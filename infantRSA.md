@@ -1,8 +1,8 @@
-#Infant RSA
+# Infant RSA
 
 This was the RSA challenge from the recent security fest CTF. 
 
-##Challenge
+## Challenge
 
 The challenge was given through a text file containing the following information
 
@@ -21,7 +21,7 @@ sage: pow(m, 65537, n)
 350737073191287706245279077094231979383427790754965854345553308198026655242414098616160740809345373227967386631019166444200059217617767145638212921332649998355366471855362243913815961350928202877514312334160636449875324797999398782867956099814177529874805245928396620574131989901122269013123245826472838285
 ```
 
-##Method
+## Method
 
 The trick with this challenge is to solve for `p` and `q` using the relationships
 
@@ -49,7 +49,7 @@ The value of `q` can then be found by calculating the greatest common divisor of
 
 From here the rest of the challenge is a simple implementaton of cracking RSA where `p,q,e` are all known. This results in the flag `sctf{dr4_m1g_b4kl4ng3s}`
 
-##Python Implementation
+## Python Implementation
 
 ```python
 import math

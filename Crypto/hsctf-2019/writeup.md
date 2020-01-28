@@ -181,18 +181,17 @@ c = 6373075066303442018605420369606927976458772342630440067216880268923689441417
 
 Another easy RSA. This one required you to go off an try to factorise `n`. It's a bit of a weird one, because `n` is a 700 digit integer and for sensible primes you wouldn't expect to find its factors. The challenge didn't pick sensible factors though and what we find is `n` is a perfect square.
 
-A lot of people in the hsctf discord complained about this puzzle, infering that there was something going wrong with the RSA implementation. I imagine this is because people were trying to decode `c` using $\phi(n) = (p-1)^2$. Seeing as this was a mistake a few people struggled with, I'll quickly outline how the totient function for a perfect square is found.
+A lot of people in the hsctf discord complained about this puzzle, infering that there was something going wrong with the RSA implementation. I imagine this is because people were trying to decode `c` using `\phi(n) = (p-1)^2`. Seeing as this was a mistake a few people struggled with, I'll quickly outline how the totient function for a perfect square is found.
 
-For any integer $k$ we find that the totient can be represented using its prime factors
-$$
-\phi(k) = k \left(1 - \frac{1}{p_1} \right) \left(1 - \frac{1}{p_2} \right) \cdots \left(1 - \frac{1}{p_n} \right)
-$$ 
-For a perfect square $n = k^2$ we will have the same prime factorisation, except there will be twice as many of each. *i.e* we find that
-$$
-\phi(n) = k^2 \left(1 - \frac{1}{p_1} \right) \left(1 - \frac{1}{p_2} \right) \cdots \left(1 - \frac{1}{p_n} \right)
-$$ 
+For any integer `k` we find that the totient can be represented using its prime factors
 
-Or simply that $\phi(n) = k \phi(k)$. Lets stick this totient into python and grab the flag.
+<img src="https://latex.codecogs.com/svg.latex?\phi(k)&space;=&space;k&space;\left(1&space;-&space;\frac{1}{p_1}&space;\right)&space;\left(1&space;-&space;\frac{1}{p_2}&space;\right)&space;\ldots&space;\left(1&space;-&space;\frac{1}{p_k}&space;\right)" title="\phi(k) = k \left(1 - \frac{1}{p_1} \right) \left(1 - \frac{1}{p_2} \right) \ldots \left(1 - \frac{1}{p_k} \right)" />
+
+For a perfect square `n = k^2` we will have the same prime factorisation, except there will be twice as many of each. *i.e* we find that
+
+<img src="https://latex.codecogs.com/svg.latex?\phi(n)&space;=&space;k^2&space;\left(1&space;-&space;\frac{1}{p_1}&space;\right)&space;\left(1&space;-&space;\frac{1}{p_2}&space;\right)&space;\ldots&space;\left(1&space;-&space;\frac{1}{p_k}&space;\right)" title="\phi(n) = k^2 \left(1 - \frac{1}{p_1} \right) \left(1 - \frac{1}{p_2} \right) \ldots \left(1 - \frac{1}{p_k} \right)" />
+
+Or simply that `\phi(n) = k \phi(k)`. Lets stick this totient into python and grab the flag.
 
 ##### Flag
 
@@ -221,7 +220,6 @@ print(get_RSA_flag(c,n,e))
 ```
 
 ## Tux's Kitchen
-
 
 This challenge was 10% crypto and 90% reversing. I was stuck for ages on the challenge, banging my heada against the wall untill I spotted the "typo" that was stopping my code from working.
 

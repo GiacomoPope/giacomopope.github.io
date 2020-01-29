@@ -1,6 +1,6 @@
 # Pico CTF 2019
 
-<center>
+
 | Challenge  | Category | Points |
 | ------------- | ------------- | -------------: |
 |[2Warm](#2Warm)| General Skills | 50 |
@@ -45,7 +45,7 @@
 |[picobrowser](#picobrowser)| Web | 200 |
 |[Java Script Kiddie](#Java-Script-Kiddie)| Web | 400 |
 |[Java Script Kiddie 2](#Java-Script-Kiddie-2)| Web | 550 |
-</center>
+
 
 
 # General Skills

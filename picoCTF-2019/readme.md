@@ -1,8 +1,8 @@
-Pico CTF 2019
-=====
+# Pico CTF 2019
+
 
 | Challenge  | Category | Points |
-| ------------- | ------------- |
+| ------------- | ------------- | -------------: |
 |[2Warm](#2Warm)| General Skills | 50 |
 |[Lets Warm Up](#Lets-Warm-Up)| General Skills | 50 |
 |[Warmed Up](#Warmed-Up)| General Skills | 50 |

@@ -2,13 +2,16 @@
 
 Here's a write up for the crypto challenges I was able to finish while paying hsctf. I've tried to be thorough with my writeup and include python implementation with a description of the solution. I hope that this is helpful.
 
-- [Super Secure System](#Super-Secure-System)
-- [Reverse Search Algorithm](#Reverse-Search-Algorithm)
-- [Massive RSA](#Massive-RSA)
-- [Really Secure Algorithm](#Really-Secure-Algorithm)
-- [Tux's Kitchen](#Tux's-Kitchen)
-- [Bomb](#Bomb)
-- [Spooky ECC](#Spooky-ECC)
+| Challenge  | Category |
+| ------------- | ------------- |
+|[Super Secure System](#Super-Secure-System) | OTP |
+|[Reverse Search Algorithm](#Reverse-Search-Algorithm) | RSA |
+|[Massive RSA](#Massive-RSA) | RSA |
+|[Really Secure Algorithm](#Really-Secure-Algorithm) | RSA |
+|[Tux's Kitchen](#Tux's-Kitchen) | Reversing, XOR |
+|[Bomb](#Bomb) |Enigma |
+|[Spooky ECC](#Spooky-ECC) | ECC |
+
 
 # Crypto Challenges
 

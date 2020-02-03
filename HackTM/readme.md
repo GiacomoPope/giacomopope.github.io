@@ -219,7 +219,7 @@ This gives the data
 
 These coordinates are all too close to be interesting on a map, but we can plot them all on a plane using [Desmos](https://www.desmos.com/)
 
-![Plot of flag](https://github.com/jack4818/CTF/blob/master/HackTM-2019/plot.png "Plot of flag")
+![Plot of flag](https://github.com/jack4818/CTF/blob/master/HackTM/plot.png "Plot of flag")
 
 Which gives us the flag!
 

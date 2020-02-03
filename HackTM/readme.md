@@ -31,7 +31,7 @@ But I wasnt seeing much to go forward. Using wayback machine, I can look of snap
 
 `1XhgPI0jpK8TjSMmSQ0z5Ozcu7EIIWhlXYQECJ7hFa20`
 
-This looks hopefull! Base64 against this doesn't produce anything readable, but this [](https://a2x2.github.io/link/) by a2x2 tells use that this b64 is associated to a [Google Doc](https://docs.google.com/document/d/1XhgPI0jpK8TjSMmSQ0z5Ozcu7EIIWhlXYQECJ7hFa20/edit)
+This looks hopefull! Base64 against this doesn't produce anything readable, but this [Link Identifier](https://a2x2.github.io/link/) by a2x2 tells use that this b64 is associated to a [Google Doc](https://docs.google.com/document/d/1XhgPI0jpK8TjSMmSQ0z5Ozcu7EIIWhlXYQECJ7hFa20/edit)
 
 One part of the doc stands out more than others:
 

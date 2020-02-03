@@ -2,7 +2,176 @@
 
 | Challenge  | Category | Points | 
 | ------------- | ------------- | -------------: |
+|[Count on me](#Count-on-me) | Crypto | 467 |
 |[OLD Times](#OLD-Times) | OSINT | 424 |
+
+# Crypto
+
+## Count on me 
+### 467 Points
+
+>CORRECTION: AES 256 is used. Not AES 128.
+>Hint! To decrypt the message, you need a hex-string of 64 characters in length.
+>Hint! WARNING: This challenge has been updated at 02-02-2020 15:00 UTC to fix a critical mistake.
+
+We are given the source for the challenge
+
+```py
+from Crypto.Cipher import AES
+# this is a demo of the encyption / decryption proceess.
+
+a = 'flagflagflagflag'
+key = '1111111111111111111111111111111111111111111111111111111111111111'.decode('hex')
+iv = '42042042042042042042042042042042'.decode('hex')
+
+
+#encrypt
+aes = AES.new(key,AES.MODE_CBC, iv)
+c = aes.encrypt(a).encode("hex")
+print c
+
+#decrypt
+aes = AES.new(key,AES.MODE_CBC, iv)
+print aes.decrypt(c.decode("hex"))
+```
+
+together with all the challenge details
+
+```
+AES 256 CBC
+iv: 42042042042042042042042042042042
+ciphertext: 059fd04bca4152a5938262220f822ed6997f9b4d9334db02ea1223c231d4c73bfbac61e7f4bf1c48001dca2fe3a75c975b0284486398c019259f4fee7dda8fec
+```
+
+The key for the AES decrption is a .png
+
+![Key Glyphs](https://github.com/jack4818/CTF/blob/master/HackTM/key.png "Glyphs are Base 20")
+
+and the task of this challenge is to interpret this string as a len64 hex string.
+
+Looking at each glyph it seemed reasonable to see this as a Vigesimal system. The lower half counting between `0-4` and the upper lines counting `[0,5,10,15]`. This means each glyph can be a number between `0,19`. 
+
+Going left to right we obtain an array on base10 integers
+
+```py
+glyphs = [19, 3, 10, 15, 2, ?, 16, 16, 18, 12, 19, 6, 19, 12, 8, ?, 5, 8, 17, 18, 18, 5, 9, 3, 11, 10, 1, 10, 10, 0, 10, ?, 0, 8, 18, 10, 0, 15, 18, 5, 18, 14, 19, 1, 1, 0, 4, 6, 15, 4, 11, 16, 10, 8, 14, 5, 13, 16, 9]
+```
+
+Where I have replaced the blurred glyphs with `?`. The question is, how do we take these numbers and get a len 64 string? To test, I swap all `? = 0`. The first thing I tried was joining each element to obtain one long int in base10 and converting to a hex string:
+
+```py
+int_10 = int(''.join([str(i) for i in glyphs]))
+>>> 1912238077151019519101301131115151171262422020013152031511518194401653166721318114717
+int_16 = hex(int_10)[2:]
+>>> 'fbfd6a5a0c04ee47556e2a9a42a7eb5f2280c8c7830703c5d41bbce3e0508caa29d59d'
+len(int_16)
+>>> 70
+```
+
+Then I tried converting each glyph to base16 and then concat:
+```py
+concat_int_16 = ''.join([hex(i)[2:] for i in glyphs]
+>>> 13c238077fa13513ad01dbff111c624220200df203f1f1213440105310672d121e711
+len(concat_int_16)
+>>> 69
+```
+
+Neither of these were appropriate. I got stuck here for a while and solved some other challenges. Coming back later I had the idea of concating each glyph from base20. One way to do this would be to go through `glyphs` and replace `{10,19} -> {a,j}`, but I found it easier to just grab an int_2_base function from an old challenge and solve
+
+```py
+import string
+digs = string.digits + string.ascii_letters
+
+def int2base(x, base):
+    if x < 0:
+        sign = -1
+    elif x == 0:
+        return digs[0]
+    else:
+        sign = 1
+
+    x *= sign
+    digits = []
+
+    while x:
+        digits.append(digs[int(x % base)])
+        x = int(x / base)
+
+    if sign < 0:
+        digits.append('-')
+
+    digits.reverse()
+
+    return ''.join(digits)
+
+glyphs = [19, 3, 10, 15, 2, 0, 16, 16, 18, 12, 19, 6, 19, 12, 8, 0, 5, 8, 17, 18, 18, 5, 9, 3, 11, 10, 1, 10, 10, 0, 10, 0, 0, 8, 18, 10, 0, 15, 18, 5, 18, 14, 19, 1, 1, 0, 4, 6, 15, 4, 11, 16, 10, 8, 14, 5, 13, 16, 9]
+
+int_20 = ''.join([int2base(i, 20) for i in glyphs])
+int_10 = int(int_20, 20)
+int_16 = hex(int_10)[2:]
+
+print(int_20)
+print(int_10)
+print(int_16)
+print(len(int_16))
+
+>>> j3af20ggicj6jc8058hii593ba1aa0a008ia0fi5iej11046f4bga8e5dg9
+>>> 55273615734144947969560678724501073228899919180366431845779064168750747885529
+>>> 7a33c20284ab07c18b0100b75594af73c47005d27a90b86496f3bbe27c6e1fd9
+>>> 64
+```
+
+Now we're getting there!! All that's left is to go through all `20**3` options from the three missing glyphs and decode the ciphertext
+
+## Python Implementation
+
+```py
+from Crypto.Cipher import AES
+from Crypto.Util.number import long_to_bytes
+import string
+digs = string.digits + string.ascii_letters
+
+def int2base(x, base):
+    if x < 0:
+        sign = -1
+    elif x == 0:
+        return digs[0]
+    else:
+        sign = 1
+
+    x *= sign
+    digits = []
+
+    while x:
+        digits.append(digs[int(x % base)])
+        x = int(x / base)
+
+    if sign < 0:
+        digits.append('-')
+
+    digits.reverse()
+
+    return ''.join(digits)
+
+ciphertext = bytes.fromhex('059fd04bca4152a5938262220f822ed6997f9b4d9334db02ea1223c231d4c73bfbac61e7f4bf1c48001dca2fe3a75c975b0284486398c019259f4fee7dda8fec')
+iv = bytes.fromhex('42042042042042042042042042042042')
+
+for i in range(0,20):
+	for j in range(0,20):
+		for k in range(0,20):
+			glyphs = [19, 3, 10, 15, 2, i, 16, 16, 18, 12, 19, 6, 19, 12, 8, j, 5, 8, 17, 18, 18, 5, 9, 3, 11, 10, 1, 10, 10, 0, 10, k, 0, 8, 18, 10, 0, 15, 18, 5, 18, 14, 19, 1, 1, 0, 4, 6, 15, 4, 11, 16, 10, 8, 14, 5, 13, 16, 9]
+			bigint_20 = ''.join([int2base(i, 20) for i in glyphs])
+			bigint_10 = int(bigint_20,20)
+			key = long_to_bytes(bigint_10)
+			aes = AES.new(key,AES.MODE_CBC, iv)
+			plaintext = aes.decrypt(ciphertext)
+			if b'Hack' in plaintext:
+				print(plaintext)
+```
+
+#### Flag
+
+`HackTM{can_1_h@ve_y0ur_numb3r_5yst3m_??}`
 
 
 # OSINT
@@ -223,4 +392,6 @@ These coordinates are all too close to be interesting on a map, but we can plot 
 
 Which gives us the flag!
 
-HackTM{HARDTIMES}
+#### Flag
+
+`HackTM{HARDTIMES}`

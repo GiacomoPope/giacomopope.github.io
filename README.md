@@ -1,6 +1,13 @@
-# CTF Writeups
+# CTF Writeups and Challenge Solutions
 
-Repository for write ups of the various CTF challenges I have taken part in
+A collection of solutions to challenges from Capture the Flag competitions. I will occassionally include an implementation of some exploit that I think is interesting without the context of a CTF problem.
+
+## By Category
+
+Coming soon
+
+
+## By CTF
 
 | CTF  | Category |
 | ------------- | ------------- |

@@ -177,7 +177,7 @@ ciphertext: 059fd04bca4152a5938262220f822ed6997f9b4d9334db02ea1223c231d4c73bfbac
 
 The key for the AES decrption is a .png
 
-![Key Glyphs](https://github.com/jack4818/CTF/blob/master/HackTM/key.png "Glyphs are Base 20")
+![Key Glyphs](https://raw.githubusercontent.com/jack4818/jack4818.github.io/master/HackTM/key.png "Glyphs are Base 20")
 
 and the task of this challenge is to interpret this string as a len64 hex string.
 
@@ -520,7 +520,7 @@ This gives the data
 
 These coordinates are all too close to be interesting on a map, but we can plot them all on a plane using [Desmos](https://www.desmos.com/)
 
-![Plot of flag](https://github.com/jack4818/CTF/blob/master/HackTM/plot.png "Plot of flag")
+![Plot of flag](https://raw.githubusercontent.com/jack4818/jack4818.github.io/master/HackTM/plot.png "Plot of flag")
 
 Which gives us the flag!
 

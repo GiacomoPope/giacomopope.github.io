@@ -4,16 +4,19 @@ A collection of solutions to challenges from Capture the Flag competitions. I wi
 
 ## By Category
 
-Coming soon
+### Elliptic Curves
+
+- [Supersingular curves with prime order](/misc/superprime.md)
 
 
 ## By CTF
 
 | CTF  | Category |
 | ------------- | ------------- |
+| [redpwn](/redpwn)  | Crypto |
 | [HackTM](/HackTM)  | Crypto, OSint |
 | [INS'HACK](/INS’HACK)  | Crypto |
 | [SecurityFest](/SecurityFest)  | Crypto  |
-| [hsctf 2019](/hsctf-2019/)  | Crypto  |
+| [HSCTF 2019](/hsctf-2019/)  | Crypto  |
 | [picoCTF 2019](/picoCTF-2019)  | General, Binary, Crypto, Forensics, Web  |
 

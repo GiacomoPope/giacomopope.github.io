@@ -8,14 +8,14 @@ A collection of solutions to challenges from Capture the Flag competitions. I wi
 
 #### Pairing attacks
 - [Supersingular curves with prime characteristic](/tools/mov.html)
-- [Supersingular curves with prime order](/misc/superprime.html)
+- [Supersingular curves with prime order](/misc/superprime/)
 
 
 ## By CTF
 
 | CTF  | Category |
 | ------------- | ------------- |
-| [redpwn](/redpwn)  | Crypto |
+| [redpwn 2020](/redpwn)  | Crypto |
 | [HackTM](/HackTM)  | Crypto, OSint |
 | [INS'HACK](/INS’HACK)  | Crypto |
 | [SecurityFest](/SecurityFest)  | Crypto  |

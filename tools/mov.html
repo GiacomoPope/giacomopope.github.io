@@ -1,5 +1,11 @@
-from Crypto.Util.number import getPrime
+# TODO 
+- Explaination
 
+
+## Implementation
+
+```py
+from Crypto.Util.number import getPrime
 
 a = 0
 b = 1
@@ -49,3 +55,4 @@ beta = Q2.weil_pairing(S,Po)
 # Solve dlog in GF(p^k) instead of E / GF(p)
 dd = beta.log(alpha)
 print(dd)
+```

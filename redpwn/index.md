@@ -1,5 +1,9 @@
 # Redpwn CTF
 
+I really enjoyed this CTF, only focused on the crypto, but had a good time and learnt a lot. Enough to bother doing this writeup at least
+
+## Contents
+
 | Challenge | Points | 
 | ------------- |  -------------: |
 |[4K RSA](#4K-RSA) | 389 |
@@ -10,7 +14,6 @@
 |[Speedy Signatures](#Speedy-Signatures) | 496 |
 |[Jeopardy](#Jeopardy)|499|
 |[Newcrypt](#Newcrypt)|500|
-
 
 ## 4K RSA
 
@@ -47,11 +50,11 @@
 `nc 2020.redpwnc.tf 31452`
 
 
-# Jeopardy
+## Jeopardy
 
 >The choice is yours...choose your curve!
 `nc 2020.redpwnc.tf 31542`
 
-# newcrypt
+## newcrypt
 
 >0x100

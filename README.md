@@ -7,8 +7,8 @@ A collection of solutions to challenges from Capture the Flag competitions. I wi
 ### Elliptic Curves
 
 #### Pairing attacks
-- [Supersingular curves with prime characteristic](/tools/mov.sage)
-- [Supersingular curves with prime order](/misc/superprime.md)
+- [Supersingular curves with prime characteristic](/tools/mov.html)
+- [Supersingular curves with prime order](/misc/superprime.html)
 
 
 ## By CTF

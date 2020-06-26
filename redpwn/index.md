@@ -172,9 +172,9 @@ def encrypt(m,p,N):
 	return c
 ```
 
-When the bit of the flag is `0`, we see we append `y**2 mod N`, otherwise we append `x*y**2 mod N`. As a `NQR*QR` is always a `NQR`, this means by looking at each `e` and it's Legendre symbol, we can tell if it was the result of encrypting `0`, or `1`.
+When the bit of the flag is `0`, we see we append `y**2 mod N`, otherwise we append `x*y**2 mod N`. As a `NQR*QR` is always a `NQR`, we see that when `e` is a QR of `alpha` or `beta`, the flag bit is `0`, else it is `1`. Hence, given the list `encrypted` and the prime `alpha` from above, we calculate it's Legendre symbol, and build the binary of the message element by element in the list.
 
-The issue here, is that the result is modulo `N`, and as `x` is a NQR for both `{alpha,beta}` we will learn nothing from the Jacobi symbol of `e / N`. Luckily for us, we have `N` factored, so we can solve this using the Legendre symbol `(e / alpha)`.
+Note: We could not have used `N` to solve this with the Jacobi symbold `(e/N)`. The reason being that as `x` is a NQR for both `{alpha,beta}` the Jacobi symbol of `(e / N) = (e/alpha)*(e/beta)` will always be `1`. (The two options being `1*1 mod N` or `-1*-1 mod N`).
 
 The solution is quick to write up using the inbuilt `kronecker`function from sage, and looks like:
 
@@ -208,7 +208,7 @@ N = 1520800217285206470551354904915612515622921375215901816382562161236515501744
 # Solution
 # =============================================
 
-max_flag = 400 # real max is 400
+max_flag = 400
 lower_mask = 496
 known_upper = (1024 - max_flag - lower_mask)
 upper_mask = (1024 - known_upper)

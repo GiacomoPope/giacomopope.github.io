@@ -6,9 +6,9 @@ I really enjoyed this CTF, only focused on the crypto, but had a good time and l
 
 | Challenge | Points | 
 | ------------- |  -------------: |
-|[Seekrypt](#Seekrypt) | 495 |
-|[Speedy Signatures](#Speedy-Signatures) | 496 |
-|[Jeopardy](#Jeopardy)|499|
+|[Seekrypt](#seekrypt) | 495 |
+|[Speedy Signatures](#speedy-signatures) | 496 |
+|[Jeopardy](#jeopardy)|499|
 
 
 

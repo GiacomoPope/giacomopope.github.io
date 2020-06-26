@@ -59,6 +59,13 @@ encrypted = encrypt(flag[:len(flag)//2],a,b)
 print(encrypted, a[1], b)
 ```
 
+### TL;DR
+
+- We are given an integer `y` which shares it MSB and LSB with an unknown prime
+- Using a Coppersmith attack, we can recover the prime `alpha` from the known bits
+- One half of the flag from `y^alpha`
+- The second half of the flag is recovered bit by bit from `encrypted` knowing that when `e` is a QR for `alpha`, the flag bit is `0`, and `1` otherwise.
+
 ### Solution
 
 This challenge has the flag cut in half and hidden with two different puzzles. We see that the second half of the flag is used to create the integer `y` which is given as output. Although there's a lot more going on in the challenge, we can immediately find the second half of the flag from the following data:
@@ -304,27 +311,182 @@ for i in range(100):
 	print()
 ```
 
-### Solution
 
-- TODO
-
-TL;DR 
+### TL;DR 
 
 #### Stage 1
 
-- Connect to the server until we recieve a data package with `(s1,s2,r1)`
-- Guess all permutations of the data and use the guessed `r1` to calculate `2*4096` possible `r2`
-- From guessing all `r1, r2` we also obtain the differences in the nonces
-- Use `k1 - k2` to find `secret` from `f(s1,r1,s2,r2,(k1-k2))`. 
-- Use `secret` to calculate `k1_first`
+- Connect to the server until we recieve a data package with `(s1,s2,r1)`.
+- Guess all permutations of the data and use the guessed `r1` to calculate `2*4096` possible `r2`.
+- From guessing all `r1, r2` we also obtain the differences in the nonces `dk`.
+- Use `dk` to find `secret` from the given data together with the guessed `r2`. 
+- Use `secret` to calculate `k1_first`.
+- Send `secret` to the server.
 
 #### Other stages
 
 - From `k1_first` guess the nonce `k1_round` for the pair `(s1,r1)` from `2*4096` possible `k1_round`
 - Find `secret` from `f(s1,r1,k1)`. 
+- Use `k1` to lower the bounds on the brute for additional nonces.
+- Send `secret` to the server.
+
+### Solution
+
+**Note:** My main motivation for writing this up is so I can ask the challenge author Tux if it is the intended solution. This script is pretty slow and requires a lot of guessing. I would love to know if given `s1,s2,r1` or `s1,r1,r2` is suffient to find `secret` knowing that `|k1 - k2| < 4096`.
+
+This challenge, like most CTF challenges associated to ECDSA is about the closeness of nonce values. The canoncial challenge is the famous playstation three attack where the nonces are reused. For ECDSA there is the message `m` we want to sign. To sign `m` the server creates a private key `d`, and a public key `Q`. The public key is produced from the private key via the a scalar multiplication of a generator: `Q = d*G`. It is vital for the generator `G` to be of prime order, we will denote the order of `G` as `n`. Aside: this problem is usually solved by working with an elliptic curve E of prime order, as a result all points on the curve will also have prime order.
+
+To sign the message `m`, the server calculates the hash: `h = Hash(m)`. A cryptographically secure integer `k` is picked. This value is known as the nonce (aside: the name nonce is used because it denotes n_once, or a number to be used only once!). A random point on the curve is produced from `R = k*G` and an integer `r = R.x mod n` is caluclated. If `r` is zero, a new `k` is generated. Finally the server signs `h` by calculating `s = k^-1(h + r*d) mod n`. The signed message `m` is the tuple `(r,s)`.
+
+For the remaining dicussion, all arithmetic is mod `n`. 
+
+The hardness of the ECDLP means it is infeasible to calculate `d` from `Q` given a curve of a suffiently large order. However if the nonce `k` is innapropriately picked, `d` can be recovered from `h,r,s` through signing multiple messages. When `k` is fixed, the secret `d` can be recovered from only two signings using that the nonce can be recovered from
+
+```
+k = s1^-1 (h1 + r1*d) = s2^-1 (h2 + r2*d)  --> k =  (h1 - h2) / (s1 - s2)
+```
+
+and that the secret is `d = r^-1(sk - h)`. This is the famous PS3 attack.
+
+We can do better than this though, we don't need `k1 = k2`, but only that `k1` and `k2` differ by a known number of bits. If an attacker can calculate the difference `k1 - k2`, the secret `d` can be recovered in the following way.
+
+```py
+k1 = s1^-1 (h1 + r1*d), k2 = s2^-1 (h2 + r2*d)
+k1 - k2 = s1^-1 (h1 + r1*d) - s2^-1 (h2 + r2*d)
+s1s2(k1 - k2) = s2 (h1 + r1*d) - s1 (h2 + r2*d)
+d*(s1*r2 - s2*r1) = (s2*h1 - s1*h2) - s1s2(k1 - k2)
+d = (s2*h1 - s1*h2) - s1s2(k1 - k2)*(s1*r2 - s2*r1)^-1
+```
+
+An implmentation of the lattice attack to recover `k1 - k2` from a set of signed messages is wonderfully described here: [Trail of Bits: ECDSA - Handle With Care](https://blog.trailofbits.com/2020/06/11/ecdsa-handle-with-care/). I originally thought we'd need to use this to solve this challenge but it turns out knowing the difference of `k1,k2` (and other problems) means just guessing `|k1 - k2| < 4096` is good enough.
+
+Ok, so this challenge lets us connect to a server, sign two messages and gives us the tuples `(r1,s1)` and `(r2,s2)`. We also control the message `h`. The challenge comes in the following way: the nonces used for the challenge are ensured to be different, but their difference is only at most `4096`. This challenge would be easy if not for the next step:
+
+```py
+sigs = [str(r1),str(s1),str(r2),str(s2)]
+random.shuffle(sigs)
+sigs.pop(random.randint(0,3))
+print(' '.join(sigs))
+```
+
+We are only given 3 of the four pieces `(r1,s1,r2,s2)` AND we don't know which of these integers is which. We can break down our problem in two questions:
+
+- Case 1: given `(r1,s1,r2)`, can we calculate `d`?
+- Case 2: given `(r1,s1,s2)`, can we calculate `d`?
+
+For the first case, I have no idea how to solve this. Maybe there's a way, but I can't see it. It might seem like we cant then solve the challenge (as we would need 100 rounds of `(r1,s1,s2)` data, but we can do better).
+
+For the second set of data, we also know that `r1 = k1*G` and the missing data is `r2 = k2*G`. As `|k1 - k2| < 4096`, we can take `r1`, lift it to find `R1`. We can then generate `2*4096` points such that one of them is `R2 = k2*G`. Once we have `R1` and `R2`, we know `k1 - k2` and we can solve the above equation for `d`.
+
+So what about the other rounds? Well, we can use our secret `d` to find `k1` from our data. Now we know this nonces, we know every other nonce for the rest of the challenge will be one of `2*4096` nonces either side of `k1`. Lets start writing some code.
+
+The first question is given some data `(?,?,?)` how do we know if we are in case 1 or case 2? We can! By taking the data given, we can guess one of them is `r1`. By lifting this onto the curve we can look at the `2*4096` possible `r2` values, if it's in the array we know we have `r1, r2` and that `s2` is missing. 
+
+```py
+# Returns r1, r2, k1 - k2 if both r1,r2 in the data,
+# otherwise None.
+def find_r_value(data_array):
+    for r_guess in data_array[1:]:
+        try:
+            R1 = E.lift_x(r_guess)
+        except:
+            continue
+        for i in range(-4096, 4096):
+            R2 = R1 + i * G
+            r2_guess = Integer(R2.xy()[0])
+            if r2_guess in data_array and r2_guess != r_guess:
+                return r_guess, r2_guess, i
+    return None
+```
+
+Note, this also gives `k1 - k2`, but this is not enough to solve, as we do not know what `s2` is (and I cant think of a way to derive it, or even brute force it).
+
+So now we can analyse the data packet on the first connection. If we find both `r1,r2` we quit and try again. When only one `r1` value is in the set, we continue and calculate all possible `r2` values. One of these `r2` will produce a secret `d` such that `d*G == Q`. We implement this like so
+
+```py
+def big_brute(guesses, Qx, Qy):
+    # O(6 * 8192 * 2)
+    # permutation * k_gap values * pos or neg k_gap
+    for guess in guesses:
+        ra, sa, sb = guess
+        try:
+            R1 = E.lift_x(ra)
+        except:
+            continue
+        for i in range(-4096, 4096):
+            print("i = ", i)
+            R2 = R1 + i * G
+            rb = int(R2.xy()[0])
+            k_gap = i
+
+            for kd in [k_gap, -k_gap]:
+            	# guess the k_gap, use to derive a potential secret
+                potential_priv_key = (sb * h1) - (sa * h1) - (sa * sb * kd)
+                potential_priv_key *= inverse_mod((rb * sa) - (ra * sb), n)
+                potential_priv_key %= n
+                pG = potential_priv_key * ecG
+                if pG.x() == Qx and pG.y() == Qy:
+                    print("found private key!")
+                    r1_found = ra
+                    s1_found = sa
+                    secret = potential_priv_key
+                    return r1_found, s1_found, secret
+    exit("Something went wrong, exiting")
+```
+
+Note that we're now using python rather than sage to do the scalar multiplication. V01d noticed it was MUCH faster, and made our script take ~ 30 mins rather than several hours. 
+
+Now we have the secret, we can also calculate the nonce `k1` and send the secret to the server, progressing to round `2`.
+
+We can reduce our search space by again checking if `r1,r2` are in `given_data`. We do this like so:
+```
+    if check_data is None:
+        print("One r value found, full search space")
+        guesses = list(itertools.permutations(given_data))
+    else:
+        print("Both r values found, reduced search space")
+        ra,rb,_ = check_data
+        for x in given_data:
+            if x != ra and x != rb:
+                sa = x
+                break
+        guesses = [[sa, ra, rb], [sa, rb, ra]]
+```
+We see that when both `ri` values appear, we can identify `s1` and reduce our guesses from the 6 permutations to just 2. Given these permutations we guess `2*4096` possible nonces and calculate the secret from them. If the secret produces the public key, we are successful
+
+```py
+def brute_from_nonce(guesses, Qx, Qy):
+    for guess in guesses:
+        sa, ra, _ = guess
+        for i in range(-k_lower, k_upper):
+            k_guess = k1_found + i
+            potential_priv_key = inverse(ra, n) * (k_guess * sa - h1) % n
+            pG = potential_priv_key * ecG
+            if pG.x() == Qx and pG.y() == Qy:
+                print("found private key!")
+                secret = potential_priv_key
+                print(secret)
+                return secret, k_guess
+```
+
+All we have to do is do this 99 times. We can speed it up a bit by using each recovered nonce from the above check to reduce the bound we guess over by recalculating the bounds each round
+
+```py
+if k_guess > k1_found:
+    k_diff = 4096 - (k_guess - k1_found)
+    if k_diff < k_lower:
+        k_lower = k_diff
+elif k_guess < k1_found:
+    k_diff = 4096 - (k1_found - k_guess)
+    if k_diff < k_upper:
+        k_upper = k_diff
+```
+
+After about 20 rounds the search space halves, which is pretty nice.
+
+Thanks to v01d, who was able to change up my slow script and produce something fairly reasonable. Thanks to hyperreality who ran my slow script and was gonna leave it on overnight until v01d saved us!
 
 ### Implementation
-
 
 ```py
 import os

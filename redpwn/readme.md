@@ -707,4 +707,362 @@ while True:
 
 `nc 2020.redpwnc.tf 31542`
 
-### TODO
+### Challenge 
+
+```py
+#!/usr/bin/env sage
+import random
+import time
+import asyncio
+import traceback
+
+flag = open('flag.txt','r').read()
+
+def isPrime(n):
+    if n == 2: return True
+    if n%2 == 0: return False
+    r,d = 0,n-1
+    while d%2 == 0: r += 1; d //= 2
+    for k in range(1):
+        a = random.randint(2,n-2)
+        x = pow(a,d,n)
+        if x == 1 or x == n-1: continue
+        for i in range(r-1):
+            x = pow(x,2,n)
+            if x == n-1: continue
+        else: return False
+    return True
+
+
+async def handle_conn(reader, writer):
+    async def prompt(ptext):
+        writer.write(ptext.encode())
+        await writer.drain()
+        return (await reader.readline()).decode()
+
+    try:
+        BITS = 200
+
+        a = Integer(await prompt('a: '))
+        b = Integer(await prompt('b: '))
+        p = Integer(await prompt('p: '))
+
+        E = EllipticCurve(GF(p), [a,b])
+        assert E.order().nbits() >= BITS
+        assert E.order() != p
+        assert isPrime(E.order())
+
+        G = E.gens()[0]
+        writer.write(f'{G}\n'.encode())
+        secret = random.randint(1,E.order()-1)
+        pub = G * secret
+        writer.write(f'{pub}\n'.encode())
+
+        user = int(await prompt('secret?'))
+        if user == secret:
+            writer.write(f'{flag}\n'.encode())
+            await writer.drain()
+    except Exception:
+        writer.write(traceback.format_exc(2).encode())
+    finally:
+        await writer.drain()
+        writer.close()
+        await writer.wait_closed()
+
+
+async def main():
+    server = await asyncio.start_server(handle_conn, '0.0.0.0', 9999)
+
+    addr = server.sockets[0].getsockname()
+    print(f'Listening on {addr}')
+
+    async with server:
+        await server.serve_forever()
+
+asyncio.run(main())
+```
+
+### TL;DR
+
+- Server needs a curve which has a prime order which is different from the characteristic of the finite field
+- When a curve is accepted, the server builds the ECDLP and asks us to solve it.
+- Order of the curve must be at least 200 bits, if the order of the curve is prime, we cannot solve dlog
+- However, the order is checked with a broken `isPrime` function, vulnreable to composite strong pseudoprimes
+- We solve the challenge by first calculating a strong pseudoprime passing `isPrime` which is smooth enough that we can reasonibly solve dlog
+- We then must construct an elliptic curve of this order and pass it to the server. If the curve is accepted we are given `G`, `Q=dG` which we must derive `d` from
+
+### Solution
+
+This challenge was a golf challenge, where the number of bits the prime needed to satisfy decreased over time. When the challenge is solved, the number is fixed. The challenge was solved fairly quickly and the order of the curve was fixed at `200` bits. 
+
+I did not solve this challenge during the competition. The algorithm for finding an elliptic curve of prescribed order was duanting and I was unable to make it work. Holocircuit did amazing work and got very close, but we couldnt squash all the bugs before the end of the competition. Since the CTF ended, I learnt many people solved this challenge by using [ecgen](https://github.com/J08nY/ecgen), an unmaintained and notorious tool which will generate a curve. I have also since found a wonderful paper [Safety in Numbers: On the Need for Robust Diffie-Hellman Parameter Validation](https://eprint.iacr.org/2019/032.pdf) which has an almost complete solution to this challenge.
+
+I will split this write-up into three stages, calculating a strong pseudoprime, constructing a curve of prime order and solving dlog for the curve. For the last step, I have emulated the server and I use a dummy flag... I don't know what the real one is.
+
+#### Step One: Strong Pseudoprimes
+
+##### Miller-Rabin
+
+I already had some experience fooling the Miller-Rabin test from a wonderful paper bu Arnault: [Constructing Carmichael numbers which are strong primes to several bases](https://core.ac.uk/download/pdf/81930829.pdf) and even had some code lying around. However it was hard to generalise to many many factors and the best integer I found was `238` bits with 5 factors. This passed `isPrime` with about 6% success (this isPrime function is so whack).
+
+I decided the bit length of the factors was too large to reasonibly solve dlog, so I started looking for other methods.
+
+```
+C = 340649031679478708871356501710247209854526956821188127472136012686397651
+bit length: 238
+factors: [10360877555851, 134691408226051, 424795979789851, 549126510460051, 1046448633140851]
+bit lengths: [44, 47, 49, 49, 50]
+```
+
+##### Universal forms
+
+The second method I used was constructing Carmichael numbers from universal forms, based off the paper [On Fermat's Simple Theorem](https://projecteuclid.org/download/pdf_1/euclid.bams/1183501763) which shows how we have a one parameter condition to construct Carmichael numbers with `n` factors. These Carmichael numbers passed the test less often, but often enough with ~1% success.
+
+For an integer `M`, we can find Carmichael numbers C from universal forms, which can be written as
+```
+U_n+1 = (6M + 1)(12M + 1)(18M + 1)(2^2 M + 1)...(2^n-1 M +1)
+```
+where each factor of `U_n+1` must be prime. Using the following snippet of code
+
+```py
+def universal_forms(SEED, l):
+	coeffs = [6,12,18,36,72,144,288,576,1152,1728]
+	coeffs = coeffs[:l]
+	while True:
+		ps = [c*SEED + 1 for c in coeffs]
+		if all(isPrime(p) for p in ps):
+			return ps, SEED + 1
+		SEED += 1
+```
+
+I was able to calculate several composite numbers which passed the isPrime test with at least 1% success with 5 factors. I could not find composite integers of more factors which passed the test with this bound of success. A subset of the integers I found was
+
+```
+C = 1300166808692042795962532177088827946815806931819239012667149
+bit length: 200
+factors: [313114417687, 626228835373, 939343253059, 1878686506117, 3757373012233]
+bit lengths: [39, 40, 40, 41, 42]
+...
+C = 2880633345009518112283310208636540975082090682427396690125869
+bit length: 201
+factors: [367113915967, 734227831933, 1101341747899, 2202683495797, 4405366991593]
+bit lengths: [39, 40, 41, 42, 43]
+```
+
+This was progress, and during the CTF I felt like this was good enough. `42` bits as a highest factor seemed reasonable. I was surprised by how easy this was to implement and how quick it was. For larger C, I can see this getting very slow, especially when you require `k > 3` factors.
+
+
+##### Erdos Method + Granville and Pomerance
+
+This section is a bonus, and based off two algorithms in [Safety in Numbers: On the Need for Robust Diffie-Hellman Parameter Validation](https://eprint.iacr.org/2019/032.pdf). We can use the Erdos method to find Carmichael numbers of many many small factors. These numbers however never pass the isPrime test (or close to never) so what we can do is then use the algoritm of Granville and Pomerance which generates Carmichael numbers from Carmichael numbers. The implementation I used was
+
+```py
+"""
+Majority of code from https://eprint.iacr.org/2019/032.pdf
+Safety in Numbers: On the Need for Robust Diffie-Hellman Parameter Validation
+"""
+
+import itertools
+from operator import mul
+
+def all_combinations(any_list): 
+	"""
+	Wrapper for itertools to generate all possible combinations of all (non trivial) sizes.
+	"""
+	return itertools.chain.from_iterable(itertools.combinations(any_list , i + 1) for i in range(len(any_list)))
+
+def LCMpim1(n):
+	"""
+	Takes as input n: a list of integers p_i and returns the lcm(p_i-1) for all i 
+	"""
+	pim1list = []
+	for pi in n:
+		pim1 = pi - 1
+		pim1list.append(pim1) 
+	return lcm(pim1list)
+
+def listbuild(L):
+	"""
+	Takes as input a (highly composite) number L and returns a list of all primes p such 
+	that p-1 | L where p does not divide L. We include the additional requirement that p = 3 mod 4.
+	"""
+	a = list(factor(L))
+	p = []
+	for y in a:
+		for i in range(0, y[1]): 
+			p.append(y[0])
+	
+	pvals = all_combinations(p) 
+	ps = []
+	for pp in pvals:
+		t = reduce(mul, pp, 1)
+		tt = t + 1
+		if tt.is_prime(proof=False) and L % tt != 0:
+			if tt not in ps: 
+				ps.append(tt)
+	pps = []
+	ps.sort()
+	# we now filter results to only inlude p with p = 3 mod 4 
+	for p in ps:
+		if p % 4 == 3: 
+			pps.append(p)
+	return pps
+
+def erdos_build(factors , L, k):
+	"""
+	This function takes a list of possible factors, a (highly composite) integer L and k,
+	and produces a Carmichael number with k factors sampled from "factors" such that the 
+	LCM of each factor p_i - 1 is equal to L. Output is parsed as n,[p_1,p_2,...,p_k] 
+	where n = p_1 * p_2 * ... * p_k.
+	"""
+	if k <=2:
+		print("Choice of factors must be >=3")
+		return 0
+	for i in itertools.combinations(factors , k):
+		v = reduce(mul, i, 1) 
+		if v % L == 1:
+			fin = list(i) 
+			fin.sort()
+			if LCMpim1(fin) == L:
+				return [v,fin]
+	print("None found, try increasing size of factor list")
+
+
+def granville_and_pomerance(factors):
+	k = 1
+	L = LCMpim1(factors)
+	while True:
+		M = 1 + k*L
+		qs = [1 + M*(p-1) for p in factors]
+		if all(q.is_prime(proof=False) for q in qs):
+			N = prod(qs)
+			return N, qs
+		k += 1
+
+
+Ls = [810810, 2088450, 4054050, 7657650, 13783770, 22972950, 53603550]
+
+# Small L picked to keep N.nbits() small
+L = 2*3^4*5*7*11
+factors = listbuild(L)
+print(factors, L, len(factors))
+
+char, car_factors = erdos_build(factors , L, 6)
+print(char, car_factors)
+
+N, qs = granville_and_pomerance(car_factors)
+
+print(N)
+print(qs)
+print(N.nbits())
+print([q.nbits() for q in qs])
+``` 
+
+Using this produced a Carmichael number passing 3% of tests of the form:
+
+```
+C = 17226095350814884309562782709503476832333815043778073233750461
+bit length: 204
+factors: [2118459439, 7767684607, 19066134943, 31776891571, 38838423031, 44487648199]
+bit lengths [31, 33, 35, 35, 36, 36]
+```
+
+Having this sixth factor is great and greatly simplifies the upcomming dlog problem.
+
+#### Step Two: Generating a curve of prescribed order
+
+**Hindsight Checklist**
+
+- Solve using ecgen (Boo!!)
+- Solve using algorithm given by Galbraith, Massimo, and Paterson
+- Solve using algorithm by [ChiCubed](https://gist.github.com/ChiCubed/0977601c9ce88eda03b9d2576231192e)
+- Write your own algoritm
+
+Of these four lists, only the last was avaliable to me during the competition. I tried to implement something, but it was far too slow. Holocircuit attempted (and got insanely close) to implementing the algorithm in section 4.1 of [Reinier Bröker's Thesis](https://www.math.leidenuniv.nl/scripties/Broker.pdf). I haven't managed to fix my own implementation of it. It feels dishonest to display any fixed code here after seeing the work by ChiCubed, which would simply be a refactoring of their work. 
+
+The paper by Galbraith, Massimo, and Paterson produces an algorithm in appendix C (Algorithm of Bröker and Stevenhagen), however this is limited to an order `N` which is squarefree and has only 3 factors. The implmentation by ChiCubed is a much more general realisation of Bröker's algorithm.
+
+Running ChiCubed's implementation of Bröker's alorithm with a prescribed order `17226095350814884309562782709503476832333815043778073233750461` produced a curve within 10 minutes:
+
+```
+Jack: ~ % sage redpwn/generate_order.sage
+trying 171259 16555727575344674102260187525/2*a + 4686538145203615415053289961063/2
+success! Elliptic Curve defined by y^2 = x^3 + 16100304990402797113692811685429247648780477314497521961846040*x + 16470469406676450872902150339598545251380983030417104004004538 over Finite Field of size 17226095350814884309562782709498790294188611428363019943789399
+```
+
+#### Step Three: Grabbing the flag
+
+I don't have access to the server anymore and didn't have it in me to bother doing all the boring side of socket stuff so I just made a dummy script to solve with my fresh curve. 
+
+```py
+#!/usr/bin/env sage
+import random
+
+flag = 'flag{I_dont_know_what_this_is}'
+BITS = 200
+
+def isPrime(n):
+    if n == 2: return True
+    if n%2 == 0: return False
+    r,d = 0,n-1
+    while d%2 == 0: r += 1; d //= 2
+    for k in range(1):
+        a = random.randint(2,n-2)
+        x = pow(a,d,n)
+        if x == 1 or x == n-1: continue
+        for i in range(r-1):
+            x = pow(x,2,n)
+            if x == n-1: continue
+        else: return False
+    return True
+
+def solve_challenge(G,Q):
+    return G.discrete_log(Q)
+
+"""
+To solve this challenge, all we are allowed to send to the server
+is the curve parameters [p,a,b]. Sending these, the server checks
+three conditions, then sets up the ECDLP
+
+We will send the params params from curve generator function which found the curve
+
+Elliptic Curve defined by y^2 = x^3 + 16100304990402797113692811685429247648780477314497521961846040*x + 16470469406676450872902150339598545251380983030417104004004538 over Finite Field of size 17226095350814884309562782709498790294188611428363019943789399
+E.order() 
+17226095350814884309562782709503476832333815043778073233750461
+"""
+
+# What we would send to the server
+a = 16100304990402797113692811685429247648780477314497521961846040
+b = 16470469406676450872902150339598545251380983030417104004004538
+p = 17226095350814884309562782709498790294188611428363019943789399
+
+# We know it only passes 3% of the time, so we would have to connect many times to the server
+connections = 0
+while True:
+    connections += 1
+    E = EllipticCurve(GF(p), [a,b])
+    if E.order().nbits() >= BITS and E.order() != p and isPrime(E.order()):
+        break
+
+print(f'Curve accepted after {connections} connections, max connection number estimated as ~33')
+
+"""
+Passing the checks, the server asks us to solve the ECDLP
+"""
+G = E.gens()[0]
+print(G)
+secret = random.randint(1,E.order()-1)
+Q = G * secret
+print(Q)
+
+"""
+As the order of E is smooth, we can do this easily!
+"""
+print('Calculating discrete logarithm of Q')
+user = solve_challenge(G,Q)
+print(user)
+
+if user == secret:
+    print(flag)
+# flag{I_dont_know_what_this_is}
+``` 

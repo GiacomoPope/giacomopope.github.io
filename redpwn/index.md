@@ -86,8 +86,113 @@ print(encrypted, a[1], b)
 
 ### Solution
 
+This challenge has the flag cut in half and hidden with two different puzzles. We see that the second half of the flag is used to create the integer `y` which is given as output. Although there's a lot more going on in the challenge, we can immediately find the second half of the flag from the following data:
+
+```py
+flag = open('flag.txt','rb').read()
+assert len(flag) < 100
+alpha = getPrime(bits)
+beta = getPrime(bits)
+mod = alpha*beta
+y = alpha^(bytes_to_long(flag[len(flag)//2:])<<0x1f0)
+```
+
+We understand `mod = alpha * beta = N` as a composite of two large primes and so we should be thinking about this as an RSA-like challenge. The first thing we notice is that flag has at most `100` bytes, and so has a maximum bit length of `800`. Cutting that in half, we have the maximum of `400` bits for `bytes_to_long(flag[len(flag)//2:])`. This quantity is then bit-shifted by `0x1f0 = 496`, such that the integer `bytes_to_long(flag[len(flag)//2:])<<0x1f0` will have `0` as the bottom most `496` bits, and will have a maximum bit-length of `400 + 496 = 896`
+
+We now know that a `1024` bit prime is XORd with a (at most) `896` bit flag-fragment with `496` trailing zeros. This means from the given `y = alpha^flag_half` we know that the bottom `496` bits and the top `1024 - 896` will be the same as the bits of `alpha`.
+
+From this, we can apply a Coppersmith attack on `alpha` to recover it from the known bits. To use `small_roots()` we need to write `alpha` as a polynomial, we can do this with
+
+```py
+alpha = MSB + x*(1 << 498) + LSB 
+```
+
+For some unknown `x`, and known bits `MSB, LSB`, which we can calculate
+
+```
+max_flag = 400
+lower_mask = 496
+known_upper = (1024 - max_flag - lower_mask)
+upper_mask = (1024 - known_upper)
+known_bits = lower_mask+known_upper
+
+MSB = y & (((1 << upper_mask) - 1) << upper_mask)
+LSB = y & ((1 << lower_mask) - 1)
+```
+
+Finally, to use `small_roots`, we want to rewrite this function such that `x` has no multiplicative factor, which we do by finding the inverse of `(1 << 496) mod N`.
+
+```py
+PR.<x> = PolynomialRing(Zmod(N))
+
+r = 1 << (lower_mask)
+ir = inverse_mod(r, N)
+
+f = x + (MSB + LSB) * ir
+roots = f.small_roots(X=2^(1024 - known_bits), beta=0.45, epsilon=1/64)
+if roots:
+    root = int(roots[0])
+    kalpha = root + (msb_part + lsb_part) * ir
+    alpha = gcd(N, kalpha)
+    assert alpha != 1, "Fail"
+    assert alpha != N, "Fail"
+    print(alpha)
+```
+
+The output of `small_roots` gives us the value for `x`, which we can then use to reconstruct `alpha` by simply performing `alpha^y`.
+
+The second half of the flag is much much easier. We see that in the generation, a random integer `x` is found such that
+
+```
+pow(beta**2*x,(alpha-1)//2,alpha) + pow(alpha**2*x,(beta-1)//2,beta) == alpha+beta-2
+```
+
+This looks long and complicated, but it's actually pretty simple. The terms on the left hand side are in the form: `pow(p, q-1, q) * pow(x,(q-1)//2,q)` for primes `{p,q}`. From Fermat's little theorem, we know that `pow(q, p-1, p) = 1`, and `pow(x,(p-1)//2,p)` calculates the Legendre symbol for `x`. The values for `pow(x,(p-1)//2,p)` take values in `{0,1,-1} mod p` and so we see the equation simplifies to
+
+```
+pow(x,(alpha-1)//2,alpha) + pow(x,(beta-1)//2,beta) == alpha+beta-2
+```
+
+Which is only satisfied when `x` is a non quadratic residue (NQR) for both `alpha` and `beta`, *i.e.*, `pow(x,(p-1)//2,p) = -1 = p - 1 mod p` for both primes `alpha, beta`.
+
+So why is it important that `x` is a non quadratic residue? We see that the list `encrypted` is populated by looking at each bit of the flag fragment
+
+```py
+def encrypt(m,p,N):
+	m = bin(bytes_to_long(m))[2:]
+	x,y = p
+	c = []
+
+	for b in m:
+		while True:
+			y = random.randint(1,N)
+			if GCD(y,k) == 1:
+				c.append((x**int(b)*y**2)%N)
+				break
+	return c
+```
+
+When the bit of the flag is `0`, we see we append `y**2 mod N`, otherwise we append `x*y**2 mod N`. As a `NQR*QR` is always a `NQR`, this means by looking at each `e` and it's Legendre symbol, we can tell if it was the result of encrypting `0`, or `1`.
+
+The issue here, is that the result is modulo `N`, and as `x` is a NQR for both `{alpha,beta}` we will learn nothing from the Jacobi symbol of `e / N`. Luckily for us, we have `N` factored, so we can solve this using the Legendre symbol `(e / alpha)`.
+
+The solution is quick to write up using the inbuilt `kronecker`function from sage, and looks like:
+
+```
+bin_flag = ''
+for e in encrypted:
+	if kronecker(e,alpha) == 1:
+		bin_flag += '0'
+	else:
+		bin_flag += '1'
+
+flag_first = long_to_bytes(int(bin_flag,2)).decode()
+```
 
 ### Implementation 
+
+Putting this all into one script, we grab the flag. I really enjoyed this puzzle and liked how each side of the challenge was realated to each other. Thanks Tux!
+
 ```py
 from Crypto.Util.number import *
 
@@ -103,16 +208,14 @@ N = 1520800217285206470551354904915612515622921375215901816382562161236515501744
 # Solution
 # =============================================
 
-max_flag = 260 # real max is 400
+max_flag = 400 # real max is 400
 lower_mask = 496
 known_upper = (1024 - max_flag - lower_mask)
 upper_mask = (1024 - known_upper)
 known_bits = lower_mask+known_upper
 
-msb_part = y & (((1 << upper_mask) - 1) << upper_mask)
-lsb_part = y & ((1 << lower_mask) - 1)
-
-
+MSB = y & (((1 << upper_mask) - 1) << upper_mask)
+LSB = y & ((1 << lower_mask) - 1)
 
 print(f'known number of bits = {known_bits}')
 print('Finding roots..')
@@ -122,35 +225,30 @@ PR.<x> = PolynomialRing(Zmod(N))
 r = 1 << (lower_mask)
 ir = inverse_mod(r, N)
 
-f = x + (msb_part + lsb_part) * ir
+f = x + (MSB + LSB) * ir
 roots = f.small_roots(X=2^(1024 - known_bits), beta=0.45, epsilon=1/64)
 if roots:
     root = int(roots[0])
-    kq = root + (msb_part + lsb_part) * ir
-    q = gcd(N, kq)
-    assert q != 1, "Fail"
-    assert q != N, "Fail"
-    p = N / q
-    print(p,q)
+    kalpha = root + (msb_part + lsb_part) * ir
+    alpha = gcd(N, kalpha)
+    assert alpha != 1, "Fail"
+    assert alpha != N, "Fail"
+    print(alpha)
 
-# p = 111465177805937770092447538469179445774366193827194740607135429566055472211468222381549404082890700206235027215272837920897816155607239237735456964466540345357023816176790307723190964931868944349012990770951977325326303518466212160620425490277981375362357314987300481362988133278120883358082360890689404217367 
-# q = 136437248584749771882310599149278388531535057166399265926387706469408766646754256272579824337507311270141846388413460068357591608585943215991636909883491826121544218636098300792976192313647146944748229438407801334865956608317244973051161890353895660399085055691697783021603089766899505767068206163163800347041
+# alpha = 136437248584749771882310599149278388531535057166399265926387706469408766646754256272579824337507311270141846388413460068357591608585943215991636909883491826121544218636098300792976192313647146944748229438407801334865956608317244973051161890353895660399085055691697783021603089766899505767068206163163800347041
 
-# We dont know which of p,q is alpha, so we try both, assuming only one decrypts
-try:
-	flag_second = long_to_bytes(p ^^ y).decode()
-except:
-	flag_second = long_to_bytes(q ^^ y).decode()
+flag_second = long_to_bytes(alpha ^^ y).decode()
 
 bin_flag = ''
 for e in encrypted:
-	if kronecker(e,p) == 1:
+	if kronecker(e,alpha) == 1:
 		bin_flag += '0'
 	else:
 		bin_flag += '1'
 
 flag_first = long_to_bytes(int(bin_flag,2)).decode()
 print(flag_first + flag_second)
+
 # flag{y0u_f0und_m0re_th4n_s3cr3ts.....th3_fl4g_1ts3lf!!!!}
 ```
 

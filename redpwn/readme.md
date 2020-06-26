@@ -91,7 +91,7 @@ alpha = MSB + x*(1 << 498) + LSB
 
 For some unknown `x`, and known bits `MSB, LSB`, which we can calculate
 
-```
+```py
 max_flag = 400
 lower_mask = 496
 known_upper = (1024 - max_flag - lower_mask)
@@ -125,13 +125,13 @@ The output of `small_roots` gives us the value for `x`, which we can then use to
 
 The second half of the flag is much much easier. We see that in the generation, a random integer `x` is found such that
 
-```
+```py
 pow(beta**2*x,(alpha-1)//2,alpha) + pow(alpha**2*x,(beta-1)//2,beta) == alpha+beta-2
 ```
 
 This looks long and complicated, but it's actually pretty simple. The terms on the left hand side are in the form: `pow(p, q-1, q) * pow(x,(q-1)//2,q)` for primes `{p,q}`. From Fermat's little theorem, we know that `pow(q, p-1, p) = 1`, and `pow(x,(p-1)//2,p)` calculates the Legendre symbol for `x`. The values for `pow(x,(p-1)//2,p)` take values in `{0,1,-1} mod p` and so we see the equation simplifies to
 
-```
+```py
 pow(x,(alpha-1)//2,alpha) + pow(x,(beta-1)//2,beta) == alpha+beta-2
 ```
 
@@ -160,7 +160,7 @@ Note: We could not have used `N` to solve this with the Jacobi symbold `(e/N)`. 
 
 The solution is quick to write up using the inbuilt `kronecker`function from sage, and looks like:
 
-```
+```py
 bin_flag = ''
 for e in encrypted:
 	if kronecker(e,alpha) == 1:
@@ -342,20 +342,20 @@ For the remaining dicussion, all arithmetic is mod `n`.
 
 The hardness of the ECDLP means it is infeasible to calculate `d` from `Q` given a curve of a suffiently large order. However if the nonce `k` is innapropriately picked, `d` can be recovered from `h,r,s` through signing multiple messages. When `k` is fixed, the secret `d` can be recovered from only two signings using that the nonce can be recovered from
 
-```
-k = s1^-1 (h1 + r1*d) = s2^-1 (h2 + r2*d)  --> k =  (h1 - h2) / (s1 - s2)
+```py
+k = s1^-1*(h1 + r1*d) = s2^-1*(h2 + r2*d)  --> k =  (h1 - h2) / (s1 - s2)
 ```
 
-and that the secret is `d = r^-1(sk - h)`. This is the famous PS3 attack.
+and that the secret is `d = r^-1*(sk - h)`. This is the famous PS3 attack.
 
 We can do better than this though, we don't need `k1 = k2`, but only that `k1` and `k2` differ by a known number of bits. If an attacker can calculate the difference `k1 - k2`, the secret `d` can be recovered in the following way.
 
 ```py
-k1 = s1^-1 (h1 + r1*d), k2 = s2^-1 (h2 + r2*d)
-k1 - k2 = s1^-1 (h1 + r1*d) - s2^-1 (h2 + r2*d)
-s1s2(k1 - k2) = s2 (h1 + r1*d) - s1 (h2 + r2*d)
-d*(s1*r2 - s2*r1) = (s2*h1 - s1*h2) - s1s2(k1 - k2)
-d = (s2*h1 - s1*h2) - s1s2(k1 - k2)*(s1*r2 - s2*r1)^-1
+k1 = s1^-1*(h1 + r1*d), k2 = s2^-1*(h2 + r2*d)
+k1 - k2 = s1^-1*(h1 + r1*d) - s2^-1*(h2 + r2*d)
+s1*s2*(k1 - k2) = s2*(h1 + r1*d) - s1*(h2 + r2*d)
+d*(s1*r2 - s2*r1) = (s2*h1 - s1*h2) - s1*s2*(k1 - k2)
+d = (s2*h1 - s1*h2) - s1*s2*(k1 - k2)*(s1*r2 - s2*r1)^-1
 ```
 
 An implmentation of the lattice attack to recover `k1 - k2` from a set of signed messages is wonderfully described here: [Trail of Bits: ECDSA - Handle With Care](https://blog.trailofbits.com/2020/06/11/ecdsa-handle-with-care/). I originally thought we'd need to use this to solve this challenge but it turns out knowing the difference of `k1,k2` (and other problems) means just guessing `|k1 - k2| < 4096` is good enough.
@@ -439,18 +439,18 @@ Note that we're now using python rather than sage to do the scalar multiplicatio
 Now we have the secret, we can also calculate the nonce `k1` and send the secret to the server, progressing to round `2`.
 
 We can reduce our search space by again checking if `r1,r2` are in `given_data`. We do this like so:
-```
-    if check_data is None:
-        print("One r value found, full search space")
-        guesses = list(itertools.permutations(given_data))
-    else:
-        print("Both r values found, reduced search space")
-        ra,rb,_ = check_data
-        for x in given_data:
-            if x != ra and x != rb:
-                sa = x
-                break
-        guesses = [[sa, ra, rb], [sa, rb, ra]]
+```py
+if check_data is None:
+    print("One r value found, full search space")
+    guesses = list(itertools.permutations(given_data))
+else:
+    print("Both r values found, reduced search space")
+    ra,rb,_ = check_data
+    for x in given_data:
+        if x != ra and x != rb:
+            sa = x
+            break
+    guesses = [[sa, ra, rb], [sa, rb, ra]]
 ```
 We see that when both `ri` values appear, we can identify `s1` and reduce our guesses from the 6 permutations to just 2. Given these permutations we guess `2*4096` possible nonces and calculate the secret from them. If the secret produces the public key, we are successful
 

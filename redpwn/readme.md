@@ -1,6 +1,8 @@
 # Redpwn CTF
 
-I really enjoyed this CTF, only focused on the crypto, but had a good time and learnt a lot. Enough to bother doing this writeup at least
+I really enjoyed this CTF, only focused on the crypto, but had a good time and learnt a lot. Enough to bother doing this writeup at least. 
+
+This is my first write-up I've done after becoming part of [cr0wn](https://cr0wn.uk). The challenges written up below are the ones I focused on, but they were solved as a team. Thanks especially to Holocircuit, Hrpr, Hyperreality, V01d who helped me understand how to actually do any of this.
 
 ## Contents
 
@@ -232,7 +234,307 @@ print(flag_first + flag_second)
 
 `nc 2020.redpwnc.tf 31452`
 
-### TODO
+### Challenge 
+
+```py
+#!/usr/bin/env python3
+
+from Crypto.Util.number import inverse
+import ecdsa
+import random
+import hashlib
+
+flag = open('flag.txt','rb').read()
+
+C = ecdsa.NIST256p
+G = C.generator
+n = C.order
+k = random.randint(1,n-1)
+
+for i in range(100):
+	print("> ROUND ",i+1)
+
+	ans = random.randint(1,n-1)
+	Q = G*ans
+	print(Q.x(),Q.y())
+
+	m1 = input("Enter first message: ").encode()
+	h1 = int(hashlib.sha256(m1).hexdigest(),16)
+	done = False
+	while not done:
+		k1 = k+random.randint(1,4096)
+		P = k1*G
+		r1 = P.x()%n
+		if r1 == 0:
+			continue
+		s1 = inverse(k1,n)*(h1+r1*ans)%n
+		if s1 == 0:
+			continue
+		done = True
+
+	m2 = input("Enter second message: ").encode()
+	h2 = int(hashlib.sha256(m2).hexdigest(),16)
+	done = False
+	while not done:
+		k2 = k+random.randint(1,4096)
+		if k1 == k2:
+			continue
+		P2 = k2*G
+		r2 = P2.x()%n
+		if r2 == 0:
+			continue
+		s2 = inverse(k2,n)*(h2+r2*ans)%n
+		if s2 == 0:
+			continue
+		done = True
+
+	sigs = [str(r1),str(s1),str(r2),str(s2)]
+	random.shuffle(sigs)
+	sigs.pop(random.randint(0,3))
+	print(' '.join(sigs))
+
+	user_ans = int(input("What's my number?\n").strip())
+	if user_ans == ans:
+		print("Correct!")
+		if i == 99:
+			print("Here's your flag: {}".format(flag))
+	else:
+		print("Wrong! Better luck next time...")
+		break
+	print()
+```
+
+### Solution
+
+- TODO
+
+TL;DR 
+
+#### Stage 1
+
+- Connect to the server until we recieve a data package with `(s1,s2,r1)`
+- Guess all permutations of the data and use the guessed `r1` to calculate `2*4096` possible `r2`
+- From guessing all `r1, r2` we also obtain the differences in the nonces
+- Use `k1 - k2` to find `secret` from `f(s1,r1,s2,r2,(k1-k2))`. 
+- Use `secret` to calculate `k1_first`
+
+#### Other stages
+
+- From `k1_first` guess the nonce `k1_round` for the pair `(s1,r1)` from `2*4096` possible `k1_round`
+- Find `secret` from `f(s1,r1,k1)`. 
+
+### Implementation
+
+
+```py
+import os
+os.environ["PWNLIB_NOTERM"] = "True"
+
+from pwn import *
+import hashlib
+import itertools
+from Crypto.Util.number import inverse
+import gmpy2
+import ecdsa
+
+ecC = ecdsa.NIST256p
+ecG = ecC.generator
+ecn = ecC.order
+
+a = -3
+b = 0x5AC635D8AA3A93E7B3EBBD55769886BC651D06B0CC53B0F63BCE3C3E27D2604B
+p = 115792089210356248762697446949407573530086143415290314195533631308867097853951
+E = EllipticCurve(GF(p), [a, b])
+n = 115792089210356248762697446949407573529996955224135760342422259061068512044369
+G = E(
+    48439561293906451759052585252797914202762949526041747995844080717082404635286,
+    36134250956749795798585127919587881956611106672985015071877198253568414405109,
+)
+
+# We'll always send the same message, so let's grab it now.
+h1 = int(hashlib.sha256(b"password").hexdigest(), 16)
+
+
+"""
+For stage one, we have a 50% chance of being able to continue
+using the method described above. If we find both r1 and r2
+in the given data we exit and run the script again
+"""
+
+# --- REMOTE ---
+IP = "2020.redpwnc.tf"
+PORT = 31452
+r = remote(IP, PORT, level="debug")
+
+r.recvuntil("> ROUND")
+r.recvline()
+response = r.recvuntil("Enter", drop=True)
+
+Qs = response.split(b" ")
+Q = E(Integer(Qs[0]), Integer(Qs[1]))
+print("Q = ", Q)
+
+r.sendlineafter("message: ", b"password")
+r.sendlineafter("message: ", b"password")
+
+data = r.recvline().decode().split(" ")
+r.recvuntil("number?")
+
+given_data = list(map(Integer, data))
+print("*" * 80)
+print("Available Data")
+print("*" * 80)
+for d in given_data:
+    print(f"?? = {d}")
+
+# Returns r1, r2, k1 - k2 if both r1,r2 in the data,
+# otherwise None.
+def find_r_value(data_array):
+    for r_guess in data_array[1:]:
+        try:
+            R1 = E.lift_x(r_guess)
+        except:
+            continue
+        for i in range(-4096, 4096):
+            R2 = R1 + i * G
+            r2_guess = Integer(R2.xy()[0])
+            if r2_guess in data_array and r2_guess != r_guess:
+                return r_guess, r2_guess, i
+    return None
+
+
+check_data = find_r_value(given_data)
+
+if check_data is not None:
+    print("Need both s1, s2")
+    print("Exiting")
+    exit()
+
+else:
+    print("r1 or r2 is missing, we can proceed")
+    guesses = list(itertools.permutations(given_data))
+
+
+def big_brute(guesses, Qx, Qy):
+    # O(6 * 8192 * 2)
+    # permutation * k_gap values * pos or neg k_gap
+    for guess in guesses:
+        ra, sa, sb = guess
+        try:
+            R1 = E.lift_x(ra)
+        except:
+            continue
+        for i in range(-4096, 4096):
+            print("i = ", i)
+            R2 = R1 + i * G
+            rb = int(R2.xy()[0])
+            k_gap = i
+
+            for kd in [k_gap, -k_gap]:
+            	# guess the k_gap, use to derive a potential secret
+                potential_priv_key = (sb * h1) - (sa * h1) - (sa * sb * kd)
+                potential_priv_key *= inverse_mod((rb * sa) - (ra * sb), n)
+                potential_priv_key %= n
+                pG = potential_priv_key * ecG
+                if pG.x() == Qx and pG.y() == Qy:
+                    print("found private key!")
+                    r1_found = ra
+                    s1_found = sa
+                    secret = potential_priv_key
+                    return r1_found, s1_found, secret
+    exit("Something went wrong, exiting")
+
+Qx, Qy = map(int, Q.xy())
+r1_found, s1_found, secret = big_brute(guesses, Qx, Qy)
+
+print("Recovered secret from brute force, found:")
+print(f"r1_found = {r1_found}")
+print(f"s1_found = {s1_found}")
+print(f"secret = {secret}")
+print("We can now calculate the nonce")
+k1_found = inverse_mod(s1_found, n) * (h1 + r1_found * secret) % n
+
+# Set generic bounds, which we will lower over each round
+k_upper = 4096
+k_lower = 4096
+
+print(f"Nonce found: {k1_found}")
+print("Subsequent rounds we can go faster (but still pretty slowly)")
+r.sendline(str(secret))
+
+
+"""
+For every other round, we have the nonce within 
+8192 guess, so we take the data, permute through
+the guesses to find the pair (r1,r2) and then try 
+all 8000 nonces until the secret works.
+"""
+
+def brute_from_nonce(guesses, Qx, Qy):
+    for guess in guesses:
+        sa, ra, _ = guess
+        for i in range(-k_lower, k_upper):
+            k_guess = k1_found + i
+            potential_priv_key = inverse(ra, n) * (k_guess * sa - h1) % n
+            pG = potential_priv_key * ecG
+            if pG.x() == Qx and pG.y() == Qy:
+                print("found private key!")
+                secret = potential_priv_key
+                print(secret)
+                return secret, k_guess
+
+iRnd = 0
+while True:
+    print("Round ", iRnd)
+    print(f"Brute search for nonce between {-k_lower}, {k_upper}")
+    response = r.recvuntil("message: ")
+    cut = response.decode().split("\n")
+    Qx, Qy = map(int, cut[-2].split(" "))
+    print(Qx, Qy)
+
+    r.sendline("password")
+    r.recvuntil("message: ")
+    r.sendline("password")
+
+    data = r.recvline().decode().split(" ")
+    r.recvuntil("number?")
+
+    given_data = list(map(Integer, data))
+    print("*" * 80)
+    print("Available Data")
+    print("*" * 80)
+    for d in given_data:
+        print(f"?? = {d}")
+
+    check_data = find_r_value(given_data)
+    if check_data is None:
+        print("One r value found, full search space")
+        guesses = list(itertools.permutations(given_data))
+    else:
+        print("Both r values found, reduced search space")
+        ra,rb,_ = check_data
+        for x in given_data:
+            if x != ra and x != rb:
+                sa = x
+                break
+        guesses = [[sa, ra, rb], [sa, rb, ra]]
+
+    secret, k_guess = brute_from_nonce(guesses, Qx, Qy)
+    if k_guess > k1_found:
+        k_diff = 4096 - (k_guess - k1_found)
+        if k_diff < k_lower:
+            k_lower = k_diff
+    elif k_guess < k1_found:
+        k_diff = 4096 - (k1_found - k_guess)
+        if k_diff < k_upper:
+            k_upper = k_diff
+
+    r.sendline(str(secret))
+    iRnd += 1
+
+#flag{s0m3t1m3s_crypt0gr4ph1c_1mpl3m3nt4t10ns_f41l}
+```
+
 
 
 ## Jeopardy

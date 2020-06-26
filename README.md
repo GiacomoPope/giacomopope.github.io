@@ -8,7 +8,7 @@ A collection of solutions to challenges from Capture the Flag competitions. I wi
 
 #### Pairing attacks
 - [Supersingular curves with prime characteristic](/tools/mov.html)
-- [Supersingular curves with prime order](/misc/superprime/)
+- [Prime order curves with composite characteristic](/misc/superprime/)
 
 
 ## By CTF

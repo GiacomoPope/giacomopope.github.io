@@ -803,9 +803,7 @@ I will split this write-up into three stages, calculating a strong pseudoprime, 
 
 ##### Miller-Rabin
 
-I already had some experience fooling the Miller-Rabin test from a wonderful paper bu Arnault: [Constructing Carmichael numbers which are strong primes to several bases](https://core.ac.uk/download/pdf/81930829.pdf) and even had some code lying around. However it was hard to generalise to many many factors and the best integer I found was `238` bits with 5 factors. This passed `isPrime` with about 6% success (this isPrime function is so whack).
-
-I decided the bit length of the factors was too large to reasonibly solve dlog, so I started looking for other methods.
+I already had some experience fooling the Miller-Rabin test from a paper by Arnault: [Constructing Carmichael numbers which are strong primes to several bases](https://core.ac.uk/download/pdf/81930829.pdf) and even had some code lying around. However it was hard to generalise to many many factors and the best integer I found was `238` bits with 5 factors. This passed `isPrime` with about 6% success (this isPrime function is so whack).
 
 ```
 C = 340649031679478708871356501710247209854526956821188127472136012686397651
@@ -813,6 +811,8 @@ bit length: 238
 factors: [10360877555851, 134691408226051, 424795979789851, 549126510460051, 1046448633140851]
 bit lengths: [44, 47, 49, 49, 50]
 ```
+
+I decided the bit length of the factors was too large to reasonibly solve dlog, so I started looking for other methods.
 
 ##### Universal forms
 
@@ -835,7 +835,7 @@ def universal_forms(SEED, l):
 		SEED += 1
 ```
 
-I was able to calculate several composite numbers which passed the isPrime test with at least 1% success with 5 factors. I could not find composite integers of more factors which passed the test with this bound of success. A subset of the integers I found was
+I was able to calculate several composite numbers which passed the `isPrime` test with at least 1% success with 5 factors. I could not find composite integers of more factors which passed the test with this bound of success. A subset of the integers I found was
 
 ```
 C = 1300166808692042795962532177088827946815806931819239012667149
@@ -854,7 +854,7 @@ This was progress, and during the CTF I felt like this was good enough. `42` bit
 
 ##### Erdos Method + Granville and Pomerance
 
-This section is a bonus, and based off two algorithms in [Safety in Numbers: On the Need for Robust Diffie-Hellman Parameter Validation](https://eprint.iacr.org/2019/032.pdf). We can use the Erdos method to find Carmichael numbers of many many small factors. These numbers however never pass the isPrime test (or close to never) so what we can do is then use the algoritm of Granville and Pomerance which generates Carmichael numbers from Carmichael numbers. The implementation I used was
+This section is a bonus, and based off two algorithms in [Safety in Numbers: On the Need for Robust Diffie-Hellman Parameter Validation](https://eprint.iacr.org/2019/032.pdf). We can use the Erdos method to find Carmichael numbers of many many small factors. These numbers however never pass the `isPrime` test (or close to never) so what we can do is then use the algoritm of Granville and Pomerance which generates Carmichael numbers from Carmichael numbers. The implementation I used was
 
 ```py
 """
@@ -975,10 +975,10 @@ Having this sixth factor is great and greatly simplifies the upcomming dlog prob
 
 - Solve using ecgen (Boo!!)
 - Solve using algorithm given by Galbraith, Massimo, and Paterson
-- Solve using algorithm by [ChiCubed](https://gist.github.com/ChiCubed/0977601c9ce88eda03b9d2576231192e)
+- Solve using algorithm by [ChiCubed](https://gist.github.com/ChiCubed/0977601c9ce88eda03b9d2576231192e) written to solve this challenge!
 - Write your own algoritm
 
-Of these four lists, only the last was avaliable to me during the competition. I tried to implement something, but it was far too slow. Holocircuit attempted (and got insanely close) to implementing the algorithm in section 4.1 of [Reinier Bröker's Thesis](https://www.math.leidenuniv.nl/scripties/Broker.pdf). I haven't managed to fix my own implementation of it. It feels dishonest to display any fixed code here after seeing the work by ChiCubed, which would simply be a refactoring of their work. 
+Of these four lists, only the last was avaliable to me during the competition. I tried to implement something, but it was far too slow as my method of finding a discriment with a small square-free part was terrible. Approximately, it was of the same form as the naive solution in Bröker's thesis. Holocircuit attempted (and got insanely close) to implementing the algorithm in section 4.1 of [Reinier Bröker's Thesis](https://www.math.leidenuniv.nl/scripties/Broker.pdf). After the compeition we realised it was about 1 or two lines keeping us from the solve! I haven't managed to fix my own implementation of it. It feels dishonest to display any fixed code here after seeing the work by ChiCubed, which would simply be a refactoring of their work. 
 
 The paper by Galbraith, Massimo, and Paterson produces an algorithm in appendix C (Algorithm of Bröker and Stevenhagen), however this is limited to an order `N` which is squarefree and has only 3 factors. The implmentation by ChiCubed is a much more general realisation of Bröker's algorithm.
 
@@ -1049,6 +1049,7 @@ print(f'Curve accepted after {connections} connections, max connection number es
 """
 Passing the checks, the server asks us to solve the ECDLP
 """
+
 G = E.gens()[0]
 print(G)
 secret = random.randint(1,E.order()-1)

@@ -40,28 +40,29 @@ $$
 as all cross terms will contain a `pq = n`, and `xn mod n = 0`. If we take each of these expressions to the appropriate powers we obtain
 
 $$
-c_1^{e_2} = (2p)^{e1 e_2} + (3q)^{e1 e_2} \mod n \\
-c_2^{e_2} = (5p)^{e1 e_2} + (7q)^{e1 e_2} \mod n
+c_1^{e_2} = (2p)^{e_1 e_2} + (3q)^{e_1 e_2} \mod n \\
+c_2^{e_2} = (5p)^{e_1 e_2} + (7q)^{e_1 e_2} \mod n
 $$
 
 We want to find a way to elimintate p and write q in terms of the known values `c1,c2,e1,e2,n`. We can do this by making the coefficient for `p` the same in both lines to obtain: 
 
 $$
-5^{e1 e_2} c_1^{e_2} = (10p)^{e1 e_2} + (15q)^{e1 e_2} \mod n \\
-2^{e1 e_2} c_2^{e_2} = (10p)^{e1 e_2} + (14q)^{e1 e_2} \mod n
+5^{e1 e_2} \cdot c_1^{e_2} = (10p)^{e_1 e_2} + (15q)^{e_1 e_2} \mod n \\
+2^{e1 e_2} \cdot c_2^{e_2} = (10p)^{e_1 e_2} + (14q)^{e_1 e_2} \mod n
 $$
 
 We now simply take the difference between these two expressions to obtain
 
 $$
-5^{e1 e_2} c_1^{e_2} - 2^{e1 e_2} c_2^{e_2} = (q)^{e1 e_2} \mod n
+5^{e_1 e_2} \cdot c_1^{e_2} - 2^{e_1 e_2} \cdot c_2^{e_2} = (q)^{e_1 e_2} \mod n
 $$
 
 The value of `q` can then be found by calculating the greatest common divisor of this expression and the modulus `n`
 
 $$
-q = \text{gcd}(n, c_1^{e_2} \cdot 5^{e_1 e_2} 0 2^{e_1 e_2})
+q = \text{gcd}(n, 5^{e_1 e_2} \cdot c_1^{e_2} - 2^{e_1 e_2} \cdot c_2^{e_2})
 $$
+
 From here the rest of the challenge is a simple implementaton of cracking RSA where `p,q,e` are all known. This results in the flag `sctf{dr4_m1g_b4kl4ng3s}`
 
 ## Python Implementation

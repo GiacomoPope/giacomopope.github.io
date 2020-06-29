@@ -1,3 +1,5 @@
+{% include mathjax.html %}
+
 # 0CTF
 
 I played this CTF as part of the team Organisers. These challenges were solved as a big group effort including British EBFE, Esrever, Robin and V01d. The crypto challenges of this competition were really interesting and challening. I feel lucky to have been able to play with such a talented team, who helped show me how these more advanced challenges can be interpreted and solved. 
@@ -85,11 +87,13 @@ assert to_codon(base) == 'UUCAUGUACGTUTUCCCTAUAACGAUTUUCUUTCCATAGCUCCTUCGUCAGTAG
 ```
 
 We are futher motivated that we are going along the right line by noticing that the product of the two integers is
+
 ```python
 q = 43955934961951833386625799
 n = 33428203490603515565240058682678165019167410746025906092519187676
 assert n*q == 5^{129} - 1
 ```
+
 This suggests that the group order used for the calculations in finding `(r,s)` is stored on the server in two factors. 
 
 All that remains is to identify the two codon strings which are global constants in the binary. If this is going to be DSA-like signing for $GF(5^{192})$ then we are going to need a modulus for the field, and a base point to perform our calculations. We find the constants strings should interpreted as the modulus and base point as

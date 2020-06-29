@@ -1,5 +1,3 @@
-{% include mathjax.html %}
-
 # 0CTF
 
 I played this CTF as part of the team Organisers. These challenges were solved as a big group effort including British EBFE, Esrever, Robin and V01d. The crypto challenges of this competition were really interesting and challening. I feel lucky to have been able to play with such a talented team, who helped show me how these more advanced challenges can be interpreted and solved. 

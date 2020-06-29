@@ -24,7 +24,7 @@ When we want to sign a message, we are asked to supply a length `78` hex string 
 
 So now we know where the name `gene` comes from. If we sign the same pair `(m0, m1)` the reply from the server is the same, but if we disconnect we find that both of the values from the signing process change, suggesting a global random number is set on connection. 
 
-Futhermore signing two different messages on the same connection with the same `m0` returns the same codon string. This is starting to feel like (EC)DSA, where `m0` is some kind of nonce generating an `r` value from the base point. For it to be randomised on connection suggests that the basepoint itself is randomised. 
+Futhermore, signing two different messages on the same connection with the same `m0` returns the same codon string. This is starting to feel like (EC)DSA, where `m0` is some kind of nonce generating an `r` value from the base point. For it to be randomised on connection suggests that the basepoint itself is randomised. 
 
 Even assuming we are working in DSA, we have many unknowns:
 
@@ -39,10 +39,12 @@ Even with these hunches I really couldnt make any progress on the challenge with
 
 Analysing the binary, it is found that there are some globally defined constants:
 
+```
 - 43955934961951833386625799
 - 33428203490603515565240058682678165019167410746025906092519187676
 - ACAGCTUACTAUCAUTTAUTGGCAATUUAAAGGGGTUAATATTTCACTAGAACAAGTATGUACUGTGTUTUGGUUACACAUAGTGGATCGACTATUUCCCCGTAUCGATCUCGAGGTTGCUGGACUCGTA
 - UUCAUGUACGTUTUCCCTAUAACGAUTUUCUUTCCATAGCUCCTUCGUCAGTAGGCUUCACCATUUAAUATAATUTCACAATAUCUCTAUAGCCUUGATUTCUGUGTAATCCUGCUUTAGTACUTTTAC
+```
 
 There also seems to be the implementation of `sha256` and a multiplication table using `UAGCT` that looks like it is used to perform arithmetic over $GF(5^n)$. Note that the first of the two integers is prime. 
 
@@ -140,6 +142,7 @@ $$
 As we have access to signing arbitary messages on the server, we can recover the global secrets by signing two messages $m_1$ and $m_1^\prime$, keeping $m_0$ fixed. To keep things short, we will denote the hash of the message as $h_1 = H(m_0 + m_1)$.
 
 Sending the server two sets of data: $(m_0, m_1)$ and $(m_0, m_1^\prime)$ we receive the following data:
+
 $$
 s = h_1*d_1 + m_0 + d_0 \mod M \\
 s^\prime = h_1^\prime*d_1 + m_0 + d_0 \mod M 

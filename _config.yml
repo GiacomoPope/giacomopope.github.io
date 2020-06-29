@@ -5,3 +5,6 @@ relative_links:
   collections: true
 
 theme: jekyll-theme-cayman
+
+title: CTF Writeups
+description: 

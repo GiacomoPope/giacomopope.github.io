@@ -51,7 +51,7 @@ a, a:visited, a:hover{
 // code highlight
 
 .highlight{
-  background-color: none;
+  background-color: #0000;
 }
 
 .main-content code{
@@ -61,10 +61,27 @@ a, a:visited, a:hover{
 
 .main-content pre>code{
   background-color: #181818;
-  color: #faba09;
+  color: #efeae1;
 }
 .main-content pre{
   border: none;
   background-color: #181818;
-  
+}
+
+// Python highlighting
+
+.highlight .k, .highlight .kv{
+  color: #faba09;
+}
+
+.highlight .o, .highlight .bp{
+  color: #f92472;
+}
+
+.highlight .nf{
+  color: #66d7ee;
+}
+
+.highlight .mi{
+  color: #ac80ff;
 }

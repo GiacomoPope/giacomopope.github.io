@@ -4,7 +4,7 @@ mathjax: true
 
 # 0CTF
 
-I played this CTF as part of the team Organisers. The challenge was solved as a big group effort including British EBFE, Esrever, Robin and V01d. The crypto was really interesting and challening. I fell lucky to have been able to play with such a talented team, who helped show me how this more advanced challenges can be interpreted and solved. 
+I played this CTF as part of the team Organisers. These challenges were solved as a big group effort including British EBFE, Esrever, Robin and V01d. The crypto challenges of this competition were really interesting and challening. I feel lucky to have been able to play with such a talented team, who helped show me how these more advanced challenges can be interpreted and solved. 
 
 ## Gene
 
@@ -12,23 +12,80 @@ I played this CTF as part of the team Organisers. The challenge was solved as a 
 
 Before the crypto side of this challenge can begin the first thing we needed to do was reverse the binary file given with the challenge. While the team worked on the reversing side I played around with the socket and tried to start guessing what might be going on.
 
+Connecting to the server `nc pwnable.org 23334` we are given three options:
+
+```
+1. Sign message
+2. Verify message
+3. Get flag
+```
+
+When we want to sign a message, we are asked to supply a length `78` hex string which is refered to as `m0`. Then we are asked for the length of the message we want to sign and finally the message we want to send `m1`. Signing the message we get a tuple back from the server. As an example, signing the message `m1 = "testmessage"` with a value of `m0 = '12'*39`, we obtain the tuple:
+
+```
+('UUAGTUCAUTUAGAUACCGAACAUUUTGGAUAGCGCTUGUGUTCCCTCUCACCUTCUGTGUATTCUGCAACUUUUGAGGTTAATTGGUTUACCGAUCCGATUCCGAGUGATCGACAGAATAATGGGUTT', '0761FDDDEDC2C780153E120D0F749F5E3097ADDE8D1531C766B023C525EE37088293581F65B1')
+``` 
+
+So now we know where the name `gene` comes from. If we sign the same pair `(m0, m1)` the reply from the server is the same, but if we disconnect we find that both of the values from the signing process change, suggesting a global random number is set on connection. 
+
+Futhermore signing two different messages on the same connection with the same `m0` returns the same codon string. This is starting to feel like (EC)DSA, where `m0` is some kind of nonce generating an `r` value from the base point. For it to be randomised on connection suggests that the basepoint itself is randomised. 
+
+Even assuming we are working in DSA, we have many unknowns:
+
+- Is this ECDSA or DSA? 
+- What are the parameters? 
+- How is the base point randomised?
+- Why is the `r` value encoded into a codon, and how do we reverse this
+
+Even with these hunches I really couldnt make any progress on the challenge without understanding the binary. Luckily for me my team is much better at rev than I am, and they made big progress in understanding what is happening!
+
 #### Step One: Reversing
 
-The binary has some globally defined constants:
+Analysing the binary, it is found that there are some globally defined constants:
 
 - 43955934961951833386625799
 - 33428203490603515565240058682678165019167410746025906092519187676
 - ACAGCTUACTAUCAUTTAUTGGCAATUUAAAGGGGTUAATATTTCACTAGAACAAGTATGUACUGTGTUTUGGUUACACAUAGTGGATCGACTATUUCCCCGTAUCGATCUCGAGGTTGCUGGACUCGTA
 - UUCAUGUACGTUTUCCCTAUAACGAUTUUCUUTCCATAGCUCCTUCGUCAGTAGGCUUCACCATUUAAUATAATUTCACAATAUCUCTAUAGCCUUGATUTCUGUGTAATCCUGCUUTAGTACUTTTAC
 
-An implementation of `sha256` and a multiplication table using `UAGCT` that looks like it is used to perform arithmetic over $GF(5^n)$. The first of the two integers is prime. 
+There also seems to be the implementation of `sha256` and a multiplication table using `UAGCT` that looks like it is used to perform arithmetic over $GF(5^n)$. Note that the first of the two integers is prime. 
 
-Assuming that this cryptosystem is some variant of DSA, we started to think that $q = 43955934961951833386625799$ would be some large prime factor of the group order. Looking at $GF(5^n)$, which would have order $5^n - 1$, we find that $q | (5^{129} - 1)$, suggesting that the group we are working with is $GF(5^{129})$.
+With out assumption that this cryptosystem is some variant of DSA, we started to think that $q = 43955934961951833386625799$ would be some large prime factor of the group order. Looking at $GF(5^n)$, which would have order $5^n - 1$, we find that $q | (5^{129} - 1)$, suggesting that the group we are working with is $GF(5^{129})$.
 
 If this is indeed a DSA variant, the hash function would appear to be `sha256`, the group $GF(5^{129})$ and the codon strings would then be an encoding of the elements of $GF(5^{129})$. Futher study of the multiplicaton table allows us to realise the relationship
 
 ```python
 codon_vals = {'U' : 0, 'A' : 1, 'G' : 2, 'C' : 3, 'T' : 4}
+```
+
+and we can imagine the codon string as the concat of the coefficients of a polynomical in $GF(5^{129})$, where the integers `01234` are simply represented by the letters `UAGCT`.
+
+Robin quickly found a way to do this in sage
+
+```python
+# Convert from codon string to polynomical coeffs
+I = lambda s: list(map(int, s.translate("".maketrans("UAGCT", "01234"))))
+
+# CODON_MOD
+m = I("ACAGCTUACTAUCAUTTAUTGGCAATUUAAAGGGGTUAATATTTCACTAGAACAAGTATGUACUGTGTUTUGGUUACACAUAGTGGATCGACTATUUCCCCGTAUCGATCUCGAGGTTGCUGGACUCGTA")
+
+# CODON_BASE
+base = J('UUCAUGUACGTUTUCCCTAUAACGAUTUUCUUTCCATAGCUCCTUCGUCAGTAGGCUUCACCATUUAAUATAATUTCACAATAUCUCTAUAGCCUUGATUTCUGUGTAATCCUGCUUTAGTACUTTTAC')
+
+# Define structures
+R.<x> = GF(5)['x']
+m = R(m)
+F = GF(5^129, 'x', modulus=m)
+J = lambda s: F(I(s))
+
+# From codon string to element of F
+embed = lambda x: int(''.join(map(str, x.polynomial())), 5)
+
+# From element of F to codon string
+to_codon = lambda x: ''.join(map(str, x.polynomial())).translate("".maketrans("01234", "UAGCT"))
+
+# Check convertion is working as intended
+assert to_codon(base) == 'UUCAUGUACGTUTUCCCTAUAACGAUTUUCUUTCCATAGCUCCTUCGUCAGTAGGCUUCACCATUUAAUATAATUTCACAATAUCUCTAUAGCCUUGATUTCUGUGTAATCCUGCUUTAGTACUTTTAC'
 ```
 
 We are futher motivated that we are going along the right line by noticing that the product of the two integers is
@@ -37,9 +94,9 @@ q = 43955934961951833386625799
 n = 33428203490603515565240058682678165019167410746025906092519187676
 assert n*q == 5^{129} - 1
 ```
-Suggesting that the group order used for the calculations is stored on the server in two factors.
+This suggests that the group order used for the calculations in finding `(r,s)` is stored on the server in two factors. 
 
-All that remains is to identify the two codon strings which are global constants in the binary. We find that these should be interpreted as the modulus and base point 
+All that remains is to identify the two codon strings which are global constants in the binary. If this is going to be DSA-like signing for $GF(5^{192})$ then we are going to need a modulus for the field, and a base point to perform our calculations. We find the constants strings should interpreted as the modulus and base point as
 
 ```python
 m = "ACAGCTUACTAUCAUTTAUTGGCAATUUAAAGGGGTUAATATTTCACTAGAACAAGTATGUACUGTGTUTUGGUUACACAUAGTGGATCGACTATUUCCCCGTAUCGATCUCGAGGTTGCUGGACUCGTA"

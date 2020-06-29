@@ -78,7 +78,7 @@ a, a:visited, a:hover{
 
 // Python highlighting
 
-.highlight .k, .highlight .kv{
+.highlight .k, .highlight .kv, .highlight .ow{
   color: #faba09;
 }
 
@@ -92,4 +92,8 @@ a, a:visited, a:hover{
 
 .highlight .mi{
   color: #ac80ff;
+}
+
+.highlight .nn{
+  color: #efeae1;
 }

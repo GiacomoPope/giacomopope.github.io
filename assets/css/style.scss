@@ -48,12 +48,17 @@ a, a:visited, a:hover{
 }
 
 .main-content table{
- box-shadow: 0 2px 5px 0 rgba(0,0,0,.16),0 2px 10px 0 rgba(0,0,0,.12);
+ display: table;
+ box-shadow: 0 2px 5px 0 rgba(0,0,0,.22),0 2px 10px 0 rgba(0,0,0,.18);
 }
 
 .main-content table th, .main-content table td{
   background-color: #18181888;
   border: none;
+}
+
+.main-content tbody tr:nth-child(odd) {
+  background-color: #181818bb;
 }
 
 // code highlight
@@ -82,7 +87,7 @@ a, a:visited, a:hover{
   color: #faba09;
 }
 
-.highlight .o, .highlight .bp{
+.highlight .o, .highlight .bp, .highlight .kn{
   color: #f92472;
 }
 
@@ -90,7 +95,7 @@ a, a:visited, a:hover{
   color: #66d7ee;
 }
 
-.highlight .mi, .highlight .mh{
+.highlight .mi, .highlight .mh, .highlight .mf{
   color: #ac80ff;
 }
 

@@ -19,9 +19,13 @@ body{
   width: calc(100% - 2em);
 }
 
+.page-header-simple a, .page-header-simple a:hover, .page-header-simple a:visited{
+  color: #364981
+}
+
 a, a:visited, a:hover{
-//   Rich yellow
- color: #F5A300 
+//   Dusty Pink
+ color: #D77570 
 }
 
 .main-content h1, .main-content h2, .main-content h3, .main-content h4, .main-content h5, .main-content h6 {

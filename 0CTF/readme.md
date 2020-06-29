@@ -46,7 +46,7 @@ Analysing the binary, it is found that there are some globally defined constants
 
 There also seems to be the implementation of `sha256` and a multiplication table using `UAGCT` that looks like it is used to perform arithmetic over $GF(5^n)$. Note that the first of the two integers is prime. 
 
-With out assumption that this cryptosystem is some variant of DSA, we started to think that $q = 43955934961951833386625799$ would be some large prime factor of the group order. Looking at $GF(5^n)$, which would have order $5^n - 1$, we find that $q | (5^{129} - 1)$, suggesting that the group we are working with is $GF(5^{129})$.
+With out assumption that this cryptosystem is some variant of DSA, we started to think that $q = 43955934961951833386625799$ would be some large prime factor of the group order. Looking at $GF(5^n)$, which would have order $5^n - 1$, we find that $(5^{129} - 1) \mod q \equiv 0$, suggesting that the group we are working with is $GF(5^{129})$.
 
 If this is indeed a DSA variant, the hash function would appear to be `sha256`, the group $GF(5^{129})$ and the codon strings would then be an encoding of the elements of $GF(5^{129})$. Futher study of the multiplicaton table allows us to realise the relationship
 

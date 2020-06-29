@@ -13,3 +13,18 @@ body{
   font-family: "Inter", "Helvetica Neue", "Helvetica", sans-serif;
   font-feature-settings: 'ss01' 1, 'zero' 1;
 }
+
+.page-header-simple{
+  padding: 1em;
+  width: calc(100% - 2em);
+}
+
+a, a:visited, a:hover{
+//   Rich yellow
+ color: #FFAD05 
+}
+
+.main-content h1, .main-content h2, .main-content h3, .main-content h4, .main-content h5, .main-content h6 {
+// Dusty Blue
+color: #2B3A67;
+}

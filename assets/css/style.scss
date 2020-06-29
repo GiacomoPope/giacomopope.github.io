@@ -47,6 +47,14 @@ a, a:visited, a:hover{
   margin-top: 0
 }
 
+.main-content table{
+ box-shadow: 0 2px 5px 0 rgba(0,0,0,.16),0 2px 10px 0 rgba(0,0,0,.12);
+}
+
+.main-content table th, .main-content table td{
+  background-color: #18181888;
+  border: none;
+}
 
 // code highlight
 

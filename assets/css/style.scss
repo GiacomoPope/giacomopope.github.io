@@ -91,7 +91,7 @@ a, a:visited, a:hover{
   color: #faba09;
 }
 
-.highlight .o, .highlight .bp, .highlight .kn{
+.highlight .o, .highlight .bp, .highlight .kn, .highlight .kd{
   color: #f92472;
 }
 
@@ -107,6 +107,10 @@ a, a:visited, a:hover{
   color: #efeae1;
 }
 
-.highlight .s{
+.highlight .s, .highlight .s2{
   color: #ff695a;
+}
+
+.highlight .kt {
+  color: #00cca0;
 }

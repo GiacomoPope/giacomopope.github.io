@@ -1,17 +1,8 @@
-# CTF Writeups and Challenge Solutions
+# Writeups
 
-A collection of solutions to challenges from Capture the Flag competitions. I will occassionally include an implementation of some exploit that I think is interesting without the context of a CTF problem.
+Here is a collection of write ups and discussions of the challenges I have solved in various capture the flag competitions. The focus is usually the cryptographic challenges.
 
-## By Category
-
-### Elliptic Curves
-
-#### Pairing attacks
-- [Supersingular curves with prime characteristic](/tools/mov.html)
-- [Prime order curves with composite characteristic](/misc/superprime/)
-
-
-## By CTF
+## CTF Writeups
 
 | CTF  | Category |
 | ------------- | ------------- |
@@ -22,4 +13,19 @@ A collection of solutions to challenges from Capture the Flag competitions. I wi
 | [SecurityFest](/SecurityFest)  | Crypto  |
 | [HSCTF 2019](/hsctf-2019/)  | Crypto  |
 | [picoCTF 2019](/picoCTF-2019)  | General, Binary, Crypto, Forensics, Web  |
+
+
+## Categories
+
+### Elliptic Curves
+
+- [Supersingular curves with prime characteristic](/tools/mov.html)
+- [Prime order curves with composite characteristic](/misc/superprime/)
+
+
+## About Me
+
+I am currently playing CTFs as a member of [cr0wn](https://cr0wn.uk) and I cofounded the website [CryptoHack](https://cryptohack.org) with [Hyperreality](https://github.com/hyperreality/ctf-writeups).
+
+Currently I am particularly interested in elliptic curve cryptography, so the writeups I choose to discuss will generally be focused on this area.
 

@@ -47,8 +47,8 @@ $$
 We want to find a way to elimintate p and write q in terms of the known values `c1,c2,e1,e2,n`. We can do this by making the coefficient for `p` the same in both lines to obtain: 
 
 $$
-5^{e1 e_2} \cdot c_1^{e_2} = (10p)^{e_1 e_2} + (15q)^{e_1 e_2} \mod n \\
-2^{e1 e_2} \cdot c_2^{e_2} = (10p)^{e_1 e_2} + (14q)^{e_1 e_2} \mod n
+5^{e_1 e_2} \cdot c_1^{e_2} = (10p)^{e_1 e_2} + (15q)^{e_1 e_2} \mod n \\
+2^{e_1 e_2} \cdot c_2^{e_2} = (10p)^{e_1 e_2} + (14q)^{e_1 e_2} \mod n
 $$
 
 We now simply take the difference between these two expressions to obtain
@@ -60,7 +60,7 @@ $$
 The value of `q` can then be found by calculating the greatest common divisor of this expression and the modulus `n`
 
 $$
-q = \text{gcd}(n, 5^{e_1 e_2} \cdot c_1^{e_2} - 2^{e_1 e_2} \cdot c_2^{e_2})
+q = \text{gcd}\left( n, 5^{e_1 e_2} \cdot c_1^{e_2} - 2^{e_1 e_2} \cdot c_2^{e_2} \right)
 $$
 
 From here the rest of the challenge is a simple implementaton of cracking RSA where `p,q,e` are all known. This results in the flag `sctf{dr4_m1g_b4kl4ng3s}`

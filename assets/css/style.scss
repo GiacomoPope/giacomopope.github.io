@@ -16,8 +16,9 @@ body{
 }
 
 .page-header-simple{
-  padding: 1em;
+  padding: 0 2em;
   width: calc(100% - 2em);
+  font-size: 0.8em;
 }
 
 .page-header-simple a, .page-header-simple a:hover, .page-header-simple a:visited{
@@ -40,4 +41,14 @@ a, a:visited, a:hover{
 
 .main-content h4, .main-content h5, .main-content h6{
   font-weight: 500; 
+}
+
+
+// code highlight
+.main-content code, .main-content pre>code{
+  color: #0c3079;
+}
+.main-content pre{
+  border: none;
+  
 }

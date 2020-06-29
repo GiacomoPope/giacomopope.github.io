@@ -86,14 +86,18 @@ a, a:visited, a:hover{
   color: #f92472;
 }
 
-.highlight .nf{
+.highlight .nf, .highlight .nb{
   color: #66d7ee;
 }
 
-.highlight .mi{
+.highlight .mi, .highlight .mh{
   color: #ac80ff;
 }
 
 .highlight .nn{
   color: #efeae1;
+}
+
+.highlight .s{
+  color: #ff695a;
 }

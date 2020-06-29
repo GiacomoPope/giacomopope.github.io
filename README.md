@@ -15,6 +15,7 @@ A collection of solutions to challenges from Capture the Flag competitions. I wi
 
 | CTF  | Category |
 | ------------- | ------------- |
+| [0CTF 2020](/0CTF)  | Crypto |
 | [redpwn 2020](/redpwn)  | Crypto |
 | [HackTM](/HackTM)  | Crypto, OSint |
 | [INS'HACK](/INS’HACK)  | Crypto |

@@ -12,7 +12,8 @@ html { font-family: 'Inter var', sans-serif; }
 body{
   font-family: "Inter", "Helvetica Neue", "Helvetica", sans-serif;
   font-feature-settings: 'ss01' 1, 'zero' 1;
-  color: #1b242e;
+  background: #21242c;
+  color: #efeae1;
 }
 
 .page-header-simple{
@@ -22,24 +23,23 @@ body{
 }
 
 .page-header-simple a, .page-header-simple a:hover, .page-header-simple a:visited{
-  color: #364981
+  color: #7aaf9f;
 }
 
 a, a:visited, a:hover{
-//   Dusty Pink
- color: #D77570 
-}
-
-.main-content h1, .main-content h2, .main-content h3, .main-content h4, .main-content h5, .main-content h6 {
-// Dusty Blue
- color: #364981;
+//   Dusty Blue
+ color: #679dc6 
 }
 
 .main-content h1, .main-content h2, .main-content h3{
+  // Dusty Gold
+  color: #faba09;
   font-weight: 600; 
 }
 
 .main-content h4, .main-content h5, .main-content h6{
+  //   Dusty Green
+  color: #7aaf9f;
   font-weight: 500; 
 }
 
@@ -49,10 +49,22 @@ a, a:visited, a:hover{
 
 
 // code highlight
-.main-content code, .main-content pre>code{
-  color: #0c3079;
+
+.highlight{
+  background-color: none;
+}
+
+.main-content code{
+  background-color: #181818;
+  color: #faba09;
+}
+
+.main-content pre>code{
+  background-color: #181818;
+  color: #faba09;
 }
 .main-content pre{
   border: none;
+  background-color: #181818;
   
 }

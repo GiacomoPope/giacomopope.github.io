@@ -21,10 +21,18 @@ body{
 
 a, a:visited, a:hover{
 //   Rich yellow
- color: #FFAD05 
+ color: #F5A300 
 }
 
 .main-content h1, .main-content h2, .main-content h3, .main-content h4, .main-content h5, .main-content h6 {
 // Dusty Blue
-color: #2B3A67;
+ color: #364981;
+}
+
+.main-content h1, .main-content h2, .main-content h3{
+  font-weight: 600; 
+}
+
+.main-content h4, .main-content h5, .main-content h6{
+  font-weight: 500; 
 }

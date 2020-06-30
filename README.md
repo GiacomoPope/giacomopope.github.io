@@ -20,8 +20,9 @@ Here is a collection of write ups and discussions of the challenges I have solve
 ### Elliptic Curves
 
 - [Supersingular curves with prime characteristic](/tools/mov.html)
-- [Prime order curves with composite characteristic](/misc/superprime/)
-
+- [Supersingular curves with composite characteristic](/misc/superprime/)
+- [Generating curves with pseudoprime order](/redpwn/#jeopardy)
+- [Smart's attack for anomalous curves](/hsctf-2019/#spooky-ecc)
 
 ## About Me
 

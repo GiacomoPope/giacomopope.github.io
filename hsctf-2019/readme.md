@@ -4,13 +4,13 @@ Here's a write up for the crypto challenges I was able to finish while paying hs
 
 | Challenge  | Category |
 | ------------- | ------------- |
-|[Super Secure System](#Super-Secure-System) | OTP |
-|[Reverse Search Algorithm](#Reverse-Search-Algorithm) | RSA |
-|[Massive RSA](#Massive-RSA) | RSA |
-|[Really Secure Algorithm](#Really-Secure-Algorithm) | RSA |
-|[Tux's Kitchen](#Tux's-Kitchen) | Reversing, XOR |
-|[Bomb](#Bomb) |Enigma |
-|[Spooky ECC](#Spooky-ECC) | ECC |
+|[Super Secure System](#super-secure-system) | OTP |
+|[Reverse Search Algorithm](#reverse-search-algorithm) | RSA |
+|[Massive RSA](#massive-rsa) | RSA |
+|[Really Secure Algorithm](#really-secure-algorithm) | RSA |
+|[Tux's Kitchen](#tux's-kitchen) | Reversing, XOR |
+|[Bomb](#Bomb) | Enigma |
+|[Spooky ECC](#spooky-ecc) | ECC |
 
 
 # Crypto Challenges

@@ -249,3 +249,273 @@ if __name__ == "__main__":
 #### Flag
 
 `flag{TTAUUTCAGUGUGGTTGAAUAUAT}`
+
+
+## Simple Curves
+
+#### Challenge
+
+```python
+#!/usr/bin/env sage
+
+with open('flag', 'rb') as fp:
+    flag = fp.read()
+assert len(flag) == 37 and flag[:5] == b'flag{' and flag[-1:] == b'}'
+flag = int.from_bytes(flag[5:-1], 'big')
+
+F = GF(2**256)
+P = PolynomialRing(F, 'u, v')
+u, v = P.gens()
+PP = PolynomialRing(F, 'w')
+w = PP.gens()[0]
+
+h = u^2 + u
+f = u^5 + u^3 + 1
+c = v^2 + h*v - f
+f = f(u=w)
+h = h(u=w)
+
+def encode(plain):
+    assert plain < 2**256
+    x = F.fetch_int(plain)
+    y, k = c(u=x, v=w).roots()[0]
+    assert k == 1
+    return w - x, y
+
+def decode(c):
+    x, y = c
+    print(list(x))
+    print(y)
+    x = [i.integer_representation() for i in x]
+    y = [i.integer_representation() for i in y]
+    return x, y
+
+def add(p1, p2):
+    a1, b1 = p1
+    a2, b2 = p2
+    d1, e1, e2 = xgcd(a1, a2)
+    d, c1, c2 = xgcd(d1, b1+b2+h)
+    di = PP(1/d)
+    a = a1*a2*di*di
+    b = (c1*e1*a1*b2+c1*e2*a2*b1+c2*(b1*b2+f))*di
+    b %= a
+
+    while a.degree() > 2:
+        a = PP((f-b*h-b*b)/a)
+        b = (-h-b)%a
+    a = a.monic()
+    return a, b
+
+def mul(p, k):
+    if k == 1:
+        return p
+    else:
+        tmp = mul(p, k//2)
+        tmp = add(tmp, tmp)
+        if k & 1:
+            tmp = add(tmp, p)
+        return tmp
+
+
+e = 65537
+c = mul(encode(flag), e)
+ctext = decode(c)
+print(ctext)
+# ([113832590633816699072296178013238414056344242047498922038140127850188287361982, 107565990181246983920093578624450838959059911990845389169965709337104431186583, 1], [60811562094598445636243277376189331059312500825950206260715002194681628361141, 109257511993433204574833526052641479730322989843001720806658798963521316354418])
+```
+
+#### Introduction
+
+This challenge is based on hyperelliptic curve cryptography. A hyperelliptic curve $C$, of genus $g$ over a field $K$ is given by the equation
+
+$$
+C: y^2 + h(x) y = f(x), \qquad h(x), g(x) \in K[x] 
+$$
+
+and the function $h(x)$ is a polynomial of degree not larger than $g$ and $f(x)$ has degree $2g + 1$. A hyperelliptic curve of genus $g = 1$ is an elliptic curve by defintion and we thus understand hyperelliptic curves as a generalisation of elliptic curves.
+
+To apply hyperelliptic curves in a cryptographic setting, we need an additional structure, known as the Jacobian $J$ of the curve (sometimes written as $J(C)$). The Jacobian on a hyperelliptic curve is an Abelian group, and thus has potential for cryptographic implementation through the hardness of the discrete logarithm problem for the group. In elliptic curve cryptography, the Abelian group is the collection of points on the curve (together with the additional point at infinity), and the group structure comes from point addition. For elliptic curves, it can also be shown that the Jacobian of the curve is isomorphic to the group of points on the curve, but this is not true for hyperelliptic curves or arbitary genus. We thus understand the Jacobian as the generalised group we must consider for DLP for (hyper)elliptic curves.
+
+This challenge is formed around recovering the flag, represented by an integer. The script given above produces a "base point" in the Jacobian of the curve from the flag and then performs scalar multiplication. Symbolically, the flag is lifted into the Jacobian, which we will denote as $G$. The script then performs the operation $Q = dG$ for $d \ in \mathbb{Z}$, $G,Q \in J(C)$ and prints out $Q$ (although not as an element of $J$ anymore, so we will have to lift the data given back into $J$).
+
+The challenge is then defined by the following: given the element of the Jacobian $Q$, and an integer $d$, such that $Q = dG$, find a way to recover $G$. To do this, we must "divide" the given data by `65537` to obtain the flag, *i.e.* we must find the integer $d^{-1}$ such that $d^{-1} dG = G$. We are able to do this by calculating the value of `inverse_mod(65537,jacobian_order)` and so to solve this challenge we must calculate the order of the Jacobian $J(C)$.
+
+In summary, to grab the flag, we need to:
+
+- Lift the data from the challenge into the Jacobian of the hyperelliptic curve
+- Calculate the order of the Jacobian 
+- Calculate the inverse of `65537` from `inverse_mod(65537,jacobian_order)`
+- Perform inverse multiplication on $Q$ to obtain $G = d^{-1} d Q$
+- Represent $G$ as an integer to obtain the flag
+
+The difficulty of this challenge was making sage work as I wanted it to, but I suppose the Jacobian order is the core of the intended challenge!
+
+#### Finding the order
+
+To solve this challenge, we need to find the multipicative inverse of `65537` under the action of scalar multiplication in the Jacobian of the Hyperelliptic curve. This requires calculating the order of the Jacobian. To find this, we followed example 56 in [An elementary introduction to hyperelliptic curves](https://www.math.uwaterloo.ca/~ajmeneze/publications/hyperelliptic.pdf).
+
+In our case, we have a curve $C$ of genus $g=2$, defined over $GF(q) = GF(2)$. As a result, our calculation can follow the method outlined on page 30 of the above link.
+
+While solving the challenge, we were first calculaing a value for the order which wasn't an integer. This bug came from incorrectly calculating the values $M_1$, $M_2$ by forgetting to include the point at infinity while counting all points in step 1. We spotted this by running our script against the given example in the lecture notes. Once this was fixed, we found the order for our curve was an integer. An implementation for the calculation of the order is given below
+
+```python
+# Paramters and curve
+q = 2
+n = 256
+E_f = lambda x, y: y^2 + (x^2 + x)*y + x^5 + x^3 + 1
+
+
+# Step 1 
+# Note: + 1 in calcs. represents incluing the point at infinity.
+
+def count_points(F):
+    return [(x, y) for x in F for y in F if E_f(x, y) == 0]
+    
+ps1 = count_points(GF(2))
+m1 = len(ps1) + 1
+print('points in GF(2) =', ps1)
+print('M1 =', m1)
+
+ps2 = count_points(GF(4))
+m2 = len(ps2) + 1
+print('points in GF(4) =', ps2)
+print('M2 =', m2)
+
+# Step 2
+a1 = m1 - 1 - q
+a2 = (m2 - 1 - q^2 + a1^2) / 2
+print('a1 =', a1)
+print('a2 =', a2)
+
+# Step 3
+# X^2 + a1X + (a2 − 2q) = 0 => x^2 - x - 5 = 0 => zeros = (1 +- sqrt(21)) / 2
+var('X')
+gammas = list(map(lambda x: x.rhs(), solve([X^2 + a1*X + (a2 - 2 * 2) == 0], X)))
+print('gammas =', gammas)
+
+# Step 4
+# X^2 − gamma1X + q = 0
+alpha1 = list(map(lambda x: x.rhs(), solve([X^2 - gammas[0]*X + q == 0], X)))[0]
+alpha2 = list(map(lambda x: x.rhs(), solve([X^2 - gammas[1]*X + q == 0], X)))[0]
+print('alpha1 =', alpha1)
+print('alpha2 =', alpha2)
+
+# Step 5
+nj = int(abs(1-alpha1^n)^2 * abs(1-alpha2^n)^2)
+print('size of jacobian =', nj)
+# 13407807929942597099574024998205846127384782207827457971403006387925941306569427075743805985793764139096494648696821820448189053384542053304334065342873600
+```
+
+With the order of the Jacobian, we can find the multiplicative inverse from `inv = inverse_mod(65537, jacobian_order)`. The only remaining step is to take the integers printed as challenge data and lift these back into the Jacobian of the curve. We perform this with the function
+
+```python
+F = GF(2**n)
+P.<x> = PolynomialRing(F)
+f = x^5 + x^3 + 1
+h = x^2 + x
+
+C = HyperellipticCurve(f,h,'u,v')
+J = C.jacobian()
+J = J(J.base_ring())
+
+def data_to_jacobian(data):
+      xs, ys = data
+      pt_x = P(list(map(F.fetch_int, xs)))
+      pt_y = P(list(map(F.fetch_int, ys)))
+      pt = (pt_x, pt_y)
+      return J(pt)
+```
+
+The output of `pt = data_to_jacobian(data)` is an element of `J` and by calculating `inv*pt` we obtain the flag represented as an element of the Jacobian. Representing this as an integer and applying `long_to_bytes` prints the flag.
+
+#### Implementation
+
+```python
+from Crypto.Util.number import long_to_bytes
+
+def count_points(F, curve):
+    return [(x, y) for x in F for y in F if curve(x, y) == 0]
+
+def jacobian_order(q, n, curve, debug=False):
+      # step 1 
+      # +1 represents the point at infinity.
+      ps1 = count_points(GF(2), curve)
+      m1 = len(ps1) + 1
+      if debug:
+            print('points in GF(2) =', ps1)
+            print('M1 =', m1)
+
+      ps2 = count_points(GF(4), curve)
+      m2 = len(ps2) + 1
+      if debug:
+            print('points in GF(4) =', ps2)
+            print('M2 =', m2)
+
+      # step 2
+      a1 = m1 - 1 - q
+      a2 = (m2 - 1 - q^2 + a1^2) / 2
+      if debug:
+            print('a1 =', a1)
+            print('a2 =', a2)
+
+      # step 3
+      # X^2 + a1X + (a2 − 2q) = 0 => x^2 - x - 5 = 0 => zeros = (1 +- sqrt(21)) / 2
+      var('X')
+      gammas = list(map(lambda x: x.rhs(), solve([X^2 + a1*X + (a2 - 2 * 2) == 0], X)))
+
+      # step 4
+      # X^2 − gamma1X + q = 0
+      alpha1 = list(map(lambda x: x.rhs(), solve([X^2 - gammas[0]*X + q == 0], X)))[0]
+      alpha2 = list(map(lambda x: x.rhs(), solve([X^2 - gammas[1]*X + q == 0], X)))[0]
+      if debug:
+            print('points in GF(2) =', ps1)
+            print('M1 =', m1)
+            print('points in GF(4) =', ps2)
+            print('M2 =', m2)
+            print('a1 =', a1)
+            print('a2 =', a2)
+            print('gammas =', gammas)
+            print('alpha1 =', alpha1)
+            print('alpha2 =', alpha2)
+
+      # step 5
+      nj = int(abs(1-alpha1^n)^2 * abs(1-alpha2^n)^2)
+      return nj
+
+
+def data_to_jacobian(data):
+      xs, ys = data
+      pt_x = P(list(map(F.fetch_int, xs)))
+      pt_y = P(list(map(F.fetch_int, ys)))
+      pt = (pt_x, pt_y)
+      return J(pt)
+
+q = 2
+n = 256
+enc_flag = ([113832590633816699072296178013238414056344242047498922038140127850188287361982, 107565990181246983920093578624450838959059911990845389169965709337104431186583, 1], [60811562094598445636243277376189331059312500825950206260715002194681628361141, 109257511993433204574833526052641479730322989843001720806658798963521316354418])
+
+F = GF(2**n)
+P.<x> = PolynomialRing(F)
+f = x^5 + x^3 + 1
+h = x^2 + x
+
+C = HyperellipticCurve(f,h,'u,v')
+J = C.jacobian()
+J = J(J.base_ring())
+
+E_f = lambda x, y: y^2 + (x^2 + x)*y + x^5 + x^3 + 1
+J_order = jacobian_order(q, n, E_f, debug=False)
+# J_order = 13407807929942597099574024998205846127384782207827457971403006387925941306569427075743805985793764139096494648696821820448189053384542053304334065342873600
+
+inv = inverse_mod(65537, J_order)
+# inv = 744275832722449429303298944771241714015378147795539803469248473980721950551590333728366665796690631826800853440942334601683198440773364510447034953039873
+
+J_point = data_to_jacobian(enc_flag)
+flag_point = inv*J_point
+flag_int = flag_point[0].coefficients()[0].integer_representation()
+# flag_int = 87336973591408809511144500944284390061575902317760214640835643492103517747
+
+flag = long_to_bytes(flag_int).decode()
+print('flag{'+flag+'}')
+# flag{1nTere5tinG_Hyp3re11iPtic_curv3}
+```

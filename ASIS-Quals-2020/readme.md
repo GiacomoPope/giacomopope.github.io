@@ -53,18 +53,23 @@ print 'enc =', pow(bytes_to_long(flag), e, n)
 #### Solution
 
 To solve this challenge, we use that for the RSA cryptosystem the public and private keys obey
+
 $$
 e\cdot d - 1 \equiv 0 \mod \phi(n), \qquad \Rightarrow  \qquad e\cdot d - 1 = k \cdot \phi(n), \quad k \in \mathbf{Z}
 $$
 
 and Euler's theorem, which states that
+
 $$
 \gcd(a,n) = 1 \qquad \Leftrightarrow \qquad a^{\phi(n)} \equiv 1\mod n
 $$
+
 We have the data $t_p, t_q, e, n$ which is suffient to solve for $p$. Using that 
+
 $$
 t_p = (sp + 1)^{\frac{d-1}{2^r}}
 $$
+
 We can take `eth` power to find
 
 $$
@@ -76,27 +81,32 @@ t_p^e &= (sp + 1)^{\frac{ed-e}{2^r}} \mod n \\
 $$
 
 From Euler's theorem we have
+
 $$
 (sp + 1)^{\frac{k\phi(n)}{2^r}} \equiv 1^{\frac{k}{2^r}} \equiv 1 \mod n
 $$
+
 The value of `r` is of small size `r = random.randint(12, 19)` and we know that $e - 1 = 2^{16}$ and so we know that we have
+
 $$
 t_p^e = (sp + 1)^{m} \mod n, \qquad m \in \{16, 8, 4, 2, 1, \frac12, \frac14 \}
 $$
+
 We can expand out $t_p^e$ and write down
+
 $$
 \begin{align}
 t_p^e - 1 = s p \cdot (s^{m-1} p^{m-1} + \ldots + m) \mod n \\
 \end{align}
 $$
+
 We can solve the challenge by then looking at 
+
 $$
 \gcd(t_p^e - 1, n) = p
 $$
 
 **Note**: we can only treat $p$ as a true factor in the above line as $n = p\cdot q$,  so by nature of the CRT, this expression simplifies.
-
- 
 
 #### Implementation
 
@@ -135,8 +145,6 @@ print(long_to_bytes(flag))
 > nc 76.74.178.201 9531
 > ```
 
-
-
 ### Solution
 
 The hard part of this challenge was dealing with boring bugs when sending data to the server while resolving the proof of work. One you connected to the server and passed the proof of work, we were given the prompt
@@ -153,29 +161,41 @@ The hard part of this challenge was dealing with boring bugs when sending data t
 So the question is, given a single point $P$, together with the knowledge of the placement of three points, can we uniquely determine the curve?
 
 If we assume the curve is over some finite field with prime characteristic, and that as standard this challenge uses a curve of Weierstrass form, we know we are looking for curves of the form
+
 $$
 y^2 = x^3 + Ax + B \mod p
 $$
+
 and from the knowledge of the three points we have
+
 $$
 x^3 + Ax + B = (x+ 1)^3 + A(x+1) + B = (x + 2)^3 + A(x + 2) + B \mod p
 $$
+
 We can then write down
+
 $$
 x^3 + Ax = (x+ 1)^3 + A(x+1), \quad \Rightarrow \quad A = -1 -3x - 3x^2
 $$
+
 and 
+
 $$
 x^3 + Ax = (x+ 2)^3 + A(x+2), \quad \Rightarrow \quad A = -4 -6x - 3x^2
 $$
+
 as all three points are on the same curve, we have that
+
 $$
 3x^2 + 3x + 1 = 3x^2 +6x +4, \quad \Rightarrow \quad x = -1
 $$
-and from the above we have $x = -1 \Rightarrow A = -1$. The only thing left to do is to find $B$, which we can see is recovered from the general form of the curve.  
+
+and from the above we have $x = -1 \Rightarrow A = -1$. The only thing left to do is to find $B$, which we can see is recovered from the general form of the curve.
+
 $$
 y^2 = (-1)^3 + (-1)^2 + B, \quad \Rightarrow \quad B = y^2
 $$
+
 Now we have recovered the inital point, we see that the triple of points we will be given is  $(-1, y)$, $(0, y)$ and $(1,y)$. The last two of these points would be trivial to spot and we can see this isn't what the server is sending us. We can then know for certain that the given point 
 
 ```
@@ -183,9 +203,11 @@ Now we have recovered the inital point, we see that the triple of points we will
 ```
 
 is the point $(x_0, y_0) = (-1, y)$ . We can now recover the characteristic from
+
 $$
 -1 \equiv x_0 \mod p, \quad \Rightarrow \quad p = x_0 + 1
 $$
+
 and we can quickly check that 
 
 ```python
@@ -262,7 +284,6 @@ r.interactive()
 #### Flag
 
 `ASIS{4n_Ellip71c_curve_iZ_A_pl4Ne_al9ebr4iC_cUrv3}`
-
 
 
 ## Jazzy
@@ -346,7 +367,6 @@ Being a wise guy, I tried sending the flag back to the server, but I was given t
 | this decryption is NOT allowed :P
 ```
 
-
 Solving this challenge was easy after a bit of googling to try and see what this crypto system was. I noticed that the key stream was generated using a random number generator called [Blum Blum Shub](https://en.wikipedia.org/wiki/Blum_Blum_Shub). Looking for when this was used as a keystream, I stumbled upon the [Blum-Goldwasser Cryptosystem](https://en.wikipedia.org/wiki/Blum–Goldwasser_cryptosystem) and spending a little bit of time reading the Wikipedia page, I could tell that this was the right choice.
 
 #### Adaptive chosen plaintext attack
@@ -364,8 +384,6 @@ This sounds easy! Lets go back to the server and generate $m^\prime$:
 ```
 
 Uh oh... it seems that the server checks the seed value and doesn't let us use this attack...
-
-
 
 #### Just one more block
 
@@ -413,13 +431,9 @@ b'((((......:::::: Great! the flag is: ASIS{BlUM_G0ldwaS53R_cryptOsySt3M_Iz_HI9h
 
 No pwntools cracked out to do this one in a stylish way, but we still grab the flag!
 
-
-
 #### Flag
 
 `ASIS{BlUM_G0ldwaS53R_cryptOsySt3M_Iz_HI9hlY_vUlNEr4bl3_70_CCA!?}`
-
-
 
 ## Crazy
 
@@ -472,8 +486,6 @@ for keypair in KEYS:
 	if msg == flag:
 		print pubkey, enc
 ```
-
-
 
 ### Solution
 
@@ -659,8 +671,6 @@ q = n // p
 
 print(decrypt(c, n, p, q, s))
 ```
-
-
 
 #### Flag
 

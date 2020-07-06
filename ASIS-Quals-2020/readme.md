@@ -686,7 +686,7 @@ After working through this, my take away is that my intuition for cube roots was
 
 
 $$
-f(x, y, z) = x^3 + y^2 + z + 1
+f(x, y, z) = x^3 + y^2 + z
 $$
 
 

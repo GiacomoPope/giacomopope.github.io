@@ -11,6 +11,7 @@ A handful of write ups from some of the crypto challenges from ASIS 2020 Quals. 
 | [Elliptic Curve](#elliptic-curve) |    125 |
 | [Jazzy](#jazzy)                   |    122 |
 | [Crazy](#crazy)                   |    154 |
+| [Tripolar](#tripolar)             |    154 |
 
 
 

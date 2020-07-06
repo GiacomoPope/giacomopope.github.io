@@ -779,7 +779,7 @@ $$
 This is looking better, and by renaming a few pieces we get the polynomial into the form
 
 $$
-C(x,y,z) = \frac16 \left( f^3 + 3h^2 +2h -6y - z - 6) \right) \\
+C(x,y,z) = \frac16 \left( f^3 + 3h^2 +2h -6y - z - 6 \right) \\
 $$
 
 Where we have defined

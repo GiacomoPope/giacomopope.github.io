@@ -675,3 +675,257 @@ print(decrypt(c, n, p, q, s))
 #### Flag
 
 `ASIS{1N_h0nOr_oF__Lenore__C4r0l_Blum}`
+
+
+## Tripolar
+
+**Disclaimer** I didn't solve this challenge during the competition and it took me reading a [writeup](https://ctftime.org/writeup/22112) to understand how this challenge works. I'm writing it up to talk myself through the solution, and maybe someone else will read this and be surprised by the solution too. 
+
+After working through this, my take away is that my intuition for cube roots was way off! The key for solving this challenge is that given a polynomial of the form
+
+
+$$
+f(x, y, z) = x^3 + y^2 + z + 1
+$$
+
+
+One can recover the value of $x$ from taking the cube root of $f(x,y,z)$.  Even after I read this, I couldn't believe there wasn't some loss of information of the LSB of $x$, but it seems like it holds, even for small positive integers
+
+```python
+>>> from Crypto.Util.number import *
+>>> import gmpy2
+>>> gmpy2.get_context().precision = 4096
+>>> x, y, z = [getPrime(256) for _ in range(3)]
+>>> f = x**3 + y**2 + x
+>>> _x = gmpy2.iroot(f, 3)[0]
+>>> x == _x
+True
+>>> x, y, z = [getPrime(5) for _ in range(3)]
+>>> f = x**3 + y**2 + x
+>>> _x = gmpy2.iroot(f, 3)[0]
+>>> x == _x
+True
+```
+
+The same is true for quadratic terms, by looking at the square root of $f - x^3$, but here there seems to be a bit less certainty and we find with small enough inputs, the square root approximation can be off by 1. 
+
+Anyway... with my display of ignorance out the way, lets look at the challenge!
+
+
+### Challenge
+
+```python
+#!/usr/bin/python
+
+from Crypto.Util.number import *
+from hashlib import sha1
+from flag import flag
+
+def crow(x, y, z):
+	return (x**3 + 3*(x + 2)*y**2 + y**3 + 3*(x + y + 1)*z**2 + z**3 + 6*x**2 + (3*x**2 + 12*x + 5)*y + (3*x**2 + 6*(x + 1)*y + 3*y**2 + 6*x + 2)*z + 11*x) // 6
+
+def keygen(nbit):
+	p, q, r = [getPrime(nbit) for _ in range(3)]
+	pk = crow(p, q, r)
+	return (p, q, r, pk)
+
+def encrypt(msg, key):
+	p, q, r, pk = key
+	_msg = bytes_to_long(msg)
+	assert _msg < p * q * r
+	_hash = bytes_to_long(sha1(msg).digest())
+	_enc = pow(_msg, 31337, p * q * r)
+	return crow(_enc * pk, pk * _hash, _hash * _enc) 
+
+key = keygen(256)
+enc = encrypt(flag, key)
+f = open('flag.enc', 'w')
+f.write(long_to_bytes(enc))
+f.close()
+```
+
+
+Reading through the code, we see that the flag is encrypted RSA style using three primes $p,q,r$. The message is also hashed with `sha1` and the three primes used for encryption are fed into some fairly ugly polynomial named `crow` to produce another value `pk`.
+
+The results of these computations are then all taken together, multiplied to and fed into the `crow` function again. The only output of the challenge is `enc`, which is the value of the second evaluation of the `crow` polynomial. 
+
+We then understand this challenge as learning how to find the integer solutions of `crow` so we can work backwards to finding the flag. Solving the first step will give us `_enc`, `_hash` and `pk` and solving `pk = crow(p,q,r)` we can grab the primes and reverse the encryption of `_enc`. But how to we solve `crow`?
+
+During the competition I got toally sidetracked by the paper [A Strategy for Finding Roots of Multivariate Polynomials with New Applications in Attacking RSA Variants](http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.61.8061&rep=rep1&type=pdf) by Jochemsz and May, and decided the solution to this puzzle must be to implement the small integer roots algorithm that they give in 2.2 of the paper. This was hard to specialise to this polynomial and i failed. Potentially this method works, but I couldnt get it to. The closest I got was to notice that the bitsize of `_enc*pk` was larger than the other two elements of `crow` and so by taking the cube root, I could recover the MSB of `_enc*pk`. Typing this up now I see i was kind of close, but thinking totally wrong.
+
+The real solution is much simplier and elegant and relies on the fact that we can find certain terms in the polynomial due to the various powers of certain terms (I've already explained this a little in the disclaimer). What we find is with a few steps of algebra and a resetting of my intuition of cube roots, this challenge has a nice solution.
+
+
+### Solution
+
+The first step to solving this challenge is simplifying the polynomial. I went down a rabbit hole of Legendre polynomials, taking the "dipole" hint way too seriously. Im not sure what the "Tripolar" hint was pointing towards... maybe some can enlighten me.
+
+The crow polynomial is given to us in the form
+
+$$
+\begin{align}
+C(x,y,x) &= \frac16 \big( x^3 + 3(x + 2)y^2 + y^3 + 3(x + y + 1)z^2 + z^3 + 6x^2\\
+					&+ (3x^2 + 12x + 5)y + (3x^2 + 6(x + 1)y + 3y^2 + 6x + 2)z + 11x \big)
+\end{align}
+$$
+
+This is a big mess, but we can notice that the coefficient for all cubic terms is $1$ (ignoring the overall factor of a sixth) and we can start to piece together simple parts of this expression until we obtain
+
+$$
+C(x,y,z) = \frac16 \left((x + y + z + 1 )^3 + 3(x + y + 1)^2 + 2(x + y + 1) - 6y - z - 6 \right)
+$$
+
+This is looking better, and by renaming a few pieces we get the polynomial into the form
+
+$$
+C(x,y,z) = \frac16 \left( f^3 + 3h^2 +2h -6y - z - 6) \right) \\
+$$
+
+Where we have defined
+
+$$
+f(x,y,z) = x + y + z + 1 \qquad h(x,y) = x + y + 1
+$$
+
+
+We now see how the disclaimer discussed above is going to help us. By taking the cube root of `enc`, we will recover the value for $f(x,y,z)$! Following this, we know that
+
+
+$$
+6 C - f^3 = 3h^2 + 2h - 6y - z - 6,
+$$
+
+
+and by the same approximation, the square root of the left hand side will be a good approximation for $h$. **Note** for the second time we solve `crow` with the smaller inputs of the three primes, we will find this approximation is off by one, which can be spotted by either making mistakes, or trying out this step with some known values of $p,q,r$.
+
+With knowledge of both $f(x,y,z)$ and $h(x,y)$, we can recover the input values from the three expressions
+
+
+$$
+\begin{align}
+z &= f - h \\
+y &= -\frac16 \left( 6C - f^3 - 3h^2 - 2h + z + 6\right) \\
+x &= h - y - 1
+\end{align}
+$$
+
+
+With the triple $(x,y,z)$ from `crow` we can find the input parameters from the gcd of the inputs:
+
+```python
+import math
+
+_enc = math.gcd(x,z)
+pk = math.gcd(x,y)
+_hash = math.gcd(y,z)
+```
+
+Solving `crow` from `pk` will give three primes $p,q,r$ and from that we can decrypt `_enc` from
+
+```python
+from Crypto.Util.number import *
+
+N = p*q*r
+phi = (p-1)*(q-1)*(r-1)
+d = inverse(31337, phi)
+m = pow(_enc, d, N)
+print(long_to_bytes(m))
+```
+
+
+
+### Implementation
+
+
+```python
+import gmpy2
+import math
+from Crypto.Util.number import *
+from hashlib import sha1
+gmpy2.get_context().precision = 4096
+
+def crow(x, y, z):
+	return (x**3 + 3*(x + 2)*y**2 + y**3 + 3*(x + y + 1)*z**2 + z**3 + 6*x**2 + (3*x**2 + 12*x + 5)*y + (3*x**2 + 6*(x + 1)*y + 3*y**2 + 6*x + 2)*z + 11*x) // 6
+
+
+def keygen(nbit):
+	p, q, r = [getPrime(nbit) for _ in range(3)]
+	pk = crow(p, q, r)
+	return (p, q, r, pk)
+
+
+def encrypt(msg, key):
+	p, q, r, pk = key
+	_msg = bytes_to_long(msg)
+	assert _msg < p * q * r
+	_hash = bytes_to_long(sha1(msg).digest())
+	_enc = pow(_msg, 31337, p * q * r)
+	return crow(_enc * pk, pk * _hash, _hash * _enc) 
+
+
+def alt_crow(x, y, z):
+	return ((x + y + z + 1 )**3 + 3*(x + y + 1)**2 + 2*(x + y + 1) - 6*y - z - 6) // 6
+
+
+def solve_crow(c, delta):
+	"""
+	Solve equation of the form:
+	crow = [(x + y + z + 1 )**3 + 3*(x + y + 1)**2 + 2*(x + y + 1) - 6*y - z - 6] // 6
+	     = [f^3 + 3h^3 + 2h - g] // 6
+	f = x + y + z + 1
+	h = x + y + 1
+	g = 6y + z + 6
+	"""
+	f = gmpy2.iroot(6*c, 3)[0]
+	h2 = (6*c - f**3) // 3
+	"""
+	For small values of inputs, the square root is off by one
+	"""
+	h = gmpy2.iroot(h2, 2)[0] + delta
+	z = f - h
+	y = -(6*c - f**3 - 3*h**2 - 2*h + z + 6) // 6
+	x = h - y - 1
+	assert crow(x, y, z) == c
+	return x,y,z
+
+
+def decrypt(ct):
+	# Solve for arguments
+	x, y, z = solve_crow(ct, 0)
+	assert crow(x, y, z) == ct
+
+	# Recover pieces
+	_enc = math.gcd(x, z)
+	pk = x // _enc
+	_hash = z // _enc
+	assert crow(_enc * pk, pk * _hash, _hash * _enc) == ct
+
+	# Solve for primes
+	p, q, r = solve_crow(pk, 1)
+	assert crow(p, q, r) == pk
+
+	# Solve encryption
+	N = p*q*r
+	phi = (p-1)*(q-1)*(r-1)
+	d = inverse(31337, phi)
+	m = pow(_enc, d, N)
+	return long_to_bytes(m)
+
+# Sanity test
+p, q, r, pk = keygen(256)
+# Check alt form is correct
+assert alt_crow(p,q,r) == pk
+# Check solver finds values
+x, y, z = solve_crow(pk, 1)
+assert x == p and y == q and z == r
+
+ct = open('flag.enc', "rb").read()
+ct = bytes_to_long(ct)
+flag = decrypt(ct)
+print(flag)
+```
+
+
+#### Flag
+
+`ASIS{I7s__Fueter-PoLy4__c0nJ3c7UrE_iN_p4Ir1n9_FuNCT10n}`

@@ -697,12 +697,12 @@ One can recover the value of $x$ from taking the cube root of $f(x,y,z)$.  Even 
 >>> import gmpy2
 >>> gmpy2.get_context().precision = 4096
 >>> x, y, z = [getPrime(256) for _ in range(3)]
->>> f = x**3 + y**2 + x
+>>> f = x**3 + y**2 + z
 >>> _x = gmpy2.iroot(f, 3)[0]
 >>> x == _x
 True
 >>> x, y, z = [getPrime(5) for _ in range(3)]
->>> f = x**3 + y**2 + x
+>>> f = x**3 + y**2 + z
 >>> _x = gmpy2.iroot(f, 3)[0]
 >>> x == _x
 True

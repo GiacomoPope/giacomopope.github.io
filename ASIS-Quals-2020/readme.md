@@ -503,10 +503,10 @@ def find_factors(data):
 		  for j in range(i+1,data_length):
 		  	x = data[j][0]
 		  	if math.gcd(p,x) != 1:
-          print(f'i = {i}')
-          print(f'j = {j}')
-          print(f'p = {math.gcd(p,x)}')
-				  return i, math.gcd(p,x)
+          			print(f'i = {i}')
+        			print(f'j = {j}')
+         			print(f'p = {math.gcd(p,x)}')
+				return i, math.gcd(p,x)
 ```
 
 Very quickly we get output:

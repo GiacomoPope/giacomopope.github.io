@@ -99,9 +99,9 @@ sage: factor(p-1)
 2 * 4229971 * 4604689 * 6790219 * 9085073 * 9562139 * 9774509 * 11406217 * 20683151 * 24963011 * 26496859 * 29026219
 ```
 
-So then the question is, can we define a map from group of points on the curve to the group $\mathbb{F}_p$? When an elliptic curve is singular, this is indeed the case and is an interesting problem (we have a version of this on CryptoHack). I've also seen this for rational curves of genus 0, such as the circle. 
+So then the question is, can we define a map from group of points on the curve to the group $\mathbb{F}_{p}$? When an elliptic curve is singular, this is indeed the case and is an interesting problem (we have a version of this on CryptoHack). I've also seen this for rational curves of genus 0, such as the circle. 
 
-Generally, the method is defining an isomorpishm from the group $C (\mathbb{F}_p) \mapsto \mathbb{F}_{p^n}$ for some curve $C$ and integer $n$, though looking at the curve polynomial. However, we can do just as well from the point addition law itself.
+Generally, the method is defining an isomorpishm from the group $C (\mathbb{F}_{p})$ for some curve $C$ to the finite group $\mathbb{F}_{p^k}$ for some integer $n$. Normally I have seen this done from the curve polynomial, but we can do just as well from the point addition law itself.
 
 
 What we want to show, is that for the point addition
@@ -113,7 +113,7 @@ $$
 we can find a function $f(x,y)$ such that
 
 $$
-g = f(x_0,y_0), \quad h = f(x^\prime, y^\prime), \qquad h = g^k, \qquad  f(x,y) \in \mathbb{F}_p
+g = f(x_0,y_0), \quad h = f(x^\prime, y^\prime), \qquad h = g^k, \qquad  f(x,y) \in \mathbb{F}_{p}
 $$
 
 we can then find the secret integer $k$ by solving the discrete log in $\mathbb{F}_p$. This will be very quick using Pohlig-Hellman as $p$ is smooth and easy as sage implements this for us!

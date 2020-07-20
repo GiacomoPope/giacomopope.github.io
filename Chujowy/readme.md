@@ -1,6 +1,6 @@
-# Chujowyc CTF
+# Chujowy CTF
 
-I loved this CTF, there were some great crypto challenges, that all felt well made and interesting. For now, I'm going to write up the most interesting: **Real ECC**, but might come back to this and add in how I solved the three RSA challenges. Thanks to Chujowyc for hosting this CTF.
+I loved this CTF, there were some great crypto challenges, that all felt well made and interesting. For now, I'm going to write up the most interesting: **Real ECC**, but might come back to this and add in how I solved the three RSA challenges. Thanks to Chujowy for hosting this CTF.
 
 
 ## Contents

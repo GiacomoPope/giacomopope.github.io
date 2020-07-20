@@ -6,7 +6,7 @@ Here is a collection of write ups and discussions of the challenges I have solve
 
 | CTF  | Category |
 | ------------- | ------------- |
-| [Chujowyc](/Chujowyc)  | Crypto |
+| [Chujowy](/Chujowy)  | Crypto |
 | [ASIS Quals 2020](/ASIS-Quals-2020)  | Crypto |
 | [0CTF 2020](/0CTF)  | Crypto |
 | [redpwn 2020](/redpwn)  | Crypto |

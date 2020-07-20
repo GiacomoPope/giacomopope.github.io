@@ -101,7 +101,7 @@ sage: factor(p-1)
 
 So then the question is, can we define a map from group of points on the curve to the group $\mathbb{F}\_{p}$? When an elliptic curve is singular, this is indeed the case and is an interesting problem (we have a version of this on CryptoHack). I've also seen this for rational curves of genus 0, such as the circle. 
 
-Generally, the method is defining an isomorpishm from the group $C (\mathbb{F}\_{p})$ for some curve $C$ to the finite group $\mathbb{F}\_{p^k}$ for some integer $n$. Normally I have seen this done from the curve polynomial, but we can do just as well from the point addition law itself.
+Generally, the method is defining an isomorpishm from the group $C (\mathbb{F}\_{p})$ for some curve $C$ to the finite group $\mathbb{F}\_{p^n}$ for some integer $n$. Normally I have seen this done from the curve polynomial, but we can do just as well from the point addition law itself.
 
 
 What we want to show, is that for the point addition

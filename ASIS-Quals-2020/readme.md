@@ -77,7 +77,7 @@ $$
 \begin{align}
 t_p^e &= (sp + 1)^{\frac{ed-e}{2^r}} \mod n \\
 &= (sp + 1)^{\frac{k\phi(n) + 1 -e}{2^r}} \mod n \\
-&= (sp + 1)^{\frac{k\phi(n)}{2^r}} (sp + 1)^{\frac{e - 1}{2^r}} \mod n
+&= (sp + 1)^{\frac{k\phi(n)}{2^r}} (sp + 1)^{\frac{1-e}{2^r}} \mod n
 \end{align}
 $$
 
@@ -87,13 +87,7 @@ $$
 (sp + 1)^{\frac{k\phi(n)}{2^r}} \equiv 1^{\frac{k}{2^r}} \equiv 1 \mod n
 $$
 
-The value of `r` is of small size `r = random.randint(12, 19)` and we know that $e - 1 = 2^{16}$ and so we know that we have
-
-$$
-t_p^e = (sp + 1)^{m} \mod n, \qquad m \in \{16, 8, 4, 2, 1, \frac12, \frac14 \}
-$$
-
-We can expand out $t_p^e$ and write down
+The value of `r` is of small size `r = random.randint(12, 19)` and we also $e - 1 = 2^{16}$. We can understand $m = \frac{1-e}{2^r}$ as a power of two. The actual value of $m$ isn't needed, as we can simply expand out $t_p^e$ and write down
 
 $$
 \begin{align}
@@ -101,7 +95,7 @@ t_p^e - 1 = s p \cdot (s^{m-1} p^{m-1} + \ldots + m) \mod n \\
 \end{align}
 $$
 
-We can solve the challenge by then looking at 
+We see that $N$ and $t_p^e$ share a common factor of $p$, and we can solve the challenge from
 
 $$
 \gcd(t_p^e - 1, n) = p

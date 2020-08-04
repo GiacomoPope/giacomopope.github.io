@@ -17,10 +17,9 @@ I loved this CTF, there were some great crypto challenges, that all felt well ma
 > :warning: I didn't realise this during the CTF, but another player DMd me after reading my write up and told me that this challenge had been copied from [GoogleCTF 2017](https://github.com/google/google-ctf/tree/master/2017/quals/2017-crypto-backdoor). 
 
 
-> This recent change allows us to finally reduce the key sizeAuthor: @enedil
-
-
 ### Challenge
+
+> This recent change allows us to finally reduce the key sizeAuthor: @enedil
 
 ```python
 from operator import xor

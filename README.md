@@ -6,13 +6,13 @@ Here is a collection of write ups and discussions of the challenges I have solve
 
 | CTF  | Category |
 | ------------- | ------------- |
-| [Chujowy](/Chujowy)  | Crypto |
-| [ASIS Quals 2020](/ASIS-Quals-2020)  | Crypto |
-| [0CTF 2020](/0CTF)  | Crypto |
-| [redpwn 2020](/redpwn)  | Crypto |
+| [Chujowy](/Chujowy)  | Elliptic Curves |
+| [ASIS Quals 2020](/ASIS-Quals-2020)  | Elliptic Curves, RSA, Blum-Goldwasser, Diophantine Eqns. |
+| [0CTF 2020](/0CTF)  | DSA, Hyperelliptic Curves |
+| [redpwn 2020](/redpwn)  | RSA, ECDSA, Elliptic Curves |
 | [HackTM](/HackTM)  | Crypto, OSint |
-| [INS'HACK](/INS’HACK)  | Crypto |
-| [SecurityFest](/SecurityFest)  | Crypto  |
+| [INS'HACK](/INS’HACK)  | RSA |
+| [SecurityFest](/SecurityFest)  | Modular Arithmetic |
 | [HSCTF 2019](/hsctf-2019/)  | Crypto  |
 | [picoCTF 2019](/picoCTF-2019)  | General, Binary, Crypto, Forensics, Web  |
 

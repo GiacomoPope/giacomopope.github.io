@@ -1,3 +1,8 @@
+# Research
+
+- [From Static to Cosmological Solutions of N=2 Supergravity](https://arxiv.org/pdf/1905.09167.pdf)
+- [Cosmological Solutions, a New Wick-Rotation, and the First Law of Thermodynamics](https://arxiv.org/pdf/2008.06929.pdf)
+
 # Writeups
 
 Here is a collection of write ups and discussions of the challenges I have solved in various capture the flag competitions. The focus is usually the cryptographic challenges.
@@ -6,6 +11,9 @@ Here is a collection of write ups and discussions of the challenges I have solve
 
 | CTF  | Category |
 | ------------- | ------------- |
+| [TetCTF 2021](https://blog.cryptohack.org/tetctf-2021)  | Gaussian Integers, Discrete Log Problem, Finite Fields |
+| [CryptoCTF 2020](https://blog.cryptohack.org/openband)  | Moebius Inversion, Unsolved (Unsolvable?)  |
+| [CryptoCTF 2020](https://blog.cryptohack.org/cryptoctf2020)  | Team Writeup, all challenges  |
 | [Chujowy](/Chujowy)  | Elliptic Curves |
 | [ASIS Quals 2020](/ASIS-Quals-2020)  | Elliptic Curves, RSA, Blum-Goldwasser, Diophantine Eqns. |
 | [0CTF 2020](/0CTF)  | DSA, Hyperelliptic Curves |
@@ -28,7 +36,7 @@ Here is a collection of write ups and discussions of the challenges I have solve
 
 ## About Me
 
-I am currently playing CTFs as a member of [cr0wn](https://cr0wn.uk) and I cofounded the website [CryptoHack](https://cryptohack.org) with [Hyperreality](https://github.com/hyperreality/ctf-writeups).
+I am currently playing CTFs as a member of [cr0wn](https://cr0wn.uk) and I co-founded the website [CryptoHack](https://cryptohack.org) with [Hyperreality](https://github.com/hyperreality/ctf-writeups).
 
 Currently I am particularly interested in elliptic curve cryptography, so the writeups I choose to discuss will generally be focused on this area.
 

@@ -34,7 +34,7 @@ Here is a collection of write ups and discussions of the challenges I have solve
 - [Generating curves with pseudoprime order](/redpwn/#jeopardy)
 - [Smart's attack for anomalous curves](/hsctf-2019/#spooky-ecc)
 
-## About Me
+# About Me
 
 I am currently playing CTFs as a member of [cr0wn](https://cr0wn.uk) and I co-founded the website [CryptoHack](https://cryptohack.org) with [Hyperreality](https://github.com/hyperreality/ctf-writeups).
 

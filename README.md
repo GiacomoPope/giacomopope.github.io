@@ -36,7 +36,11 @@ Here is a collection of write ups and discussions of the challenges I have solve
 
 # About Me
 
-I am currently playing CTFs as a member of [cr0wn](https://cr0wn.uk) and I co-founded the website [CryptoHack](https://cryptohack.org) with [Hyperreality](https://github.com/hyperreality/ctf-writeups).
+## Giacomo (Jack) Pope
 
-Currently I am particularly interested in elliptic curve cryptography, so the writeups I choose to discuss will generally be focused on this area.
+Recent PhD graduate from the University of Liverpool. My thesis was titled "Cosmological Killing Horizons and their Thermodynamics", and the main results of my thesis are split between my two papers linked above. 
+
+I co-founded the website [CryptoHack](https://cryptohack.org) with [Hyperreality](https://github.com/hyperreality/ctf-writeups), and regularly play CTF competitions with [cr0wn](https://cr0wn.uk) and [Organizers](https://ctftime.org/team/42934). 
+
+Currently, I am particularly interested in elliptic curve cryptography, so the writeups and blog posts I make will generally be focused on this area.
 

@@ -15,6 +15,7 @@ I didn't play this CTF, but I was pinged when someone noticed this challenge was
 ## Solution
 
 This challenge is a standard RSA challenge, where the primes are derived as the $x$-coordinates of two points $Q,R$ on an elliptic curve $E / F_p$ which are related by
+
 $$
 \begin{aligned}
 P &= (P_x, P_y) \\
@@ -22,10 +23,13 @@ Q &= [k]P = (Q_x, Q_y)  \\
 R &= [k+1]P = (R_x, R_y) \\
 \end{aligned}
 $$
+
 and from the challenge, we are given the curve $E$,
+
 $$
 E: y^2 = x^3 + ax + b \pmod p
 $$
+
 the base point $P$ and the RSA modulus $N = Q_x R_x$ . The important data we need is given by:
 
 ```python
@@ -41,47 +45,61 @@ Py = 127488627505774198126192341659221251350097930114709534296533983812754032293
 To solve the challenge, we must factor $N$ by finding $Q_x$ or $R_x$.
 
 From the group addition law on $E$ we have that:
+
 $$
 R_x = \lambda^2 - Q_x - P_x \pmod p, \qquad \lambda = \frac{Q_y - P_y}{Q_x - P_x}
 $$
+
 As $N = Q_x R_x$, we can eliminate $R_x$ and obtain the expression
+
 $$
 N = (\lambda^2 - Q_x - P_x) Q_x
 $$
+
 We now have two unknowns: $(Q_x, Q_y)$ which we know are related by:
+
 $$
 Q_y^2 = Q_x^3 + a Q_x + b \pmod p
 $$
+
 To solve this equation, we can then write
+
 $$
 f(Q_x) = N - (\lambda^2 - Q_x - P_x) Q_x
 $$
+
 and look for roots of $f(Q_x)$. The issue I had when I was trying to solve this was that $Q_y = \sqrt{Q_x^3 + a Q_x + b} \pmod p$ and putting this into sage and looking for roots was just breaking it all.
 
 The trick is to rearrange this polynomial to remove the square root so that SageMath played nicely.
 
 We can do this by:
+
 $$
 \begin{aligned}
 &N + Q_x(Q_x + P_x) = Q_x \left( \frac{Q_y - P_y}{Q_x - P_x} \right)^2 \\ \\
 &\left[ N + Q_x(Q_x + P_x) \right] \left[Q_x - P_x\right]^2 = Q_x \left( Q_y - P_y \right)^2 \\ 
 &\left[ N + Q_x(Q_x + P_x) \right] \left[Q_x - P_x\right]^2 = Q_x \left( Q_y^2 - 2 Q_y P_y + P_y^2 \right) \\ 
 &\left[ N + Q_x(Q_x + P_x) \right] \left[Q_x - P_x\right]^2 - Q_x( Q_y^2  + P_y^2)= - 2 Q_x Q_y P_y  
-\\
 \end{aligned}
 $$
+
 Now writing
+
 $$
 \begin{aligned}
 f_1 &= \left[ N + Q_x(Q_x + P_x) \right] \left[Q_x - P_x\right]^2 \\
 f_2 &=  Q_x( Q_y^2  + P_y^2)
 \end{aligned}
 $$
+
 We can square both sides to obtain
+
 $$
 (f_1 - f_2)^2 = (2 Q_x Q_y P_y)^2
 $$
+
 and find roots of:
+
 $$
 \tilde{f}(Q_x) = (f_1 - f_2)^2 - (2 Q_x Q_y P_y)^2 \pmod p
 $$

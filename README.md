@@ -1,8 +1,3 @@
-# Research
-
-- [From Static to Cosmological Solutions of N=2 Supergravity](https://arxiv.org/pdf/1905.09167.pdf)
-- [Cosmological Solutions, a New Wick-Rotation, and the First Law of Thermodynamics](https://arxiv.org/pdf/2008.06929.pdf)
-
 # Writeups
 
 Here is a collection of write ups and discussions of the challenges I have solved in various capture the flag competitions. The focus is usually the cryptographic challenges.
@@ -11,6 +6,7 @@ Here is a collection of write ups and discussions of the challenges I have solve
 
 | CTF  | Category |
 | ------------- | ------------- |
+| [Cyber Apocalypse CTF 2021](/Cyber-Apocalypse-2021)  | RSA, Elliptic & Hyperelliptic Curves, Multivariate, Maths  |
 | [TetCTF 2021](https://blog.cryptohack.org/tetctf-2021)  | Gaussian Integers, Discrete Log Problem, Finite Fields |
 | [CryptoCTF 2020](https://blog.cryptohack.org/openband)  | Moebius Inversion, Unsolved (Unsolvable?)  |
 | [CryptoCTF 2020](https://blog.cryptohack.org/cryptoctf2020)  | Team Writeup, all challenges  |
@@ -33,6 +29,11 @@ Here is a collection of write ups and discussions of the challenges I have solve
 - [Supersingular curves with composite characteristic](/misc/superprime/)
 - [Generating curves with pseudoprime order](/redpwn/#jeopardy)
 - [Smart's attack for anomalous curves](/hsctf-2019/#spooky-ecc)
+
+# Research
+
+- [From Static to Cosmological Solutions of N=2 Supergravity](https://arxiv.org/pdf/1905.09167.pdf)
+- [Cosmological Solutions, a New Wick-Rotation, and the First Law of Thermodynamics](https://arxiv.org/pdf/2008.06929.pdf)
 
 # About Me
 

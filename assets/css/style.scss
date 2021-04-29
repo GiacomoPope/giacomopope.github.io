@@ -4,14 +4,14 @@
 @import "{{ site.theme }}";
 
 @font-face {
-  font-family: 'Maru-Mono';
+  font-family: 'MaruMono';
   src: url('../fonts/GT-Maru-Mono-Regular-Oblique.woff2') format('woff2');
   font-weight: normal;
   font-style: italic;
 }
 
 @font-face {
-  font-family: 'Maru-Mono';
+  font-family: 'MaruMono';
   src: url('../fonts/GT-Maru-Mono-Regular.woff2') format('woff2');
   font-weight: normal;
   font-style: normal;
@@ -97,7 +97,7 @@ a, a:visited, a:hover{
 // code highlight
 
 code, pre{
-  font-family: 'Maru-Mono', monospace;
+  font-family: 'MaruMono', monospace;
 }
 
 .highlight{

@@ -2,44 +2,49 @@
 ---
 
 @import "{{ site.theme }}";
-
-@font-face {
-  font-family: 'MaruMono';
-  src: url('../fonts/GT-Maru-Mono-Regular-Oblique.woff2') format('woff2');
-  font-weight: normal;
-  font-style: italic;
+@import url('https://rsms.me/inter/inter.css');
+html { font-family: 'Inter', sans-serif; }
+@supports (font-variation-settings: normal) {
+  html { font-family: 'Inter var', sans-serif; }
 }
 
-@font-face {
-  font-family: 'MaruMono';
-  src: url('../fonts/GT-Maru-Mono-Regular.woff2') format('woff2');
-  font-weight: normal;
-  font-style: normal;
-}
+// @font-face {
+//   font-family: 'MaruMono';
+//   src: url('../fonts/GT-Maru-Mono-Regular-Oblique.woff2') format('woff2');
+//   font-weight: normal;
+//   font-style: italic;
+// }
 
-@font-face {
-  font-family: 'Maru';
-  src: url('../fonts/GT-Maru-Regular.woff2') format('woff2');
-  font-weight: normal;
-  font-style: normal;
-}
+// @font-face {
+//   font-family: 'MaruMono';
+//   src: url('../fonts/GT-Maru-Mono-Regular.woff2') format('woff2');
+//   font-weight: normal;
+//   font-style: normal;
+// }
 
-@font-face {
-  font-family: 'Maru';
-  src: url('../fonts/GT-Maru-Regular-Oblique.woff2') format('woff2');
-  font-weight: normal;
-  font-style: italic;
-}
+// @font-face {
+//   font-family: 'Maru';
+//   src: url('../fonts/GT-Maru-Regular.woff2') format('woff2');
+//   font-weight: normal;
+//   font-style: normal;
+// }
 
-@font-face {
-  font-family: 'Maru';
-  src: url('../fonts/GT-Maru-Bold.woff2') format('woff2');
-  font-weight: bold;
-  font-style: normal;
-}
+// @font-face {
+//   font-family: 'Maru';
+//   src: url('../fonts/GT-Maru-Regular-Oblique.woff2') format('woff2');
+//   font-weight: normal;
+//   font-style: italic;
+// }
+
+// @font-face {
+//   font-family: 'Maru';
+//   src: url('../fonts/GT-Maru-Bold.woff2') format('woff2');
+//   font-weight: bold;
+//   font-style: normal;
+// }
 
 body{
-  font-family: "Maru", "Helvetica Neue", "Helvetica", sans-serif;
+  font-family: "Inter", "Helvetica Neue", "Helvetica", sans-serif;
   font-feature-settings: 'ss01' 1, 'zero' 1;
   background: #21242c;
   color: #efeae1;
@@ -96,11 +101,6 @@ a, a:visited, a:hover{
 
 // code highlight
 
-.main-content code, 
-.main-content pre{
-  font-family: 'MaruMono', monospace;
-}
-
 .highlight{
   background-color: #0000;
 }
@@ -119,7 +119,7 @@ a, a:visited, a:hover{
   background-color: #181818;
 }
 
-// Python highlighting
+Python highlighting
 
 .highlight .k, .highlight .kv, .highlight .ow{
   color: #faba09;

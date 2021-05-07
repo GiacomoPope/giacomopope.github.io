@@ -25,4 +25,4 @@ If you're interested in contributing to the book, come chat to us in the [Crypto
 
 ### Personal Work
 
-I like to break up my mathematical research with creative projects. Most recently, I have been writing poetry. A collection of my published work on my [Neutral Spaces page](https://neutralspaces.co/giacomo/).
+I like to break up my mathematical research with creative projects. Most recently, I have been writing poetry. A collection of my published work is on my [Neutral Spaces page](https://neutralspaces.co/giacomo/).

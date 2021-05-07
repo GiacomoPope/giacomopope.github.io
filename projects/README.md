@@ -2,9 +2,9 @@
 
 ### CryptoHack
 
-[CryptoHack](https://cryptohack.org) is a fun free platform for learning modern cryptography that I co-founded with [Hyperreality](https://github.com/hyperreality/ctf-writeups). We built the site with the vision of creating the resource we wished we had access to when we began studying cryptography. 
+[CryptoHack](https://cryptohack.org) is a fun, free platform for learning modern cryptography that I co-founded with [Hyperreality](https://github.com/hyperreality/ctf-writeups). We built the site with the vision of creating the resource we wished we had access to when we began studying cryptography. 
 
-Along side the challenges, we have an amazing community on [Discord](https://discord.gg/eJaJ3xC), which I recommend joining if you have a Discord account and enjoy talking about maths / cryptography. Many people I have met there I now consider a good friend. Occasionally, we work together as under the name *CryptoHackers* and solve CTFs / Cryptography challenges. We built a [blog](https://blog.cryptohack.org/) for CryptoHack to keep track of the projects we do together.
+Along side the challenges, we have an amazing community on [Discord](https://discord.gg/eJaJ3xC), which I recommend joining if you have a Discord account and enjoy talking about maths / cryptography. Many people I have met there I now consider good friends. Occasionally, we work together under the name *CryptoHackers* and solve CTFs / Cryptography challenges. We built a [blog](https://blog.cryptohack.org/) for CryptoHack to keep track of the projects we do together.
 
 ### CryptoBook
 
@@ -14,7 +14,7 @@ If you're interested in contributing to the book, come chat to us in the [Crypto
 
 ### Neutral Spaces
 
-[Neutral Spaces](https://neutralspaces.co/) is a literary website which helps contemporary writers by giving them an ad-free, zero cost space to host a portfolio. As the community grew, other projects such as a [blog](https://neutralspaces.co/blog) and a [writer's workshop](https://neutralspaces.co/workshop) have developed. Each year, the community comes together to create an online magazine with a range of fiction, poetry and essays.
+[Neutral Spaces](https://neutralspaces.co/) is a literary website I created to help contemporary writers by giving them an ad-free, zero cost space to host a portfolio. As the community grew, other projects such as a [blog](https://neutralspaces.co/blog) and a [writer's workshop](https://neutralspaces.co/workshop) have developed. Each year, the community comes together to create an online magazine with a range of fiction, poetry and essays.
 
 - [Issue One: Celebration](https://neutralspaces.co/magazine/)
 - [Issue Two: Doomscrolling](https://neutralspaces.co/magazine_two/)

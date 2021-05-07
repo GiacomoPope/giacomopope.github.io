@@ -7,6 +7,23 @@
     <meta name="theme-color" content="#157878">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="stylesheet" href="{{ '/assets/css/style.css?v=' | append: site.github.build_revision | relative_url }}">
+    <link rel="stylesheet" href="{{ '/assets/css/light.css?v=' | append: site.github.build_revision | relative_url }}">
+
+    <script type="text/javascript">
+        function isLightThemeSelected() {
+          return document.cookie.match(/theme=light/i) != null
+        }
+
+        function setThemeFromCookie() {
+            var html = document.getElementsByTagName('html')[0]
+            html.className = isLightThemeSelected() ? 'light-theme' : 'dark-theme'
+            console.log('Loaded cookie: ' + document.cookie)
+        }
+
+        (function() {
+          setThemeFromCookie()
+        })();
+    </script>
 
     <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
@@ -20,7 +37,6 @@
         processEscapes: true
       }
     });
-
   </script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS_HTML"></script>
   </head>
@@ -38,8 +54,36 @@
     <main id="content" class="main-content" role="main">
       {{ content }}
       <footer class="site-footer">
-        <a href="https://cryptohack.org">CryptoHack</a> | <a href="https://twitter.com/cryptohack__">Twitter</a> | <a href="https://keybase.io/jack4818">Keybase</a>
+        <a href="https://cryptohack.org">CryptoHack</a> | <a href="https://twitter.com/cryptohack__">Twitter</a> | <a href="https://keybase.io/jack4818">Keybase</a> | <a id="changeTheme" class="btn-toggle">Dark-Mode</a>
       </footer>
+
+      <script>
+      function updateThemeToggleFooter() {
+        let elem = document.querySelector('#changeTheme');
+        elem.innerHTML = isLightThemeSelected() ? 'Dark Mode' : 'Light Mode'
+      }
+
+      (function() {
+        updateThemeToggleFooter()
+      })();
+
+      function togglePageContentLightDark() {
+          var html = document.getElementsByTagName('html')[0]
+          var currentClass = html.className
+          var newClass = html.className == 'dark-theme' ? 'light-theme' : 'dark-theme'
+          html.className = newClass
+
+          document.cookie = 'theme=' + (newClass == 'light-theme' ? 'light' : 'dark') + '; SameSite=Strict; path=/; expires=Fri, 31 Dec 9999 23:59:59 GMT'
+          console.log('Cookies are now: ' + document.cookie)
+
+          updateThemeToggleFooter()
+      }
+
+      const btn = document.querySelector(".btn-toggle");
+      btn.addEventListener("click", function() {
+        togglePageContentLightDark();
+      });
+      </script>
     </main>
   </body>
 </html>

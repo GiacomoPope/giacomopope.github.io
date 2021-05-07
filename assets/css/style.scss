@@ -1,53 +1,70 @@
 ---
 ---
-
 @import "{{ site.theme }}";
-@import url('https://rsms.me/inter/inter.css');
-html { font-family: 'Inter', sans-serif; }
-@supports (font-variation-settings: normal) {
-  html { font-family: 'Inter var', sans-serif; }
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital@0;1&display=swap');
+
+@font-face {
+  font-family: 'Minion';
+  src: url('../fonts/MinionPro-Regular.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
 }
 
-// @font-face {
-//   font-family: 'MaruMono';
-//   src: url('../fonts/GT-Maru-Mono-Regular-Oblique.woff2') format('woff2');
-//   font-weight: normal;
-//   font-style: italic;
-// }
+@font-face {
+  font-family: 'Minion';
+  src: url('../fonts/MinionPro-It.woff2') format('woff2');
+  font-weight: normal;
+  font-style: italic;
+}
 
-// @font-face {
-//   font-family: 'MaruMono';
-//   src: url('../fonts/GT-Maru-Mono-Regular.woff2') format('woff2');
-//   font-weight: normal;
-//   font-style: normal;
-// }
+@font-face {
+  font-family: 'Minion';
+  src: url('../fonts/MinionPro-Medium.woff2') format('woff2');
+  font-weight: bold;
+  font-style: normal;
+}
 
-// @font-face {
-//   font-family: 'Maru';
-//   src: url('../fonts/GT-Maru-Regular.woff2') format('woff2');
-//   font-weight: normal;
-//   font-style: normal;
-// }
+@font-face {
+  font-family: 'Minion';
+  src: url('../fonts/MinionPro-MediumIt.woff2') format('woff2');
+  font-weight: bold;
+  font-style: italic;
+}
 
-// @font-face {
-//   font-family: 'Maru';
-//   src: url('../fonts/GT-Maru-Regular-Oblique.woff2') format('woff2');
-//   font-weight: normal;
-//   font-style: italic;
-// }
-
-// @font-face {
-//   font-family: 'Maru';
-//   src: url('../fonts/GT-Maru-Bold.woff2') format('woff2');
-//   font-weight: bold;
-//   font-style: normal;
-// }
+:root{
+  --bg: #ffffff;
+  --text: #141414;
+  --link: #006aa2; 
+  --link-green: #00801A;
+  --link-red: #A72937;
+  --dim: #494f51;
+}
 
 body{
-  font-family: "Inter", "Helvetica Neue", "Helvetica", sans-serif;
-  font-feature-settings: 'ss01' 1, 'zero' 1;
-  background: #21242c;
-  color: #efeae1;
+  font-family: "Minion", serif;
+  background: var(--bg);
+  color: var(--text);
+}
+
+header{
+  display: flex;
+  justify-content: space-between;
+}
+
+.tag-line{
+  font-size: 1.5em;
+}
+
+.right-links{
+  word-spacing: 1em;
+}
+
+.maincontent blockquote{
+  color: var(--dim);
+}
+
+.main-content{
+  font-size: 1.22rem;
 }
 
 .page-header-simple{
@@ -56,8 +73,17 @@ body{
   font-weight: 500;
 }
 
-.page-header-simple a, .page-header-simple a:hover, .page-header-simple a:visited{
-  color: #7aaf9f;
+.page-header-simple a, 
+.page-header-simple a:hover, 
+.page-header-simple a:visited{
+  color: var(--link-red);
+  font-size: 0.85em;
+}
+
+footer a, 
+footer a:hover, 
+footer a:visited{
+  color: var(--link-green);
 }
 
 .page-header-simple a:hover{
@@ -65,86 +91,77 @@ body{
 }
 
 a, a:visited, a:hover{
-//   Dusty Blue
- color: #679dc6 
+ color: var(--link); 
 }
 
-.main-content h1, .main-content h2, .main-content h3{
-  // Dusty Gold
-  color: #faba09;
-  font-weight: 600; 
+.main-content h1, 
+.main-content h2, 
+.main-content h3,
+.main-content h4, 
+.main-content h5, 
+.main-content h6{
+  color: var(--text);
+  font-weight: bold; 
 }
 
-.main-content h4, .main-content h5, .main-content h6{
-  //   Dusty Green
-  color: #7aaf9f;
-  font-weight: 500; 
+
+.main-content h1{
+  font-size: 2em;
+}
+
+.main-content h1,
+.main-content h2{
+  font-variant: small-caps;
+  text-transform: lowercase;
+  letter-spacing: 0.075em;
+}
+
+.main-content h3,
+.main-content h4{
+  font-style: italic;
 }
 
 .main-content h4{
-  margin-top: 0
+  margin-top: 0;
 }
 
 .main-content table{
  display: table;
- box-shadow: 0 2px 5px 0 rgba(0,0,0,.22),0 2px 10px 0 rgba(0,0,0,.18);
+ box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.12), 0 2px 10px 0 rgba(0, 0, 0, 0.06);
 }
 
 .main-content table th, .main-content table td{
-  background-color: #18181888;
-  border: none;
+  border: 1px solid #0002;
 }
 
 .main-content tbody tr:nth-child(odd) {
-  background-color: #181818bb;
+
+}
+
+.main-content table th{
+  font-weight: bold;
 }
 
 // code highlight
 
-.highlight{
-  background-color: #0000;
-}
-
-.main-content code{
-  background-color: #181818;
-  color: #faba09;
-}
-
-.main-content pre>code{
-  background-color: #181818;
-  color: #efeae1;
-}
+.main-content code,
 .main-content pre{
-  border: none;
-  background-color: #181818;
+  font-family: 'IBM Plex Mono', monospace;
+  font-weight: normal!important;
+  color: #24292e;
 }
 
-// Python highlighting
-
-.highlight .k, .highlight .kv, .highlight .ow{
-  color: #faba09;
+.main-content .highlight *{
+  font-weight: normal!important;
 }
 
-.highlight .o, .highlight .bp, .highlight .kn, .highlight .kd{
-  color: #f92472;
+.main-content pre {
+    color: #24292e;
+    background-color: #f6f8fa;
+    border: none;
+    border-radius: 0rem;
 }
 
-.highlight .nf, .highlight .nb{
-  color: #66d7ee;
-}
-
-.highlight .mi, .highlight .mh, .highlight .mf{
-  color: #ac80ff;
-}
-
-.highlight .nn{
-  color: #efeae1;
-}
-
-.highlight .s, .highlight .s2{
-  color: #ff695a;
-}
-
-.highlight .kt {
-  color: #00cca0;
+.main-content pre > code{
+  color: #24292e;
 }

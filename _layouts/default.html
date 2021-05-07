@@ -7,26 +7,38 @@
     <meta name="theme-color" content="#157878">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="stylesheet" href="{{ '/assets/css/style.css?v=' | append: site.github.build_revision | relative_url }}">
+
     <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
-    tex2jax: {
-      inlineMath: [['$','$'], ['\\(','\\)']],
-      processEscapes: true
-    }
+      "HTML-CSS": {
+        fonts: ["Gyre-Pagella"],
+        imageFont: null,
+        undefinedFamily: "'Arial Unicode MS', cmbright"
+      },
+      tex2jax: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        processEscapes: true
+      }
     });
-    </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-AMS-MML_HTMLorMML" type="text/javascript"></script>
+
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS_HTML"></script>
   </head>
   
   <body> 
     <header class="page-header-simple" role="banner">
-      <a href="https://jack4818.github.io">jack4818</a>
+      
+      <div class="left-links"><a href="/">Giacomo Pope</a></div>
+      <div class="right-links">
+        <a href="/projects">Projects</a>
+        <a href="/writeups">Writeups</a>
+      </div>
     </header>
 
     <main id="content" class="main-content" role="main">
       {{ content }}
       <footer class="site-footer">
-        <a href="https://cryptohack.org">CryptoHack.org</a> | <a href="https://keybase.io/jack4818">Keybase</a>
+        <a href="https://cryptohack.org">CryptoHack</a> | <a href="https://twitter.com/cryptohack__">Twitter</a> | <a href="https://keybase.io/jack4818">Keybase</a>
       </footer>
     </main>
   </body>

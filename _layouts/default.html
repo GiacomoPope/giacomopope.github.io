@@ -3,8 +3,16 @@
   <head>
     <meta charset="UTF-8">
     {% seo %}
+
+    <meta property="og:image" content="{{ '/assets/images/ch.png' | relative_url }}" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:description" content="Cryptography and CTF Writeups" />
+    <meta name="twitter:title" content="Giacomo Pope" />
+    <meta name="twitter:site" content="@cryptohack__" />
+    <meta name="twitter:image" content="{{ '/assets/images/ch.png' | relative_url }}" />
+
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#157878">
+    <meta name="theme-color" content="#040d21">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <link rel="stylesheet" href="{{ '/assets/css/style.css?v=' | append: site.github.build_revision | relative_url }}">
     <link rel="stylesheet" href="{{ '/assets/css/light.css?v=' | append: site.github.build_revision | relative_url }}">

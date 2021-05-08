@@ -41,6 +41,7 @@
       --code-text: #fff;
       --code-bg: #070b14;
       --border-line: #ffffff00;
+      --inline: #7effca;
 }
 
 body{
@@ -161,7 +162,7 @@ a, a:visited, a:hover{
 }
 
 .main-content code{
-  color: var(--link-red);
+  color: var(--inline);
   padding: 5px;
   border-radius: 3px;
 }
@@ -207,7 +208,7 @@ a, a:visited, a:hover{
 }
 
 .highlight .nf, .highlight .nb{
-  color: #66d7ee;
+  color: #73e6fe;
 }
 
 .highlight .mi, .highlight .mh, .highlight .mf{

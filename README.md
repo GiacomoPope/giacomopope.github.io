@@ -15,5 +15,6 @@
 
 #### Thesis 
 - [Cosmological Killing Horizons and their Thermodynamics](/thesis.pdf)
+- [One-page layperson introduction to research motivations](/layperson.pdf)
 
 

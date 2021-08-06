@@ -144,7 +144,7 @@ $$
 x^2 + y^2 = (x + iy)(x - iy)
 $$
 
-and now we realise that by factoring $z^7$ as a Guassian integer in $\mathbb{Z}[i]$:
+and now we realise that by factoring $z^7$ as a Gaussian integer in $\mathbb{Z}[i]$:
 
 $$
 z = \prod_i (a_i + i b_i)

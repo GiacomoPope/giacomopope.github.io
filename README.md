@@ -10,8 +10,9 @@
 ## Research
 
 #### Papers
-- [From Static to Cosmological Solutions of *N=2* Supergravity](https://arxiv.org/pdf/1905.09167.pdf)
+- [Type-II Calabi-Yau compactifications, T-duality and special geometry in general spacetime signature](https://arxiv.org/pdf/2111.09017.pdf)
 - [Cosmological Solutions, a New Wick-Rotation, and the First Law of Thermodynamics](https://arxiv.org/pdf/2008.06929.pdf)
+- [From Static to Cosmological Solutions of *N=2* Supergravity](https://arxiv.org/pdf/1905.09167.pdf)
 
 #### Thesis 
 - [Cosmological Killing Horizons and their Thermodynamics](/thesis.pdf)

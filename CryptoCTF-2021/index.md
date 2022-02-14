@@ -765,7 +765,7 @@ print(f'{k}, {l}')
 
 However, these primes aren't special (re: the flag), so maybe this also isn't intended?
 
-## ELEGANT CURVE
+## Elegant Curve
 ### Challenge
 > Playing with [Fire](https://cr.yp.toc.tf/tasks/elegant_curve_ae8c3f188723d2852c9f939ba87d930398720a62.txz)!
 >

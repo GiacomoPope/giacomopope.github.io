@@ -2,34 +2,35 @@
 ---
 @import "{{ site.theme }}";
 @import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital@0;1&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,300;0,500;1,300;1,500&display=swap');
 
-@font-face {
-  font-family: 'Minion';
-  src: url('../fonts/MinionPro-Regular.woff2') format('woff2');
-  font-weight: normal;
-  font-style: normal;
-}
+// @font-face {
+//   font-family: 'Minion';
+//   src: url('../fonts/MinionPro-Regular.woff2') format('woff2');
+//   font-weight: normal;
+//   font-style: normal;
+// }
 
-@font-face {
-  font-family: 'Minion';
-  src: url('../fonts/MinionPro-It.woff2') format('woff2');
-  font-weight: normal;
-  font-style: italic;
-}
+// @font-face {
+//   font-family: 'Minion';
+//   src: url('../fonts/MinionPro-It.woff2') format('woff2');
+//   font-weight: normal;
+//   font-style: italic;
+// }
 
-@font-face {
-  font-family: 'Minion';
-  src: url('../fonts/MinionPro-Medium.woff2') format('woff2');
-  font-weight: bold;
-  font-style: normal;
-}
+// @font-face {
+//   font-family: 'Minion';
+//   src: url('../fonts/MinionPro-Medium.woff2') format('woff2');
+//   font-weight: bold;
+//   font-style: normal;
+// }
 
-@font-face {
-  font-family: 'Minion';
-  src: url('../fonts/MinionPro-MediumIt.woff2') format('woff2');
-  font-weight: bold;
-  font-style: italic;
-}
+// @font-face {
+//   font-family: 'Minion';
+//   src: url('../fonts/MinionPro-MediumIt.woff2') format('woff2');
+//   font-weight: bold;
+//   font-style: italic;
+// }
 
 :root {
       --bg: #040d21;
@@ -45,14 +46,33 @@
 }
 
 body{
-  font-family: "Minion", serif;
+  font-family: "Crimson Pro", serif;
   background: var(--bg);
   color: var(--text);
+  font-weight: 300;
+  line-height: 1.25;
 }
 
 header{
   display: flex;
   justify-content: space-between;
+}
+
+pre{
+  line-height: 1;
+}
+
+blockquote{
+  font-style: italic;
+}
+
+h2 + h3{
+  margin-top: 0!important;
+}
+
+.MathJax_Display{
+  overflow-x: auto;
+  overflow-y: hidden;
 }
 
 #changeTheme{
@@ -72,7 +92,10 @@ header{
 }
 
 .main-content{
-  font-size: 1.22rem;
+  max-width: 43rem;
+  margin: 0rem auto;
+  padding: 2rem .75rem;
+  font-size: 1.2rem;
 }
 
 .page-header-simple{
@@ -86,6 +109,12 @@ header{
 .page-header-simple a:visited{
   color: var(--link-red);
   font-size: 0.85em;
+}
+
+footer{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
 }
 
 footer a, 
@@ -113,24 +142,49 @@ a, a:visited, a:hover{
 }
 
 
+// .main-content h1{
+//   font-size: 2em;
+// }
+
+// .main-content h1,
+// .main-content h2{
+//   font-variant: small-caps;
+//   text-transform: lowercase;
+//   letter-spacing: 0.075em;
+// }
+
+// .main-content h3,
+// .main-content h4{
+//   font-style: italic;
+// }
+
+// .main-content h4{
+//   margin-top: 0;
+// }
+
+
 .main-content h1{
-  font-size: 2em;
+  font-size: 2rem
 }
 
-.main-content h1,
 .main-content h2{
-  font-variant: small-caps;
-  text-transform: lowercase;
-  letter-spacing: 0.075em;
+  font-size: 1.5rem
 }
 
-.main-content h3,
-.main-content h4{
+.main-content h3{
+  font-size: 1.4rem;
+  font-weight: 300;
   font-style: italic;
 }
 
 .main-content h4{
-  margin-top: 0;
+  font-weight: 300;
+}
+
+
+.main-content table{
+  display: table;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.22), 0 2px 10px 0 rgba(0, 0, 0, 0.16);
 }
 
 .main-content table th, .main-content table td {

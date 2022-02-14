@@ -6,6 +6,7 @@ Here is a collection of write ups and discussions of the challenges I have solve
 
 | CTF  | Category |
 | ------------- | ------------- |
+| [DiceCTF 2022](/dice2022)  | VDF, Commitment Schemes |
 | [Crypto CTF 2021](/CryptoCTF-2021)  | Elliptic & Edwards Curves, RSA, Diophantine Eqns.  |
 | [Cyber Apocalypse CTF 2021](/Cyber-Apocalypse-2021)  | RSA, Elliptic & Hyperelliptic Curves, Multivariate, Maths  |
 | [Zer0pts 2021](/zer0pts2021)  | Elliptic Curves, Polynoimial Rings |

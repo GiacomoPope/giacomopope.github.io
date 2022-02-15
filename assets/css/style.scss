@@ -138,30 +138,8 @@ a, a:visited, a:hover{
 .main-content h5, 
 .main-content h6{
   color: var(--text);
-  font-weight: bold; 
+  font-weight: 500; 
 }
-
-
-// .main-content h1{
-//   font-size: 2em;
-// }
-
-// .main-content h1,
-// .main-content h2{
-//   font-variant: small-caps;
-//   text-transform: lowercase;
-//   letter-spacing: 0.075em;
-// }
-
-// .main-content h3,
-// .main-content h4{
-//   font-style: italic;
-// }
-
-// .main-content h4{
-//   margin-top: 0;
-// }
-
 
 .main-content h1{
   font-size: 2rem
@@ -178,6 +156,11 @@ a, a:visited, a:hover{
 }
 
 .main-content h4{
+  font-weight: 300;
+}
+
+.main-content h5{
+  font-size: 1.1rem;
   font-weight: 300;
 }
 

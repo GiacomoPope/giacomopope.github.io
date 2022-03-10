@@ -3,8 +3,9 @@
 ## Giacomo Pope (Jack)
 
 - Co-founder of [CryptoHack](https://cryptohack.org): a free education platform for learning modern cryptography.
+- Cryptography consultant with [NCC Group](https://cryptoservices.github.io/about/).
 - Ph.D. in theoretical physics, my work was devoted to better understanding black hole solutions of *N=2* supergravity and their thermodynamics.
-- Compete in CTFs with [Organizers](https://ctftime.org/team/42934) and [cr0wn](https://cr0wn.uk).
+- Compete in CTFs with [Organizers](https://ctftime.org/team/42934).
     - I have included [Writeups](/writeups) for the challenges I have either written or solved from various CTFs.
 
 ## Research

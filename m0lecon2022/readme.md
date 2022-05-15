@@ -1,6 +1,16 @@
+# M0lecon CTF 2022
+
+Organisers played pwnthem0le last weekend, a 24 hour CTF hosted by pwnthem0le, and managed to grab first place! I didn't have much time to play with everyone, but I did get nerd sniped into solving this really nice isogeny challenge! Thanks to Drago_1729 for writing the challenge and pwnthem0le for hosting the CTF.
+
 ## SIDHalf
 
 ### Challenge
+
+* **Author**: [@Drago_1729](https://twitter.com/Drago1729)
+* **Solves**: 3
+* **Points**: 424
+
+> It seems a new isogeny hash function, but maybe it's not too hard to invert...
 
 ```python
 with open("flag.txt") as f:

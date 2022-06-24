@@ -1,6 +1,6 @@
 # M0lecon CTF 2022
 
-Organisers played pwnthem0le last weekend, a 24 hour CTF hosted by pwnthem0le, and managed to grab first place! I didn't have much time to play with everyone, but I did get nerd sniped into solving this really nice isogeny challenge! Thanks to Drago_1729 for writing the challenge and pwnthem0le for hosting the CTF.
+Organisers played m0leconCTF 2022 last weekend, a 24 hour CTF hosted by pwnthem0le, and managed to grab first place! I didn't have much time to play with everyone, but I did get nerd sniped into solving this really nice isogeny challenge! Thanks to Drago_1729 for writing the challenge and pwnthem0le for hosting the CTF.
 
 ## SIDHalf
 

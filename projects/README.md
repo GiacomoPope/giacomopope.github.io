@@ -16,8 +16,10 @@ If you're interested in contributing to the book, come chat to us in the [Crypto
 
 [Neutral Spaces](https://neutralspaces.co/) is a literary website I created to help contemporary writers by giving them an ad-free, zero cost space to host a portfolio. As the community grew, other projects such as a [blog](https://neutralspaces.co/blog) and a [writer's workshop](https://neutralspaces.co/workshop) have developed. Each year, the community comes together to create an online magazine with a range of fiction, poetry and essays.
 
-- [Issue One: Celebration](https://neutralspaces.co/magazine/)
-- [Issue Two: Doomscrolling](https://neutralspaces.co/magazine_two/)
+- [Issue One: Celebration](https://neutralspaces.co/magazine/one/)
+- [Issue Two: Doomscrolling](https://neutralspaces.co/magazine/two/)
+- [Issue Three: The Advantages of Becoming a Father](https://neutralspaces.co/magazine/three/)
+
 
 ### Screaming into a Horse's Mouth
 

@@ -1,6 +1,10 @@
 <span class="tag-line">Theoretical physicist, turned aspiring cryptographer. I am primarily interested in the application of elliptic curves in public-key cryptography.</span>
 
-## Giacomo Pope (Jack)
+
+<h2 style="text-align: center; margin: 3em 0 1em;">
+Giacomo Pope (Jack)
+</h2>
+
 
 - Co-founder of [CryptoHack](https://cryptohack.org): a free education platform for learning modern cryptography.
 - Cryptography consultant with [NCC Group](https://cryptoservices.github.io/about/).
@@ -8,10 +12,12 @@
 - Compete in CTFs with [Organizers](https://ctftime.org/team/42934).
     - I have included [Writeups](/writeups) for the challenges I have either written or solved from various CTFs.
 
-## Research
+
+<h2 style="text-align: center; margin-top: 3em 0 1em;">
+Research
+</h2>
 
 ### Cryptography
-
 #### Blog Posts
 - [Implementing the Castryck-Decru SIDH Key Recovery Attack in SageMath](https://research.nccgroup.com/2022/08/08/implementing-the-castryck-decru-sidh-key-recovery-attack-in-sagemath/)
 - [Estimating the Bit Security of Pairing-Friendly Curves](https://research.nccgroup.com/2022/02/03/estimating-the-bit-security-of-pairing-friendly-curves/)

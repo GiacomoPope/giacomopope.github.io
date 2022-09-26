@@ -10,6 +10,14 @@
 
 ## Research
 
+### Cryptography
+
+#### Blog Posts
+- [Implementing the Castryck-Decru SIDH Key Recovery Attack in SageMath](https://research.nccgroup.com/2022/08/08/implementing-the-castryck-decru-sidh-key-recovery-attack-in-sagemath/)
+- [Estimating the Bit Security of Pairing-Friendly Curves](https://research.nccgroup.com/2022/02/03/estimating-the-bit-security-of-pairing-friendly-curves/)
+
+### Theoretical Physics
+
 #### Papers
 - [Type-II Calabi-Yau compactifications, T-duality and special geometry in general spacetime signature](https://arxiv.org/pdf/2111.09017.pdf)
 - [Cosmological Solutions, a New Wick-Rotation, and the First Law of Thermodynamics](https://arxiv.org/pdf/2008.06929.pdf)

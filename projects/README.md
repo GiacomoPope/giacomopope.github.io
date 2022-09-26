@@ -23,7 +23,7 @@ Following NIST's decision to standardise the
 [CRYSTALS](https://pq-crystals.org)
 primatives, I decided to write a pure Python implementation of both the 
 key-encapsulation mechanism 
-[https://pq-crystals.org/kyber/index.shtml](CRYSTALS-Kyber) 
+[CRYSTALS-Kyber](https://pq-crystals.org/kyber/index.shtml) 
 and the digital signature scheme 
 [CRYSTALS-Dilithium](https://pq-crystals.org/dilithium/index.shtml).
 

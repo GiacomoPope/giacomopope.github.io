@@ -76,11 +76,11 @@ This is where this encryption scheme diverges from SIDH. Rather than sending to 
 
 First, "generators" of the torsion group for Bob's new curve are found: $E_B[2^a] = \langle U,V \rangle$ (note these aren't necessarily generators as they're just random points with order at most $2^a$. That doesn't matter here though). 
 
-We encrypt the byte `val` by mixing together the image of the torsion points $(G_B, H_B) = (\phi(P_A), \phi(P_B))$ as 
+We encrypt the byte $v$ by mixing together the image of the torsion points $(G_B, H_B) = (\phi(P_A), \phi(P_B))$ as 
 
 $$
-G = G_B - [\textsf{val}] U, \\
-H = H_B - [\textsf{val}] V.
+G = G_B - [v] U, \\
+H = H_B - [v] V.
 $$
 
 The challenge then gives us the curve $E_B$ and $(G,H,U,V)$. To grab our flag, we must find a way to efficiently recover `val` from this data.
@@ -109,7 +109,7 @@ $$
 \tilde{e}(G_B, H_B) = e(P_A, Q_A)^{3^b}
 $$
 
-This gives us the perfect test for when we have found the correct guess $x$, as the above equality will only hold when $x = \textsf{val}$. We then solve the challenge with a short loop in Sage
+This gives us the perfect test for when we have found the correct guess $x$, as the above equality will only hold when $x = v$. We then solve the challenge with a short loop in Sage
 
 ```python
 bytes_found = []

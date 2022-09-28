@@ -18,6 +18,11 @@ Research
 </h2>
 
 ### Cryptography
+
+#### Articles
+
+- [A Note on Reimplementing the Castryck-Decru Attack and Lessons Learned for SageMath, Rémy Oudompheng and Giacomo Pope](https://eprint.iacr.org/2022/1283).
+
 #### Blog Posts
 - [Implementing the Castryck-Decru SIDH Key Recovery Attack in SageMath](https://research.nccgroup.com/2022/08/08/implementing-the-castryck-decru-sidh-key-recovery-attack-in-sagemath/)
 - [Estimating the Bit Security of Pairing-Friendly Curves](https://research.nccgroup.com/2022/02/03/estimating-the-bit-security-of-pairing-friendly-curves/)

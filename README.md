@@ -21,7 +21,7 @@ Research
 
 #### Articles
 
-- [A Note on Reimplementing the Castryck-Decru Attack and Lessons Learned for SageMath, Rémy Oudompheng and Giacomo Pope](https://eprint.iacr.org/2022/1283).
+- [A Note on Reimplementing the Castryck-Decru Attack and Lessons Learned for SageMath](https://eprint.iacr.org/2022/1283), Rémy Oudompheng and Giacomo Pope
 
 #### Blog Posts
 - [Implementing the Castryck-Decru SIDH Key Recovery Attack in SageMath](https://research.nccgroup.com/2022/08/08/implementing-the-castryck-decru-sidh-key-recovery-attack-in-sagemath/)
@@ -29,12 +29,12 @@ Research
 
 ### Theoretical Physics
 
-#### Papers
-- [Type-II Calabi-Yau compactifications, T-duality and special geometry in general spacetime signature](https://arxiv.org/pdf/2111.09017.pdf)
-- [Cosmological Solutions, a New Wick-Rotation, and the First Law of Thermodynamics](https://arxiv.org/pdf/2008.06929.pdf)
-- [From Static to Cosmological Solutions of *N=2* Supergravity](https://arxiv.org/pdf/1905.09167.pdf)
+#### Articles
+- [Type-II Calabi-Yau compactifications, T-duality and special geometry in general spacetime signature](https://arxiv.org/pdf/2111.09017.pdf), Max Médevielle, Thomas Mohaupt and Giacomo Pope
+- [Cosmological Solutions, a New Wick-Rotation, and the First Law of Thermodynamics](https://arxiv.org/pdf/2008.06929.pdf), Jan Gutowski, Thomas Mohaupt and Giacomo Pope
+- [From Static to Cosmological Solutions of *N=2* Supergravity](https://arxiv.org/pdf/1905.09167.pdf), Jan Gutowski, Thomas Mohaupt and Giacomo Pope
 
-#### Thesis 
+#### PhD Thesis 
 - [Cosmological Killing Horizons and their Thermodynamics](/thesis.pdf)
 - [One-page layperson introduction to research motivations](/layperson.pdf)
 

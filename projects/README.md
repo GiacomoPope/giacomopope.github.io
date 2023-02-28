@@ -17,6 +17,20 @@ CTFs / Cryptography challenges. We built a
 [blog](https://blog.cryptohack.org/) for CryptoHack to keep track of the 
 projects we do together.
 
+### Learning to SQI
+
+At the beginning of 2023 I worked with Maria Corte-Real Santos, Jonathan Komada Eriksen and Michael Meyer
+to write a SageMath implementation of SQISign following the 2020 paper: 
+[SQISign: compact post-quantum signatures from quaternions and isogenies](https://eprint.iacr.org/2020/1240), 
+by Luca De Feo, David Kohel, Antonin Leroux, Christophe Petit, and Benjamin Wesolowski (2020).
+
+The aim of this implementation is to create an educational resource for the interested isogenist 
+or cryptographer and focuses on being clear and verbose. The project includes:
+
+- [`SQISign-SageMath`](https://github.com/LearningToSQI/SQISign-SageMath), the SageMath implementation released 
+  under an MIT license
+- [Learning to SQI](https://learningtosqi.github.io), an accompanying blog written as supplementary material to the above implementation.
+
 ### CRYSTALS-Python
 
 Following NIST's decision to standardise the 

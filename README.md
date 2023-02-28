@@ -24,6 +24,7 @@ Research
 - [A Note on Reimplementing the Castryck-Decru Attack and Lessons Learned for SageMath](https://eprint.iacr.org/2022/1283), Rémy Oudompheng and Giacomo Pope
 
 #### Blog Posts
+- [Learning to SQI: Implementing SQISign in SageMath](https://learningtosqi.github.io)
 - [Implementing the Castryck-Decru SIDH Key Recovery Attack in SageMath](https://research.nccgroup.com/2022/08/08/implementing-the-castryck-decru-sidh-key-recovery-attack-in-sagemath/)
 - [Estimating the Bit Security of Pairing-Friendly Curves](https://research.nccgroup.com/2022/02/03/estimating-the-bit-security-of-pairing-friendly-curves/)
 

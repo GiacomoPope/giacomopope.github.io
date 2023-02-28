@@ -275,7 +275,7 @@ print(f'Encrypted Flag: {enc}')
 
 This challenge was inspired by a homework question I helped a friend with which was based on the same cryptosystem. The cryptosystem is as follows. 
 
-Two large primes $p$ and $q$ are picked an a public modulus $N = pq$ is formed. Three random integers in $\mathbb{F}\_N^\star$: $(g,r_1,r_2)$ are picked and then the public key:
+Two large primes $p$ and $q$ are picked an a public modulus $N = pq$ is formed. Three random integers in $\mathbb{F}_N^\star$: $(g,r_1,r_2)$ are picked and then the public key:
 
 $$
 N, \quad g_1 = g^{r_1(p-1)} \pmod N, \quad g_2 = g^{r_2(q-1)} \pmod N

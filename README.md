@@ -21,19 +21,19 @@ Research
 
 #### Articles
 
-- [A Note on Reimplementing the Castryck-Decru Attack and Lessons Learned for SageMath](https://eprint.iacr.org/2022/1283), Rémy Oudompheng and Giacomo Pope
+- [A Note on Reimplementing the Castryck-Decru Attack and Lessons Learned for SageMath](https://eprint.iacr.org/2022/1283), Rémy Oudompheng and GP
 
 #### Blog Posts
-- [Learning to SQI: Implementing SQISign in SageMath](https://learningtosqi.github.io), Maria Corte-Real Santos and Giacomo Pope
+- [Learning to SQI: Implementing SQISign in SageMath](https://learningtosqi.github.io), Maria Corte-Real Santos and GP
 - [Implementing the Castryck-Decru SIDH Key Recovery Attack in SageMath](https://research.nccgroup.com/2022/08/08/implementing-the-castryck-decru-sidh-key-recovery-attack-in-sagemath/)
 - [Estimating the Bit Security of Pairing-Friendly Curves](https://research.nccgroup.com/2022/02/03/estimating-the-bit-security-of-pairing-friendly-curves/)
 
 ### Theoretical Physics
 
 #### Articles
-- [Type-II Calabi-Yau compactifications, T-duality and special geometry in general spacetime signature](https://arxiv.org/pdf/2111.09017.pdf), Max Médevielle, Thomas Mohaupt and Giacomo Pope
-- [Cosmological Solutions, a New Wick-Rotation, and the First Law of Thermodynamics](https://arxiv.org/pdf/2008.06929.pdf), Jan Gutowski, Thomas Mohaupt and Giacomo Pope
-- [From Static to Cosmological Solutions of *N=2* Supergravity](https://arxiv.org/pdf/1905.09167.pdf), Jan Gutowski, Thomas Mohaupt and Giacomo Pope
+- [Type-II Calabi-Yau compactifications, T-duality and special geometry in general spacetime signature](https://arxiv.org/pdf/2111.09017.pdf), Max Médevielle, Thomas Mohaupt and GP
+- [Cosmological Solutions, a New Wick-Rotation, and the First Law of Thermodynamics](https://arxiv.org/pdf/2008.06929.pdf), Jan Gutowski, Thomas Mohaupt and GP
+- [From Static to Cosmological Solutions of *N=2* Supergravity](https://arxiv.org/pdf/1905.09167.pdf), Jan Gutowski, Thomas Mohaupt and GP
 
 #### PhD Thesis 
 - [Cosmological Killing Horizons and their Thermodynamics](/thesis.pdf)

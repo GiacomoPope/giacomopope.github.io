@@ -20,7 +20,7 @@ Research
 ### Cryptography
 
 #### Articles
-
+- [FESTA: Fast Encryption from Supersingular Torsion Attacks])https://eprint.iacr.org/2023/660), Andrea Basso, Luciano Maino and GP
 - [A Direct Key Recovery Attack on SIDH](https://eprint.iacr.org/2023/640), Luciano Maino, Chloe Martindale, Lorenz Panny, GP and Benjamin Wesolowski
 - [A Note on Reimplementing the Castryck-Decru Attack and Lessons Learned for SageMath](https://eprint.iacr.org/2022/1283), Rémy Oudompheng and GP
 

@@ -27,7 +27,7 @@ Research
 #### Blog Posts
 - [Learning to SQI: Implementing SQISign in SageMath](https://learningtosqi.github.io), Maria Corte-Real Santos and GP
 - [Implementing the Castryck-Decru SIDH Key Recovery Attack in SageMath](https://research.nccgroup.com/2022/08/08/implementing-the-castryck-decru-sidh-key-recovery-attack-in-sagemath/)
-- [Estimating the Bit Security of Pairing-Friendly Curves](https://research.nccgroup.com/2022/02/03/estimating-the-bit-security-of-pairing-friendly-curves/)
+- [Estimating the Bit Security of Pairing-Friendly Curves](https://research.nccgroup.com/2022/03/02/estimating-the-bit-security-of-pairing-friendly-curves/)
 
 ### Theoretical Physics
 

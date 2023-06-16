@@ -47,8 +47,8 @@ implementation which closely follows the specification will serve as a
 resource for those who wish to be familiar with *how* the primatives 
 work.
 
-- [`kyber-py`](https://github.com/jack4818/kyber-py) 
-- [`dilithium-py`](https://github.com/jack4818/dilithium-py)
+- [`kyber-py`](https://github.com/giacomopope/kyber-py) 
+- [`dilithium-py`](https://github.com/giacomopope/dilithium-py)
 
 ### Breaking SIDH over Lunch
 
@@ -59,7 +59,7 @@ I wrote a SageMath implementation of
 based on the proof of concept Magma code, available at
 [https://homes.esat.kuleuven.be/~wcastryc/](https://homes.esat.kuleuven.be/~wcastryc/)
 
-[Our implementation](https://github.com/jack4818/Castryck-Decru-SageMath) 
+[Our implementation](https://github.com/giacomopope/Castryck-Decru-SageMath) 
 breaks `SIKEp434` in only 20 seconds, and `SIKEp751` in under one hour.
 
 ### CryptoBook

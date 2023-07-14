@@ -24,6 +24,10 @@ Research
 - [A Direct Key Recovery Attack on SIDH](https://eprint.iacr.org/2023/640), Luciano Maino, Chloe Martindale, Lorenz Panny, GP and Benjamin Wesolowski
 - [A Note on Reimplementing the Castryck-Decru Attack and Lessons Learned for SageMath](https://eprint.iacr.org/2022/1283), Rémy Oudompheng and GP
 
+#### Presentations
+
+- [Superspecial Cryptography: Computing Isogenies between Elliptic Products](/talks/SIAM-AG-14-07-2023.pdf), SIAM Conference on Applied Algebraic Geometry, Eindhoven (Netherlands), 14th July 2023.
+
 #### Blog Posts
 - [Learning to SQI: Implementing SQISign in SageMath](https://learningtosqi.github.io), Maria Corte-Real Santos and GP
 - [Implementing the Castryck-Decru SIDH Key Recovery Attack in SageMath](https://research.nccgroup.com/2022/08/08/implementing-the-castryck-decru-sidh-key-recovery-attack-in-sagemath/)

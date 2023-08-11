@@ -33,6 +33,12 @@ body {
     margin: 0 16px;
 }
 
+.line{
+    width: 50%;
+    border-bottom: 1px solid var(--text);
+    margin: 3em auto;
+}
+
 .content{
     margin: 1em auto;
     max-width: 760px;
@@ -54,4 +60,5 @@ h1,h2,h3,h4,h5,h6{
 
 h1{
     text-align: center;
+    margin: 2em 0;
 }

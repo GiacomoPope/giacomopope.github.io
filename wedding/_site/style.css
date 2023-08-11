@@ -1,0 +1,64 @@
+
+@font-face {
+  font-family: "William";
+  src: url("WilliamsCaslonText-Regular.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "William";
+  src: url("WilliamsCaslonText-Bold.woff2") format("woff2");
+  font-weight: 600;
+}
+
+@font-face {
+  font-family: "William";
+  src: url("WilliamsCaslonText-Italic.woff2") format("woff2");
+  font-style: italic;
+}
+
+:root{
+    --bg: #f0bdac;
+    --text: #010933;
+}
+
+html{
+    background-image: url('./bg.jpg');
+    background-color: var(--bg);
+}
+
+body {
+    font-family: "William", serif;
+    color: var(--text);
+    font-size: 16pt;
+    margin: 0 16px;
+}
+
+.line{
+    width: 50%;
+    border-bottom: 1px solid var(--text);
+    margin: 3em auto;
+}
+
+.content{
+    margin: 1em auto;
+    max-width: 760px;
+}
+.invite-wrapper{
+    text-align: center;
+    background-color: white;
+    padding: 10px 10px 5px 10px;
+}
+
+.invite-wrapper img{
+    max-width: 100%;
+}
+
+h1,h2,h3,h4,h5,h6{
+    font-weight: normal;
+    font-style: italic;
+}
+
+h1{
+    text-align: center;
+    margin: 2em 0;
+}

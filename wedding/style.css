@@ -19,11 +19,13 @@
 :root{
     --bg: #f0bdac;
     --text: #010933;
+    --link: #02319d;
 }
 
 html{
     background-image: url('./bg.jpg');
     background-color: var(--bg);
+    background-attachment: fixed;
 }
 
 body {
@@ -31,6 +33,11 @@ body {
     color: var(--text);
     font-size: 16pt;
     margin: 0 16px;
+}
+
+a, a:hover, a:visited{
+    color: var(--link);
+    text-decoration: none;
 }
 
 .line{
@@ -61,4 +68,8 @@ h1,h2,h3,h4,h5,h6{
 h1{
     text-align: center;
     margin: 2em 0;
+}
+
+h4{
+    font-size: 1.1em;
 }

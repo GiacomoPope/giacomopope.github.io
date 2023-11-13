@@ -20,6 +20,7 @@ Research
 ### Cryptography
 
 #### Articles
+- [An Algorithmic Approach to (2,2)-isogenies in the Theta Model and Applications to Isogeny-based Cryptography](https://eprint.iacr.org/2023/1747), Pierrick Dartois, Luciano Maino, GP and Damien Robert
 - [FESTA: Fast Encryption from Supersingular Torsion Attacks](https://eprint.iacr.org/2023/660), Andrea Basso, Luciano Maino and GP
 - [A Direct Key Recovery Attack on SIDH](https://eprint.iacr.org/2023/640), Luciano Maino, Chloe Martindale, Lorenz Panny, GP and Benjamin Wesolowski
 - [A Note on Reimplementing the Castryck-Decru Attack and Lessons Learned for SageMath](https://eprint.iacr.org/2022/1283), Rémy Oudompheng and GP

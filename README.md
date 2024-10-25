@@ -21,6 +21,7 @@ Research
 
 #### Articles
 
+- [Radical 2-isogenies and cryptographic hash functions in dimensions 1, 2 and 3](https://eprint.iacr.org/2024/1732), Sabrina Kunzweiler, Luciano Maino, Tomoki Moriya, Christophe Petit, GP, Damien Robert, Miha Stopar and Yan Bo Ti
 - [SQIsign2D-West: The Fast, the Small, and the Safer](https://eprint.iacr.org/2024/760), Andrea Basso, Luca De Feo, Pierrick Dartois, Antonin Leroux, Luciano Maino, GP, Damien Robert, and Benjamin Wesolowski
 - [An Algorithmic Approach to (2,2)-isogenies in the Theta Model and Applications to Isogeny-based Cryptography](https://eprint.iacr.org/2023/1747), Pierrick Dartois, Luciano Maino, GP and Damien Robert
 - [FESTA: Fast Encryption from Supersingular Torsion Attacks](https://eprint.iacr.org/2023/660), Andrea Basso, Luciano Maino and GP

@@ -1,5 +1,4 @@
-<span class="tag-line">Theoretical physicist, turned aspiring cryptographer. I am primarily interested in the application of elliptic curves in public-key cryptography.</span>
-
+<!-- <span class="tag-line">Theoretical physicist, turned aspiring cryptographer. I am primarily interested in the application of elliptic curves in public-key cryptography.</span> -->
 
 <h2 style="text-align: center; margin: 3em 0 1em;">
 Giacomo Pope (Jack)
@@ -8,10 +7,9 @@ Giacomo Pope (Jack)
 
 - Co-founder of [CryptoHack](https://cryptohack.org): a free education platform for learning modern cryptography.
 - Cryptography consultant with [NCC Group](https://cryptoservices.github.io/about/).
+- Researcher with the University of Bristol, focused on isogeny-based cryptography.
 - Ph.D. in theoretical physics, my work was devoted to better understanding black hole solutions of *N=2* supergravity and their thermodynamics.
 - Compete in CTFs with [Organizers](https://ctftime.org/team/42934).
-    - I have included [Writeups](/writeups) for the challenges I have either written or solved from various CTFs.
-
 
 <h2 style="text-align: center; margin-top: 3em 0 1em;">
 Research
@@ -21,6 +19,8 @@ Research
 
 #### Articles
 
+- [Simpler and Faster Pairings from the Montgomery Ladder](https://eprint.iacr.org/2025/672)<br>
+  Giacomo Pope, Krijn Reijnders, Damien Robert, Alessandro Sferlazza, Benjamin Smith, <em>2025</em>.
 - [Radical 2-isogenies and cryptographic hash functions in dimensions 1, 2 and 3](https://eprint.iacr.org/2024/1732)<br>
   Sabrina Kunzweiler, Luciano Maino, Tomoki Moriya, Christophe Petit, GP, Damien Robert, Miha Stopar and Yan Bo Ti, <em>PKC 2025</em>.
 - [SQIsign2D-West: The Fast, the Small, and the Safer](https://eprint.iacr.org/2024/760)<br>

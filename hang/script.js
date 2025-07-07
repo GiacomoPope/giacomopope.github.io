@@ -1,55 +1,40 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const startBtn = document.getElementById('startBtn');
-    const startScreen = document.getElementById('startScreen');
-    const timerScreen = document.getElementById('timerScreen');
-    const timerDisplay = document.getElementById('timer');
-    const phaseText = document.getElementById('phaseText');
-    const intervalCounter = document.createElement('div');
-    intervalCounter.id = 'intervalCounter';
-    timerScreen.appendChild(intervalCounter);
-
-    const intervals = [
-        { duration: 10000, color: 'blue', text: '' },
-        { duration: 20000, color: 'green', text: '' }
-    ];
-
-    let currentInterval = 0;
-    let intervalCount = 0;
-
-    function getNextGripType(count) {
-    	if (count == 19) return 'All Done';
-        if (count < 5) return 'Up Next: Half Crimp';
-        if (count < 11) return 'Up Next: Open Crimp';
-        if (count < 15) return 'Up Next: Two Finger Half Crimp';
-        return 'Up Next: Two Finger Open Crimp';
+class IntervalTrainer {
+    constructor(config) {
+        this.config = config;
+        this.initializeDOM();
+        this.setupEventListeners();
     }
 
-    function getGripType(count) {
-        if (count < 6) return 'Half Crimp';
-        if (count < 12) return 'Open Crimp';
-        if (count < 16) return 'Two Finger Half Crimp';
-        return 'Two Finger Open Crimp';
+    initializeDOM() {
+        this.startBtn = document.getElementById('startBtn');
+        this.startScreen = document.getElementById('startScreen');
+        this.timerScreen = document.getElementById('timerScreen');
+        this.timerDisplay = document.getElementById('timer');
+        this.phaseText = document.getElementById('phaseText');
+        this.intervalCounter = document.getElementById('intervalCounter');
     }
 
-    function formatTime(milliseconds) {
+    setupEventListeners() {
+        this.startBtn.addEventListener('click', () => this.runWorkout());
+    }
+
+    formatTime(milliseconds) {
         const totalSeconds = Math.floor(milliseconds / 1000);
         const remainingMilliseconds = milliseconds % 1000;
-        const formattedSeconds = totalSeconds.toString().padStart(2, '0');
-        const formattedMilliseconds = remainingMilliseconds.toString().padStart(3, '0');
-        return `${formattedSeconds}:${formattedMilliseconds}`;
+        return `${totalSeconds.toString().padStart(2, '0')}:${remainingMilliseconds.toString().padStart(3, '0')}`;
     }
 
-    function startTimer(duration, color, text) {
+    async startTimer(duration, color, text) {
         return new Promise((resolve) => {
-            timerDisplay.className = color;
-            phaseText.textContent = text;
+            this.timerDisplay.className = color;
+            this.phaseText.textContent = text;
             
             const startTime = Date.now();
             const timerInterval = setInterval(() => {
                 const elapsedTime = Date.now() - startTime;
                 const remainingTime = Math.max(duration - elapsedTime, 0);
                 
-                timerDisplay.textContent = formatTime(remainingTime);
+                this.timerDisplay.textContent = this.formatTime(remainingTime);
                 
                 if (remainingTime <= 0) {
                     clearInterval(timerInterval);
@@ -59,42 +44,88 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    async function runWorkout() {
-        startScreen.classList.add('hidden');
-        timerScreen.classList.remove('hidden');
+    async runWorkout() {
+        this.startScreen.classList.add('hidden');
+        this.timerScreen.classList.remove('hidden');
 
         try {
-            await startTimer(5000, 'gold', 'Get Ready: Half Crimp');
+            // Initial gold countdown
+            const firstWorkoutName = this.config.workouts[this.config.workout_plan[0].workout].name;
+            await this.startTimer(5000, 'gold', `Get Ready: ${firstWorkoutName}`);
 
-            while (intervalCount < 20) {
-                for (const [index, interval] of intervals.entries()) {
-                    intervalCounter.textContent = `${intervalCount + 1}/20`;
+            let totalIntervalCount = 0;
+            let totalWorkoutIntervals = this.config.workout_plan.reduce((sum, plan) => sum + plan.repeat, 0);
+
+            for (let planIndex = 0; planIndex < this.config.workout_plan.length; planIndex++) {
+                const currentWorkoutPlan = this.config.workout_plan[planIndex];
+                const currentWorkout = this.config.workouts[currentWorkoutPlan.workout];
+                
+                // Determine the current workout name
+                const thisWorkoutName = this.config.workouts[currentWorkoutPlan.workout].name;
+
+                // Repeat the workout
+                for (let i = 0; i < currentWorkoutPlan.repeat; i++) {
+
+                    // Determine the next workout name
+                    let nextWorkoutName;
+
+                    // If we're on the final rep of the set, we need the next name.
+                    if (i == currentWorkoutPlan.repeat - 1) {
+                        const nextWorkoutPlan = this.config.workout_plan[planIndex + 1];
+
+                        nextWorkoutName = nextWorkoutPlan 
+                        ? this.config.workouts[nextWorkoutPlan.workout].name 
+                        : 'Finish';
+                    }
                     
-                    const intervalText = interval.color === 'blue' 
-                        ? getGripType(intervalCount) 
-                        : getNextGripType(intervalCount);
-                    
-                    await startTimer(interval.duration, interval.color, intervalText);
+                    else {
+                        nextWorkoutName = thisWorkoutName;
+                    }
+
+
+
+                    // Hang interval (blue)
+                    this.intervalCounter.textContent = `${totalIntervalCount + 1}/${totalWorkoutIntervals}`;
+                    await this.startTimer(
+                        currentWorkout.hang_duration, 
+                        'blue', 
+                        `${thisWorkoutName}`
+                    );
+
+                    // Rest interval (green)
+                    this.intervalCounter.textContent = `${totalIntervalCount + 1}/${totalWorkoutIntervals}`;
+                    await this.startTimer(
+                        currentWorkout.rest_duration, 
+                        'green', 
+                        `Up Next: ${nextWorkoutName}`
+                    );
+
+                    totalIntervalCount++;
                 }
-                intervalCount++;
             }
         } catch (error) {
             console.error("Workout interrupted:", error);
         } finally {
             // Reset display after workout
-            timerDisplay.textContent = '05:000';
-            timerDisplay.className = 'gold';
-            phaseText.textContent = '';
-            intervalCounter.textContent = '';
+            this.timerDisplay.textContent = '05:000';
+            this.timerDisplay.className = 'gold';
+            this.phaseText.textContent = '';
+            this.intervalCounter.textContent = '';
             
             // Hide timer screen and show start screen
-            timerScreen.classList.add('hidden');
-            startScreen.classList.remove('hidden');
-            
-            // Reset interval count
-            intervalCount = 0;
+            this.timerScreen.classList.add('hidden');
+            this.startScreen.classList.remove('hidden');
         }
     }
+}
 
-    startBtn.addEventListener('click', runWorkout);
+// Load configuration and initialize trainer
+document.addEventListener('DOMContentLoaded', async () => {
+    try {
+        const response = await fetch('config.json');
+        const config = await response.json();
+        new IntervalTrainer(config);
+    } catch (error) {
+        console.error("Failed to load configuration:", error);
+    }
 });

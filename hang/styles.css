@@ -1,0 +1,60 @@
+body {
+    font-family: monospace;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    background-color: #f0f0f0;
+}
+
+.container {
+    text-align: center;
+}
+
+#startBtn {
+    padding: 15px 30px;
+    font-size: 18px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#startBtn:hover {
+    background-color: #45a049;
+}
+
+#timer {
+    font-size: 4rem;
+    font-weight: bold;
+}
+
+#phaseText {
+    font-size: 2rem;
+    margin-top: 20px;
+}
+
+.hidden {
+    display: none;
+}
+
+.gold {
+    color: #FFD700;
+}
+
+.blue {
+    color: #1E90FF;
+}
+
+.green {
+    color: #2ECC71;
+}
+
+#intervalCounter {
+    font-size: 2rem;
+    margin-top: 1rem;
+    color: #666;
+}

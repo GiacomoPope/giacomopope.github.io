@@ -1,21 +1,16 @@
 class IntervalTrainer {
-    constructor(config) {
-        this.config = config;
+    constructor(workout_data) {
+        this.workout_data = workout_data;
         this.initializeDOM();
-        this.setupEventListeners();
+        this.runWorkout();
     }
 
     initializeDOM() {
-        this.startBtn = document.getElementById('startBtn');
         this.startScreen = document.getElementById('startScreen');
         this.timerScreen = document.getElementById('timerScreen');
         this.timerDisplay = document.getElementById('timer');
         this.phaseText = document.getElementById('phaseText');
         this.intervalCounter = document.getElementById('intervalCounter');
-    }
-
-    setupEventListeners() {
-        this.startBtn.addEventListener('click', () => this.runWorkout());
     }
 
     formatTime(milliseconds) {
@@ -53,7 +48,6 @@ class IntervalTrainer {
         // create an async function to request a wake lock
         try {
           wakeLock = await navigator.wakeLock.request("screen");
-          console.log("Wake Lock is active!");
         } catch (err) {
           // The Wake Lock request has failed - usually system related, such as battery.
           console.log(`${err.name}, ${err.message}`);
@@ -61,14 +55,14 @@ class IntervalTrainer {
 
         try {
             // Initial gold countdown
-            const firstWorkoutName = this.config.workout_plan[0].name;
+            const firstWorkoutName = this.workout_data[0].name;
             await this.startTimer(5000, 'gold', `Get Ready: ${firstWorkoutName}`);
 
             let totalIntervalCount = 0;
-            let totalWorkoutIntervals = this.config.workout_plan.reduce((sum, plan) => sum + plan.repeat, 0);
+            let totalWorkoutIntervals = this.workout_data.reduce((sum, plan) => sum + plan.repeat, 0);
 
-            for (let planIndex = 0; planIndex < this.config.workout_plan.length; planIndex++) {
-                const currentWorkout = this.config.workout_plan[planIndex];
+            for (let planIndex = 0; planIndex < this.workout_data.length; planIndex++) {
+                const currentWorkout = this.workout_data[planIndex];
                 
                 // Repeat the workout
                 for (let i = 0; i < currentWorkout.repeat; i++) {
@@ -78,12 +72,19 @@ class IntervalTrainer {
 
                     // If we're on the final rep of the set, we need the next name.
                     if (i == currentWorkout.repeat - 1) {
-                        const nextWorkout = this.config.workout_plan[planIndex + 1];
+                        const nextWorkout = this.workout_data[planIndex + 1];
                         nextWorkoutName = nextWorkout 
                         ? nextWorkout.name 
                         : 'Finish';
                     } else {
                         nextWorkoutName = currentWorkout.name;
+                    }
+
+                    let restPrompt;
+                    if (currentWorkout.name == "Hang") {
+                        restPrompt = "Rest";
+                    } else {
+                        restPrompt = `Up Next: ${nextWorkoutName}`;
                     }
 
 
@@ -100,7 +101,7 @@ class IntervalTrainer {
                     await this.startTimer(
                         currentWorkout.rest_duration, 
                         'green', 
-                        `Up Next: ${nextWorkoutName}`
+                        restPrompt
                     );
 
                     totalIntervalCount++;
@@ -129,11 +130,31 @@ class IntervalTrainer {
 
 // Load configuration and initialize trainer
 document.addEventListener('DOMContentLoaded', async () => {
+    const noHangBtn = document.getElementById('noHangBtn');
+    const sixTenBtn = document.getElementById('sixTenBtn');
+    const onOffBtn = document.getElementById('sixSixSixBtn');
+
+    // Load the workout data from json.
+    var workout_data = null;
     try {
         const response = await fetch('config.json');
-        const config = await response.json();
-        new IntervalTrainer(config);
-    } catch (error) {
+        workout_data = await response.json();
+
+        // Load the data, this should maybe be done in a loop with button ID in the JSON?
+        noHangBtn.onclick = () => {
+            new IntervalTrainer(workout_data.no_hang);
+        };
+
+        sixTenBtn.onclick = () => {
+            new IntervalTrainer(workout_data.six_ten);
+        };
+
+        onOffBtn.onclick = () => {
+            new IntervalTrainer(workout_data.six_six_six);
+        };
+
+    }
+    catch (error) {
         console.error("Failed to load configuration:", error);
     }
 });

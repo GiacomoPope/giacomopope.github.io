@@ -48,51 +48,54 @@ class IntervalTrainer {
         this.startScreen.classList.add('hidden');
         this.timerScreen.classList.remove('hidden');
 
+        // Lock the screen so that the screen always displays the timer.
+        let wakeLock = null;
+        // create an async function to request a wake lock
+        try {
+          wakeLock = await navigator.wakeLock.request("screen");
+          console.log("Wake Lock is active!");
+        } catch (err) {
+          // The Wake Lock request has failed - usually system related, such as battery.
+          console.log(`${err.name}, ${err.message}`);
+        }
+
         try {
             // Initial gold countdown
-            const firstWorkoutName = this.config.workouts[this.config.workout_plan[0].workout].name;
+            const firstWorkoutName = this.config.workout_plan[0].name;
             await this.startTimer(5000, 'gold', `Get Ready: ${firstWorkoutName}`);
 
             let totalIntervalCount = 0;
             let totalWorkoutIntervals = this.config.workout_plan.reduce((sum, plan) => sum + plan.repeat, 0);
 
             for (let planIndex = 0; planIndex < this.config.workout_plan.length; planIndex++) {
-                const currentWorkoutPlan = this.config.workout_plan[planIndex];
-                const currentWorkout = this.config.workouts[currentWorkoutPlan.workout];
+                const currentWorkout = this.config.workout_plan[planIndex];
                 
-                // Determine the current workout name
-                const thisWorkoutName = this.config.workouts[currentWorkoutPlan.workout].name;
-
                 // Repeat the workout
-                for (let i = 0; i < currentWorkoutPlan.repeat; i++) {
+                for (let i = 0; i < currentWorkout.repeat; i++) {
 
-                    // Determine the next workout name
+                    // Determine the next workout name, which is 
                     let nextWorkoutName;
 
                     // If we're on the final rep of the set, we need the next name.
-                    if (i == currentWorkoutPlan.repeat - 1) {
-                        const nextWorkoutPlan = this.config.workout_plan[planIndex + 1];
-
-                        nextWorkoutName = nextWorkoutPlan 
-                        ? this.config.workouts[nextWorkoutPlan.workout].name 
+                    if (i == currentWorkout.repeat - 1) {
+                        const nextWorkout = this.config.workout_plan[planIndex + 1];
+                        nextWorkoutName = nextWorkout 
+                        ? nextWorkout.name 
                         : 'Finish';
-                    }
-                    
-                    else {
-                        nextWorkoutName = thisWorkoutName;
+                    } else {
+                        nextWorkoutName = currentWorkout.name;
                     }
 
 
-
-                    // Hang interval (blue)
+                    // Hang interval
                     this.intervalCounter.textContent = `${totalIntervalCount + 1}/${totalWorkoutIntervals}`;
                     await this.startTimer(
                         currentWorkout.hang_duration, 
                         'blue', 
-                        `${thisWorkoutName}`
+                        `${currentWorkout.name}`
                     );
 
-                    // Rest interval (green)
+                    // Rest interval
                     this.intervalCounter.textContent = `${totalIntervalCount + 1}/${totalWorkoutIntervals}`;
                     await this.startTimer(
                         currentWorkout.rest_duration, 
@@ -115,6 +118,11 @@ class IntervalTrainer {
             // Hide timer screen and show start screen
             this.timerScreen.classList.add('hidden');
             this.startScreen.classList.remove('hidden');
+
+            // Release the wakelock
+            wakeLock.release().then(() => {
+                  wakeLock = null;
+            });
         }
     }
 }

@@ -1,41 +1,27 @@
 {
-    "workouts": {
-        "half_crimp": {
-            "name": "Half Crimp",
-            "hang_duration": 10000,
-            "rest_duration": 20000
-        },
-        "open_crimp": {
-            "name": "Open Crimp", 
-            "hang_duration": 10000,
-            "rest_duration": 20000
-        },
-        "two_finger_half_crimp": {
-            "name": "Two Finger Half Crimp",
-            "hang_duration": 10000, 
-            "rest_duration": 20000
-        },
-        "two_finger_open_crimp": {
-            "name": "Two Finger Open Crimp",
-            "hang_duration": 10000, 
-            "rest_duration": 20000
-        }
-    },
     "workout_plan": [
         {
-            "workout": "half_crimp",
+            "name": "Half Crimp",
+            "hang_duration": 1000,
+            "rest_duration": 1200,
             "repeat": 6
         },
         {
-            "workout": "open_crimp", 
+            "name": "Open Crimp", 
+            "hang_duration": 1000,
+            "rest_duration": 1200,
             "repeat": 6
         },
         {
-            "workout": "two_finger_half_crimp",
+            "name": "Two Finger Half Crimp",
+            "hang_duration": 1000, 
+            "rest_duration": 1200,
             "repeat": 4
         },
         {
-            "workout": "two_finger_open_crimp",
+            "name": "Two Finger Open Crimp",
+            "hang_duration": 1000, 
+            "rest_duration": 1200,
             "repeat": 4
         }
     ]

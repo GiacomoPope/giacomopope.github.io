@@ -1,11 +1,20 @@
+@font-face {
+    font-family: Univers;
+    font-weight: 300 900;
+    font-style: normal;
+    src: url(univers-next-regular.woff2) format('woff2 supports variations'), url(univers-next-regular.woff2) format('woff2-variations');
+    font-display: swap
+}
+
 body {
-    font-family: monospace;
+    font-family: Univers, -apple-system, system-ui;
+    font-stretch: 95%;
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
     margin: 0;
-    background-color: #f0f0f0;
+    background-color: #fff;
 }
 
 .container {
@@ -13,23 +22,51 @@ body {
 }
 
 button {
-    padding: 15px 30px;
+    font-family: Univers, -apple-system, system-ui;
+    padding: 18px 30px 15px 30px;
     font-size: 18px;
-    background-color: #4CAF50;
+    background-color: #002bf5;
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 25px;
     cursor: pointer;
     transition: background-color 0.3s ease;
+    min-width: 10em;
+    margin: 2em 0;
 }
 
 button:hover {
-    background-color: #45a049;
+    background-color: #3358FF;
+}
+
+#timerScreen {
+    position: relative;
+    width: 60vw;
+    height: 60vw;
+    max-width: 600px;
+    max-height: 600px;
 }
 
 #timer {
     font-size: 4rem;
     font-weight: bold;
+}
+
+#circle {
+    position: absolute;
+    width: 100%;  
+    height: 100%;
+    border-radius: 50%; 
+    z-index: -1;
+}
+
+#timerData {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: #fff;
 }
 
 #phaseText {
@@ -42,19 +79,19 @@ button:hover {
 }
 
 .gold {
-    color: #FFD700;
+    background-color: #feb32b;
 }
 
 .blue {
-    color: #1E90FF;
+    background-color: #002bf5;
 }
 
 .green {
-    color: #2ECC71;
+    background-color: #2ECC71;
 }
 
 #intervalCounter {
-    font-size: 2rem;
+    font-size: 1.7rem;
     margin-top: 1rem;
-    color: #666;
+    color: #fff;
 }

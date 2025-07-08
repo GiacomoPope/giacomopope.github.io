@@ -9,6 +9,7 @@ class IntervalTrainer {
         this.startScreen = document.getElementById('startScreen');
         this.timerScreen = document.getElementById('timerScreen');
         this.timerDisplay = document.getElementById('timer');
+        this.timerCircle = document.getElementById('circle');
         this.phaseText = document.getElementById('phaseText');
         this.intervalCounter = document.getElementById('intervalCounter');
     }
@@ -21,7 +22,9 @@ class IntervalTrainer {
 
     async startTimer(duration, color, text) {
         return new Promise((resolve) => {
-            this.timerDisplay.className = color;
+            var get_ready = false;
+            
+            this.timerCircle.className = color;
             this.phaseText.textContent = text;
             
             const startTime = Date.now();
@@ -30,6 +33,12 @@ class IntervalTrainer {
                 const remainingTime = Math.max(duration - elapsedTime, 0);
                 
                 this.timerDisplay.textContent = this.formatTime(remainingTime);
+
+                // Set rest circle to gold when 3 seconds are left
+                if (!get_ready && remainingTime <= 3000 && color == "green") {
+                    get_ready = true;
+                    this.timerCircle.className = 'gold';
+                }
                 
                 if (remainingTime <= 0) {
                     clearInterval(timerInterval);
@@ -112,7 +121,7 @@ class IntervalTrainer {
         } finally {
             // Reset display after workout
             this.timerDisplay.textContent = '05:000';
-            this.timerDisplay.className = 'gold';
+            this.timerCircle.className = 'gold';
             this.phaseText.textContent = '';
             this.intervalCounter.textContent = '';
             

@@ -41,10 +41,8 @@ button:hover {
 
 #timerScreen {
     position: relative;
-    width: 60vw;
-    height: 60vw;
-    max-width: 600px;
-    max-height: 600px;
+    width: min(90vw, 600px);
+    height: min(90vw, 600px);
 }
 
 #timer {
@@ -67,6 +65,7 @@ button:hover {
     justify-content: center;
     height: 100%;
     color: #fff;
+    padding: 0 40px;
 }
 
 #phaseText {
@@ -94,4 +93,25 @@ button:hover {
     font-size: 1.7rem;
     margin-top: 1rem;
     color: #fff;
+}
+
+.ring-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.line {
+    position: absolute;
+    width: 2px;
+    height: 15px;
+    background-color: #ffffff00;
+    top: 50%;
+    left: 50%;
+    transform-origin: bottom center;
+    transition: background-color 0.4s ease;
+}
+
+.line.gone {
+    background-color: #ffffff;
 }

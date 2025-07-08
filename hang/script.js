@@ -14,15 +14,62 @@ class IntervalTrainer {
         this.intervalCounter = document.getElementById('intervalCounter');
     }
 
-    formatTime(milliseconds) {
-        const totalSeconds = Math.floor(milliseconds / 1000);
-        const remainingMilliseconds = milliseconds % 1000;
-        return `${totalSeconds.toString().padStart(2, '0')}:${remainingMilliseconds.toString().padStart(3, '0')}`;
+    formatTime(seconds) {
+        return `${(seconds + 1).toString().padStart(2, '0')}`;
+
+    }
+
+    createRing() {
+        const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0)
+
+        const ringContainer = document.getElementById('ringContainer');
+        const radius = Math.min(Math.floor(vw * 0.45) - 40, 260);
+        const totalLines = 100;
+
+        // Create lines
+        for (let i = 0; i < totalLines; i++) {
+            const line = document.createElement('div');
+            line.classList.add('line');
+            
+            const angle = (i / totalLines) * (2 * Math.PI);
+            line.style.transform = `
+                translate(-50%, -100%) 
+                rotate(${angle * (180 / Math.PI)}deg)
+                translate(0, -${radius}px)
+            `;
+            
+            ringContainer.appendChild(line);
+        }
+    }
+
+    toggleLines() {
+        const lines = document.querySelectorAll('.line');
+
+        let currentIndex = 0;
+        const animateRing = () => {
+            if (currentIndex == 100) {
+                clearInterval(this.ringInterval);
+                return;
+            }
+        
+            else {
+                lines[currentIndex].classList.toggle("gone");
+                currentIndex += 1;
+            }
+        }
+
+        // Clear any existing interval first
+        if (this.ringInterval) {
+            clearInterval(this.ringInterval);
+        }
+
+        this.ringInterval = setInterval(animateRing, 8);
     }
 
     async startTimer(duration, color, text) {
         return new Promise((resolve) => {
             var get_ready = false;
+            var seconds = 0;
             
             this.timerCircle.className = color;
             this.phaseText.textContent = text;
@@ -32,8 +79,14 @@ class IntervalTrainer {
                 const elapsedTime = Date.now() - startTime;
                 const remainingTime = Math.max(duration - elapsedTime, 0);
                 
-                this.timerDisplay.textContent = this.formatTime(remainingTime);
-
+                // Update wheel and timer.
+                const currentSeconds = Math.floor(remainingTime / 1000);
+                if (currentSeconds != seconds) {
+                    this.toggleLines();
+                    seconds = currentSeconds;
+                }
+                this.timerDisplay.textContent = this.formatTime(currentSeconds);
+                
                 // Set rest circle to gold when 3 seconds are left
                 if (!get_ready && remainingTime <= 3000 && color == "green") {
                     get_ready = true;
@@ -52,6 +105,9 @@ class IntervalTrainer {
         this.startScreen.classList.add('hidden');
         this.timerScreen.classList.remove('hidden');
 
+        // Create a ring of dashes
+        this.createRing();
+
         // Lock the screen so that the screen always displays the timer.
         let wakeLock = null;
         // create an async function to request a wake lock
@@ -65,10 +121,12 @@ class IntervalTrainer {
         try {
             // Initial gold countdown
             const firstWorkoutName = this.workout_data[0].name;
-            await this.startTimer(5000, 'gold', `Get Ready: ${firstWorkoutName}`);
 
             let totalIntervalCount = 0;
             let totalWorkoutIntervals = this.workout_data.reduce((sum, plan) => sum + plan.repeat, 0);
+            this.intervalCounter.textContent = `${totalIntervalCount}/${totalWorkoutIntervals}`;
+
+            await this.startTimer(5000, 'gold', `Get Ready: ${firstWorkoutName}`);
 
             for (let planIndex = 0; planIndex < this.workout_data.length; planIndex++) {
                 const currentWorkout = this.workout_data[planIndex];

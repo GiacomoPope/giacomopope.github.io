@@ -20,7 +20,7 @@ Research
 #### Articles
 
 - [Simpler and Faster Pairings from the Montgomery Ladder](https://eprint.iacr.org/2025/672)<br>
-  Giacomo Pope, Krijn Reijnders, Damien Robert, Alessandro Sferlazza, Benjamin Smith, <em>2025</em>.
+  Giacomo Pope, Krijn Reijnders, Damien Robert, Alessandro Sferlazza, Benjamin Smith, <em>CiC, Vol. 2, Issue 2, 2025</em>.
 - [Radical 2-isogenies and cryptographic hash functions in dimensions 1, 2 and 3](https://eprint.iacr.org/2024/1732)<br>
   Sabrina Kunzweiler, Luciano Maino, Tomoki Moriya, Christophe Petit, GP, Damien Robert, Miha Stopar and Yan Bo Ti, <em>PKC 2025</em>.
 - [SQIsign2D-West: The Fast, the Small, and the Safer](https://eprint.iacr.org/2024/760)<br>

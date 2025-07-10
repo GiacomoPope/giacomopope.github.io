@@ -40,5 +40,13 @@
             "rest_duration": 6000,
             "repeat": 6
         }
+    ],
+    "max_hang": [
+        {
+            "name": "Hang",
+            "hang_duration": 10000,
+            "rest_duration": 120000,
+            "repeat": 6
+        }
     ]
 }

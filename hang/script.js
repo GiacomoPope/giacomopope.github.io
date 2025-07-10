@@ -200,6 +200,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const noHangBtn = document.getElementById('noHangBtn');
     const sixTenBtn = document.getElementById('sixTenBtn');
     const onOffBtn = document.getElementById('sixSixSixBtn');
+    const maxHangBtn = document.getElementById('maxHangBtn');
 
     // Load the workout data from json.
     var workout_data = null;
@@ -207,7 +208,6 @@ document.addEventListener('DOMContentLoaded', async () => {
         const response = await fetch('config.json');
         workout_data = await response.json();
 
-        // Load the data, this should maybe be done in a loop with button ID in the JSON?
         noHangBtn.onclick = () => {
             new IntervalTrainer(workout_data.no_hang);
         };
@@ -218,6 +218,10 @@ document.addEventListener('DOMContentLoaded', async () => {
 
         onOffBtn.onclick = () => {
             new IntervalTrainer(workout_data.six_six_six);
+        };
+
+        maxHangBtn.onclick = () => {
+            new IntervalTrainer(workout_data.max_hang);
         };
 
     }

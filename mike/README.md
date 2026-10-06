@@ -114,13 +114,13 @@ Before discussing some more of the technical parts of a MIKE implementation, I w
 
 The foundations of MIKE are in the implementations of finite fields. In particular we require working with two different fields at different points of the key exchange.
 
-#### The base field Fp
+#### The Base Field
 
 For the majority of the shared secret generation, operations are in the field $\mathbb{F}_p$. For some prime $p$, all arithmetic $(+, -, \times, /)$ is performed modulo the prime $p$. Up to the choice of the prime, this is exactly what we're used to working with in elliptic curve cryptography, whose coordinates are in some finite field.
 
 In a certain sense, working on efficient and constant-time $\mathbb{F}_p$ arithmetic is the hardest part of MIKE. Once the arithmetic and a few helper functions (such as constant-time conditional swapping) are implemented, almost all the hard work has been done (from an engineering perspective at least).
 
-#### The extension field Fp2 
+#### The Extension Field 
 
 For key generation, and the beginning of the shared secret generation, we have to work in a degree-two extension of $\mathbb{F}\_p$ which we denote $\mathbb{F}\_{p^2}$. At the level of the code, an element of  $\mathbb{F}_{p^2}$ is represented by two elements $x_0$ and $x_1$ of  $\mathbb{F}\_{p}$ such that $x = x_0 + i x_1$. In our case, where $p \equiv  3 \pmod{4}$, we use the generator $i$ such that $i^2 = -1$ and  $\mathbb{F}\_{p^2} =  \mathbb{F}\_{p}[i] / \langle i^2 + 1 \rangle$.
 

@@ -9,12 +9,12 @@ The special thing about MIKE is that relative to other post-quantum NIKEs we're 
 |                     $p$ | $\log_2(p)$ | $e$  | Public Key (bytes) | Key Gen (ms) | Shared Secret (ms) |
 | ----------------------: | :---------: | :--: | :----------------: | :----------: | :----------------: |
 | $633 \cdot 2^{308} - 1$ |     318     | 228  |         80         |     0.65     |        4.9         |
-| $593 \cdot 2^{474} - 1$ |     484     | 340  |        122         |     2.12     |        15.2        |
-| $317 \cdot 2^{628} - 1$ |     637     | 452  |        160         |     4.21     |        28.6        |
+| $593 \cdot 2^{474} - 1$ |     484     | 340  |        122         |     2.11     |        15.0        |
+| $317 \cdot 2^{628} - 1$ |     637     | 452  |        160         |     4.16     |        28.6        |
 |                         |             |      |                    |              |                    |
-| $117 \cdot 2^{374} - 1$ |     381     | 372  |         96         |     0.86     |        6.2         |
-|  $77 \cdot 2^{566} - 1$ |     573     | 564  |        144         |     2.57     |        18.0        |
-|  $41 \cdot 2^{758} - 1$ |     764     | 756  |        192         |     8.12     |        51.1        |
+| $117 \cdot 2^{374} - 1$ |     381     | 372  |         96         |     1.49     |        10.5        |
+|  $77 \cdot 2^{566} - 1$ |     573     | 564  |        144         |     4.55     |        31.3        |
+|  $41 \cdot 2^{758} - 1$ |     764     | 756  |        192         |     11.2     |        69.9        |
 
 Parameter details and running times for MIKE key generation and shared secret generation. C implementation benchmarks recorded on an `AMD Ryzen 7 PRO 7840U CPU @ 3.3Ghz` with turboboost and multithreading disabled. Note that $p$ is the prime characteristic of the finite field and $e$ sets the degree of the $2^e$-isogenies computed in dimension one (key generation) and dimension four (shared secret generation).
 

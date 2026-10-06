@@ -1,50 +1,51 @@
 <!DOCTYPE html>
-<html lang="{{ site.lang | default: "en-US" }}">
-  <head>
-    <meta charset="UTF-8">
-    
-    <!-- seo -->
-    <meta property="og:image" content="https://giacomopope.com/assets/images/ch.png" />
-    <meta name="twitter:card" content="summary" />
-    <meta name="twitter:description" content="Cryptography and CTF Writeups" />
-    <meta name="twitter:title" content="Giacomo Pope" />
-    <meta name="twitter:site" content="@cryptohack__" />
-    <meta name="twitter:image" content="https://giacomopope.com/assets/images/ch.png" />
+<html lang="{{ site.lang | default: " en-US" }}">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="theme-color" content="#040d21">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <link rel="stylesheet" href="{{ '/assets/css/style.css?v=' | append: site.github.build_revision | relative_url }}">
-    <link rel="stylesheet" href="{{ '/assets/css/light.css?v=' | append: site.github.build_revision | relative_url }}">
+<head>
+  <meta charset="UTF-8">
 
-    <!-- Favicon -->
-    <link rel="apple-touch-icon" sizes="180x180" href="https://giacomopope.com/assets/favicon/apple-touch-icon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="https://giacomopope.com/assets/favicon/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="16x16" href="https://giacomopope.com/assets/favicon/favicon-16x16.png">
-    <link rel="manifest" href="https://giacomopope.com/assets/favicon/site.webmanifest">
-    <link rel="mask-icon" href="https://giacomopope.com/assets/favicon/safari-pinned-tab.svg" color="#000000">
-    <link rel="shortcut icon" href="https://giacomopope.com/assets/favicon/favicon.ico">
-    <meta name="msapplication-TileColor" content="#da532c">
-    <meta name="msapplication-config" content="https://giacomopope.com/assets/favicon/browserconfig.xml">
-    <meta name="theme-color" content="#ffffff">
+  <!-- seo -->
+  <meta property="og:image" content="https://giacomopope.com/assets/images/wellbeing.png" />
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:description" content="Cryptography and CTF Writeups" />
+  <meta name="twitter:title" content="Giacomo Pope" />
+  <meta name="twitter:site" content="@cryptohack__" />
+  <meta name="twitter:image" content="https://giacomopope.com/assets/images/wellbeing.png" />
 
-    <script type="text/javascript">
-        function isLightThemeSelected() {
-          return document.cookie.match(/theme=light/i) != null
-        }
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#040d21">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="stylesheet" href="{{ '/assets/css/style.css?v=' | append: site.github.build_revision | relative_url }}">
+  <link rel="stylesheet" href="{{ '/assets/css/light.css?v=' | append: site.github.build_revision | relative_url }}">
 
-        function setThemeFromCookie() {
-            var html = document.getElementsByTagName('html')[0]
-            html.className = isLightThemeSelected() ? 'light-theme' : 'dark-theme'
-            console.log('Loaded cookie: ' + document.cookie)
-        }
+  <!-- Favicon -->
+  <link rel="apple-touch-icon" sizes="180x180" href="https://giacomopope.com/assets/favicon/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="https://giacomopope.com/assets/favicon/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="https://giacomopope.com/assets/favicon/favicon-16x16.png">
+  <link rel="manifest" href="https://giacomopope.com/assets/favicon/site.webmanifest">
+  <link rel="mask-icon" href="https://giacomopope.com/assets/favicon/safari-pinned-tab.svg" color="#000000">
+  <link rel="shortcut icon" href="https://giacomopope.com/assets/favicon/favicon.ico">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="msapplication-config" content="https://giacomopope.com/assets/favicon/browserconfig.xml">
+  <meta name="theme-color" content="#ffffff">
 
-        (function() {
-          setThemeFromCookie()
-        })();
-    </script>
+  <script type="text/javascript">
+    function isLightThemeSelected() {
+      return document.cookie.match(/theme=light/i) != null
+    }
 
-    <script type="text/x-mathjax-config">
+    function setThemeFromCookie() {
+      var html = document.getElementsByTagName('html')[0]
+      html.className = isLightThemeSelected() ? 'light-theme' : 'dark-theme'
+      console.log('Loaded cookie: ' + document.cookie)
+    }
+
+    (function () {
+      setThemeFromCookie()
+    })();
+  </script>
+
+  <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
       "HTML-CSS": {
         fonts: ["Gyre-Pagella"],
@@ -58,55 +59,56 @@
     });
   </script>
   <script src="https://cdn.jsdelivr.net/npm/mathjax@2/MathJax.js?config=TeX-AMS_HTML"></script>
-  </head>
-  
-  <body> 
-    <header class="page-header-simple" role="banner">
-      
-      <div class="left-links"><a href="/">Giacomo Pope</a></div>
-      <div class="right-links">
-        <a href="/projects">Projects</a>
-        <a href="/writeups">Writeups</a>
-      </div>
-    </header>
+</head>
 
-    <main id="content" class="main-content" role="main">
-      {{ content }}
-      <footer class="site-footer">
-        <a href="https://cryptohack.org">CryptoHack</a>  
-        <a href="https://github.com/giacomopope">GitHub</a>  
-        <a href="https://twitter.com/isogenies">Twitter</a>  
-        <a href="mailto:giacomopope@gmail.com">E-Mail</a> 
-        <a id="changeTheme" class="btn-toggle">Dark-Mode</a>
-      </footer>
+<body>
+  <header class="page-header-simple" role="banner">
 
-      <script>
+    <div class="left-links"><a href="/">Giacomo Pope</a></div>
+    <div class="right-links">
+      <a href="/projects">Projects</a>
+      <a href="/writeups">Writeups</a>
+    </div>
+  </header>
+
+  <main id="content" class="main-content" role="main">
+    {{ content }}
+    <footer class="site-footer">
+      <a href="https://cryptohack.org">CryptoHack</a>
+      <a href="https://github.com/giacomopope">GitHub</a>
+      <a href="https://twitter.com/isogenies">Twitter</a>
+      <a href="mailto:giacomopope@gmail.com">E-Mail</a>
+      <a id="changeTheme" class="btn-toggle">Dark-Mode</a>
+    </footer>
+
+    <script>
       function updateThemeToggleFooter() {
         let elem = document.querySelector('#changeTheme');
         elem.innerHTML = isLightThemeSelected() ? 'Dark Mode' : 'Light Mode'
       }
 
-      (function() {
+      (function () {
         updateThemeToggleFooter()
       })();
 
       function togglePageContentLightDark() {
-          var html = document.getElementsByTagName('html')[0]
-          var currentClass = html.className
-          var newClass = html.className == 'dark-theme' ? 'light-theme' : 'dark-theme'
-          html.className = newClass
+        var html = document.getElementsByTagName('html')[0]
+        var currentClass = html.className
+        var newClass = html.className == 'dark-theme' ? 'light-theme' : 'dark-theme'
+        html.className = newClass
 
-          document.cookie = 'theme=' + (newClass == 'light-theme' ? 'light' : 'dark') + '; SameSite=Strict; path=/; expires=Fri, 31 Dec 9999 23:59:59 GMT'
-          console.log('Cookies are now: ' + document.cookie)
+        document.cookie = 'theme=' + (newClass == 'light-theme' ? 'light' : 'dark') + '; SameSite=Strict; path=/; expires=Fri, 31 Dec 9999 23:59:59 GMT'
+        console.log('Cookies are now: ' + document.cookie)
 
-          updateThemeToggleFooter()
+        updateThemeToggleFooter()
       }
 
       const btn = document.querySelector(".btn-toggle");
-      btn.addEventListener("click", function() {
+      btn.addEventListener("click", function () {
         togglePageContentLightDark();
       });
-      </script>
-    </main>
-  </body>
+    </script>
+  </main>
+</body>
+
 </html>

@@ -277,6 +277,10 @@ a, a:visited, a:hover{
   .page-header-simple{
     padding: 0.75em;
   }
+  .main-content table{
+    display: block;
+    overflow-x: auto;
+  }
 }
 
 // @media (prefers-color-scheme: light) {

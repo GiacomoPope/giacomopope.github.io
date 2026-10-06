@@ -35,6 +35,7 @@ Research
 #### Presentations
 
 - [From Capturing Flags to Cryptography Consultancy](/talks/TURIN-03-21-2026.pdf)
+- [Midnight Isogenies](/talks/OIST-18-02-26.pdf)
 - [SQIsign2D: Dimensional Goldilocks](/talks/BRIS-SEM-07-06-2024.pdf), Univeristy of Bristol, Bristol (United Kingdom), 7th June 2024.
 - [Superspecial Cryptography: Computing Isogenies between Elliptic Products](/talks/SIAM-AG-14-07-2023.pdf), SIAM Conference on Applied Algebraic Geometry, Eindhoven (Netherlands), 14th July 2023.
 

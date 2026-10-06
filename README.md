@@ -34,11 +34,13 @@ Research
 
 #### Presentations
 
+- [From Capturing Flags to Cryptography Consultancy](/talks/TURIN-03-21-2026.pdf)
 - [SQIsign2D: Dimensional Goldilocks](/talks/BRIS-SEM-07-06-2024.pdf), Univeristy of Bristol, Bristol (United Kingdom), 7th June 2024.
 - [Superspecial Cryptography: Computing Isogenies between Elliptic Products](/talks/SIAM-AG-14-07-2023.pdf), SIAM Conference on Applied Algebraic Geometry, Eindhoven (Netherlands), 14th July 2023.
 
 #### Blog Posts
 
+- [A String Theorists Guide to MIKE](/mike)
 - [Learning to SQI: Implementing SQISign in SageMath](https://learningtosqi.github.io), Maria Corte-Real Santos and GP
 - [Implementing the Castryck-Decru SIDH Key Recovery Attack in SageMath](https://research.nccgroup.com/2022/08/08/implementing-the-castryck-decru-sidh-key-recovery-attack-in-sagemath/)
 - [Estimating the Bit Security of Pairing-Friendly Curves](https://research.nccgroup.com/2022/03/02/estimating-the-bit-security-of-pairing-friendly-curves/)

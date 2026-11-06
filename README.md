@@ -19,6 +19,8 @@ Research
 
 #### Articles
 
+- [Vectorized (2, 2)-Isogenies in the Theta Model Using AVX-512 and Applications to SQIsign](https://eprint.iacr.org/2026/2773)<br>
+  Marius A. Aardal, Diego F. Aranha, Patrick Longa, GP
 - [MIKE: a fast and compact post-quantum NIKE](https://eprint.iacr.org/2026/2377)<br>
   Andrea Basso, Pierrick Dartois, Max Duparc, Jonathan Komada Eriksen, Sabrina Kunzweiler, Michael Meyer, GP, Krijn Reĳnders, Damien Robert, Ryan Rueger, Sina Schaeffler
 - [Simpler and Faster Pairings from the Montgomery Ladder](https://eprint.iacr.org/2025/672)<br>

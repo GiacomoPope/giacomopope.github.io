@@ -38,6 +38,7 @@ Research
 
 #### Presentations
 
+- [A Constructivist Perspective on MIKE](/talks/EPLF-16-11-2026.pdf), Isogeny Workshop, EPFL (Switzerland), November 16th 2026.
 - [From Capturing Flags to Cryptography Consultancy](/talks/TURIN-03-21-2026.pdf), M0lecon, Politecnico di Torino (Italy), March 21st 2026.
 - [Midnight Isogenies](/talks/OIST-18-02-26.pdf), OIST Isogeny Workshop, Okinawa Institute of Science and Technology, (Japan), 18th February 2026.
 - [SQIsign2D: Dimensional Goldilocks](/talks/BRIS-SEM-07-06-2024.pdf), Univeristy of Bristol, Bristol (United Kingdom), 7th June 2024.
